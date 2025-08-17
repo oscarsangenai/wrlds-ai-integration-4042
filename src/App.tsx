@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 import Community from "./pages/Community";
+import Resources from "./pages/Resources";
 import Blog from "./pages/Blog";
 import BlogPostDetail from "./pages/BlogPostDetail";
 import DevelopmentProcess from "./pages/DevelopmentProcess";
@@ -34,6 +35,7 @@ const AnimatedRoutes = () => {
         <Route path="/" element={<TransitionRoute><Index /></TransitionRoute>} />
         <Route path="/about" element={<TransitionRoute><About /></TransitionRoute>} />
         <Route path="/community" element={<TransitionRoute><Community /></TransitionRoute>} />
+        <Route path="/resources" element={<TransitionRoute><Resources /></TransitionRoute>} />
         <Route path="/blog" element={<TransitionRoute><Blog /></TransitionRoute>} />
         <Route path="/blog/:slug" element={<TransitionRoute><BlogPostDetail /></TransitionRoute>} />
         <Route path="/development-process" element={<TransitionRoute><DevelopmentProcess /></TransitionRoute>} />
