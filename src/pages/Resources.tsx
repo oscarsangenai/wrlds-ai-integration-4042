@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import resourcesData from '@/data/resources.json';
 import PageLayout from '@/components/PageLayout';
 import SEO from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
@@ -19,38 +20,8 @@ interface Resource {
   discord_url?: string;
 }
 
-// Sample data based on the provided format
-const sampleResources: Resource[] = [
-  {
-    id: 1,
-    title: "Why I Moved My Peach AI Agents to Azure—and What That Has to Do with Trust",
-    description: "This personal reflection explores the author's journey from a non-technical background into deploying AI agents on Microsoft Azure, highlighting how considerations of trust and usability influenced the decision. The article offers insights for others navigating cloud technology and standards like ISO 42001.",
-    date: "2025-05-14",
-    author: "andreahickethier",
-    channel: "🏘general-chat",
-    tag: "News/Article",
-    resource_url: "https://medium.com/@andrea.hickethier/why-i-moved-my-peach-ai-agents-to-azure-and-what-that-has-to-do-with-trust-a4c9ababe88b",
-    discord_url: "https://discord.com/channels/1353058864810950737/1353058864810950740/1372118701981171792"
-  },
-  {
-    id: 2,
-    title: "The Future of AI Alignment: Meeting as Equals in Ethical Growth",
-    description: "Henri Edwards explores a new approach to AI alignment, advocating for partnerships between humans and AI based on mutual ethical development rather than control. This article discusses the implications of treating AI as collaborators in shaping ethical outcomes.",
-    date: "2025-05-13",
-    author: "henri_edwards",
-    tag: "Paper",
-    resource_url: "https://example.com/ai-alignment-future"
-  },
-  {
-    id: 3,
-    title: "Revolutionize Your Productivity with AI: A Non-Technical Guide",
-    description: "This comprehensive guide provides accessible insights for non-technical professionals on leveraging AI tools to boost productivity in everyday tasks such as email drafting and content creation.",
-    date: "2025-05-12",
-    author: "productivity_expert",
-    tag: "Tutorial",
-    resource_url: "https://example.com/ai-productivity-guide"
-  }
-];
+// Sample data based on the provided format - now loaded from JSON
+const sampleResources: Resource[] = resourcesData;
 
 const Resources = () => {
   const [selectedTag, setSelectedTag] = useState<string>("All");
