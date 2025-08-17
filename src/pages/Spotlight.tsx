@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PageLayout from '@/components/PageLayout';
 import SEO from '@/components/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Award, Users, Calendar, Star } from 'lucide-react';
+import { LinkedInScraper } from '@/components/LinkedInScraper';
+import { LinkedInPost } from '@/utils/FirecrawlService';
+import { ExternalLink, Award, Users, Calendar, Star, Linkedin } from 'lucide-react';
 
 interface MemberSpotlight {
   id: number;
@@ -142,6 +144,11 @@ const formatDate = (dateString: string) => {
 };
 
 const Spotlight = () => {
+  const [linkedInPosts, setLinkedInPosts] = useState<LinkedInPost[]>([]);
+
+  const handleLinkedInPostsLoaded = (posts: LinkedInPost[]) => {
+    setLinkedInPosts(posts);
+  };
   return (
     <PageLayout showContact={false}>
       <SEO
@@ -163,6 +170,22 @@ const Spotlight = () => {
           </div>
         </section>
 
+        {/* LinkedIn Data Integration Section */}
+        <section className="py-12 px-4 bg-muted/30">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
+                <Linkedin className="h-8 w-8 text-primary" />
+                Live LinkedIn Integration
+              </h2>
+              <p className="text-muted-foreground">
+                Load real "Member of the Week" posts directly from LinkedIn.
+              </p>
+            </div>
+            <LinkedInScraper onPostsLoaded={handleLinkedInPostsLoaded} />
+          </div>
+        </section>
+
         {/* Member Spotlight Section */}
         <section className="py-12 px-4">
           <div className="max-w-6xl mx-auto">
@@ -170,14 +193,74 @@ const Spotlight = () => {
               <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
                 <Award className="h-8 w-8 text-primary" />
                 Member Spotlight
+                {linkedInPosts.length > 0 && (
+                  <Badge variant="secondary" className="ml-2">
+                    {linkedInPosts.length} Live Posts
+                  </Badge>
+                )}
               </h2>
               <p className="text-muted-foreground">
-                Celebrating the outstanding contributions of our community members.
+                {linkedInPosts.length > 0 
+                  ? "Live data from LinkedIn and featured community members."
+                  : "Celebrating the outstanding contributions of our community members."
+                }
               </p>
             </div>
 
-            <div className="grid gap-8 md:gap-6">
-              {memberSpotlights.map((member) => (
+            {/* LinkedIn Posts */}
+            {linkedInPosts.length > 0 && (
+              <div className="mb-12">
+                <h3 className="text-2xl font-semibold mb-6 flex items-center gap-2">
+                  <Linkedin className="h-6 w-6 text-blue-600" />
+                  Latest LinkedIn Posts
+                </h3>
+                <div className="grid gap-6">
+                  {linkedInPosts.map((post) => (
+                    <Card key={post.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 border-l-4 border-l-blue-500">
+                      <CardHeader className="pb-4">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <div className="flex items-center gap-3 mb-2">
+                              <Badge className={post.type === 'member-spotlight' 
+                                ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300'
+                                : 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300'
+                              }>
+                                {post.type === 'member-spotlight' ? 'Member Spotlight' : 'General Post'}
+                              </Badge>
+                              <span className="text-sm text-muted-foreground">{post.date}</span>
+                            </div>
+                            {post.memberName && (
+                              <CardTitle className="text-xl mb-2">{post.memberName}</CardTitle>
+                            )}
+                            {post.memberTitle && (
+                              <p className="text-lg text-primary font-medium mb-3">{post.memberTitle}</p>
+                            )}
+                          </div>
+                          <Button variant="outline" size="sm" asChild>
+                            <a href={post.linkedinUrl} target="_blank" rel="noopener noreferrer">
+                              <Linkedin className="mr-2 h-4 w-4" />
+                              LinkedIn
+                              <ExternalLink className="ml-2 h-4 w-4" />
+                            </a>
+                          </Button>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-muted-foreground leading-relaxed">
+                          {post.memberDescription || post.content}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Sample/Fallback Member Spotlights */}
+            <div>
+              <h3 className="text-2xl font-semibold mb-6">Featured Community Members</h3>
+              <div className="grid gap-8 md:gap-6">
+                {memberSpotlights.map((member) => (
                 <Card key={member.id} className="overflow-hidden hover:shadow-lg transition-all duration-300">
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between">
@@ -230,7 +313,8 @@ const Spotlight = () => {
                     </div>
                   </CardContent>
                 </Card>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </section>
