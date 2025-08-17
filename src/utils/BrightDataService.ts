@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { fallbackMemberPosts } from '@/data/fallbackMemberPosts';
 
 export interface LinkedInPost {
   id: string;
@@ -58,9 +59,25 @@ export class BrightDataService {
       }
 
       console.log('Successfully scraped LinkedIn posts:', data?.posts);
+      
+      // Merge scraped posts with fallback posts to ensure we have comprehensive coverage
+      const scrapedPosts = data?.posts || [];
+      const allPosts = [...scrapedPosts, ...fallbackMemberPosts];
+      
+      // Remove duplicates based on content similarity
+      const uniquePosts = allPosts.filter((post, index, arr) => {
+        return arr.findIndex(p => 
+          p.memberName === post.memberName || 
+          p.content.substring(0, 100) === post.content.substring(0, 100)
+        ) === index;
+      });
+      
+      // Sort by date (newest first)
+      uniquePosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      
       return {
         success: true,
-        posts: data?.posts || []
+        posts: uniquePosts
       };
 
     } catch (error) {

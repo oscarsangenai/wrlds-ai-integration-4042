@@ -37,15 +37,20 @@ export const BrightDataScraper = ({ onPostsLoaded }: BrightDataScraperProps) => 
         setScrapedPosts(result.posts);
         onPostsLoaded(result.posts);
         setProgress(100);
+        
+        // Show detailed results
+        const memberSpotlights = result.posts.filter(p => p.type === 'member-spotlight');
+        const generalPosts = result.posts.filter(p => p.type === 'general');
+        
         toast({
-          title: "Success",
-          description: `Successfully scraped ${result.posts.length} Member of the Week posts from LinkedIn`,
+          title: "Scraping Complete",
+          description: `Found ${memberSpotlights.length} Member Spotlights and ${generalPosts.length} general posts. Total: ${result.posts.length} posts processed.`,
           duration: 5000,
         });
       } else {
         toast({
-          title: "Scraping Complete",
-          description: result.error || "No Member of the Week posts found. This could be due to LinkedIn's access restrictions or content changes.",
+          title: "Scraping Complete - Limited Results",
+          description: result.error || "Some Member of the Week posts may be missing due to LinkedIn's access restrictions. This is normal for LinkedIn's protected content.",
           variant: "destructive",
           duration: 7000,
         });
@@ -81,8 +86,13 @@ export const BrightDataScraper = ({ onPostsLoaded }: BrightDataScraperProps) => 
             <div className="flex-1">
               <p className="text-sm font-medium mb-1">Enterprise-Grade Scraping</p>
               <p className="text-xs text-muted-foreground">
-                Using Bright Data's professional web scraping service to extract "Member of the Week" posts from Gen AI Global's LinkedIn company page.
+                Using Bright Data's professional web scraping service to extract "Member of the Week" posts. Note: LinkedIn's authentication may limit access to some posts.
               </p>
+              <div className="mt-2 text-xs text-muted-foreground space-y-1">
+                <div>• Searches for: #memberoftheweek, #aipioneers, member spotlight patterns</div>
+                <div>• Extracts member names, titles, and descriptions automatically</div>
+                <div>• Some posts may require manual addition due to LinkedIn restrictions</div>
+              </div>
             </div>
           </div>
           

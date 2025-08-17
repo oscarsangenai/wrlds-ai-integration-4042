@@ -113,33 +113,82 @@ function parseLinkedInPosts(data: any): LinkedInPost[] {
     const collectData = Array.isArray(data) ? data : [data]
     
     collectData.forEach((item: any, index: number) => {
-      if (item.text || item.content || item.post_text) {
-        const content = item.text || item.content || item.post_text || ''
+      if (item.text || item.content || item.post_text || item.description) {
+        const content = item.text || item.content || item.post_text || item.description || ''
+        
+        // Enhanced patterns to catch more Member of the Week variations
+        const memberOfWeekPatterns = [
+          /member\s+of\s+the\s+week/i,
+          /memberoftheweek/i,
+          /member\s+spotlight/i,
+          /membersspotlight/i,
+          /🎖️.*member/i,
+          /spotlight.*member/i,
+          /featuring.*member/i,
+          /celebrating.*member/i,
+          /aipioneers/i,
+          /genai.*member/i,
+          /member.*feature/i,
+          /weekly.*spotlight/i,
+          /community.*spotlight/i,
+          /meet.*our.*member/i
+        ]
         
         // Check if this is a Member of the Week post
-        const isMemberSpotlight = /member\s+(?:of\s+the\s+)?week|member\s+spotlight|🎖️/i.test(content)
+        const isMemberSpotlight = memberOfWeekPatterns.some(pattern => pattern.test(content))
         
-        if (isMemberSpotlight || content.length > 100) {
-          // Extract member name
+        // Also check hashtags specifically
+        const hashtags = item.hashtags || extractHashtags(content)
+        const hasRelevantHashtags = hashtags && (
+          hashtags.includes('memberoftheweek') ||
+          hashtags.includes('membersspotlight') ||
+          hashtags.includes('aipioneers') ||
+          hashtags.includes('genai') ||
+          hashtags.includes('spotlight')
+        )
+        
+        if (isMemberSpotlight || hasRelevantHashtags || content.length > 100) {
+          // Enhanced member name extraction
           const namePatterns = [
-            /(?:meet|introducing|spotlight\s+on|celebrating)\s+([A-Z][a-z]+\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/gi,
-            /([A-Z][a-z]+\s+[A-Z][a-z]+)\s+(?:exemplifies|demonstrates|brings|contributes)/gi,
-            /\b([A-Z][a-z]{2,}\s+[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,})?)\b/g
+            // Direct name mentions after common phrases
+            /(?:meet|introducing|spotlight\s+on|celebrating|featuring)\s+([A-Z][a-z]+\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/gi,
+            // Names followed by descriptive text
+            /([A-Z][a-z]+\s+[A-Z][a-z]+)\s+(?:exemplifies|demonstrates|brings|contributes|is|has|continues)/gi,
+            // Names with professional titles
+            /([A-Z][a-z]+\s+[A-Z][a-z]+),?\s+(?:director|manager|lead|senior|principal|chief|head|vp|ceo|cto|cfo)/gi,
+            // Names followed by "at Company"
+            /([A-Z][a-z]+\s+[A-Z][a-z]+)\s+at\s+[A-Z]/gi,
+            // General name patterns (2-3 words, title case)
+            /\b([A-Z][a-z]{2,}\s+[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,})?)\b/g,
+            // LinkedIn mention format
+            /(?:@|mention\s+)([A-Z][a-z]+\s+[A-Z][a-z]+)/gi
           ]
           
           let memberName = 'Community Member'
           for (const pattern of namePatterns) {
             const nameMatch = content.match(pattern)
             if (nameMatch && nameMatch[1]) {
-              memberName = nameMatch[1].trim()
-              break
+              const extractedName = nameMatch[1].trim()
+              // Validate name (avoid common false positives)
+              if (!extractedName.match(/^(Gen|AI|Global|LinkedIn|Member|Week|Spotlight)$/i) && 
+                  extractedName.split(' ').length >= 2 && 
+                  extractedName.split(' ').length <= 4) {
+                memberName = extractedName
+                break
+              }
             }
           }
           
-          // Extract title/company
+          // Enhanced title/company extraction
           const titlePatterns = [
-            /(?:director|manager|lead|senior|principal|chief|head|vp|ceo|cto|cfo)[\s\w,]+/gi,
-            /at\s+([A-Z][a-zA-Z\s&]+)(?:\s|$|,|\.|!)/g
+            // Job titles
+            /(?:director|manager|lead|senior|principal|chief|head|vp|ceo|cto|cfo|founder|co-founder)\s+[\w\s,&-]+/gi,
+            // Professional roles
+            /(?:engineer|developer|analyst|scientist|researcher|consultant|advisor|specialist|architect|designer)\s+[\w\s,&-]*/gi,
+            // "at Company" pattern
+            /at\s+([A-Z][\w\s&,-]+?)(?:\s|$|,|\.|!|\?)/gi,
+            // Company role format
+            /([A-Z][\w\s&,-]+?)\s+(?:at|@)\s+([A-Z][\w\s&,-]+)/gi
           ]
           
           let memberTitle = 'Community Member'
@@ -147,20 +196,51 @@ function parseLinkedInPosts(data: any): LinkedInPost[] {
             const titleMatch = content.match(pattern)
             if (titleMatch) {
               memberTitle = titleMatch[0].trim()
-              break
+              // Clean up title
+              memberTitle = memberTitle.charAt(0).toUpperCase() + memberTitle.slice(1)
+              if (memberTitle.length < 100) { // Avoid overly long titles
+                break
+              }
             }
           }
           
+          // Enhanced description extraction
+          let memberDescription = content
+          // Remove hashtags and clean up
+          memberDescription = memberDescription.replace(/#[\w]+/g, '').trim()
+          // Remove excessive whitespace
+          memberDescription = memberDescription.replace(/\s+/g, ' ').trim()
+          // Limit length
+          if (memberDescription.length > 400) {
+            memberDescription = memberDescription.substring(0, 400) + '...'
+          }
+
+          // Extract potential LinkedIn URL from content or use item URL
+          const linkedinUrlMatch = content.match(/https:\/\/www\.linkedin\.com\/[^\s)]+/) ||
+                                   content.match(/linkedin\.com\/[^\s)]+/)
+          const linkedinUrl = item.url || 
+                              item.post_url || 
+                              item.link ||
+                              (linkedinUrlMatch ? 'https://' + linkedinUrlMatch[0].replace('https://', '') : null) ||
+                              'https://www.linkedin.com/company/gen-ai-global/posts/'
+
+          // Extract date more reliably
+          const dateStr = item.date || 
+                         item.published_date || 
+                         item.created_date ||
+                         extractDateFromText(content) ||
+                         new Date().toISOString().split('T')[0]
+
           posts.push({
-            id: `bright-data-${index}`,
+            id: `bright-data-${index}-${Date.now()}`,
             content: content,
             author: item.author || 'Gen AI Global',
-            date: item.date || item.published_date || new Date().toISOString().split('T')[0],
-            type: isMemberSpotlight ? 'member-spotlight' : 'general',
-            linkedinUrl: item.url || item.post_url || 'https://www.linkedin.com/company/gen-ai-global/posts/',
+            date: dateStr,
+            type: isMemberSpotlight || hasRelevantHashtags ? 'member-spotlight' : 'general',
+            linkedinUrl,
             memberName,
             memberTitle,
-            memberDescription: content.length > 300 ? content.substring(0, 300) + '...' : content
+            memberDescription
           })
         }
       }
@@ -170,5 +250,32 @@ function parseLinkedInPosts(data: any): LinkedInPost[] {
     console.error('Error parsing LinkedIn posts:', parseError)
   }
   
-  return posts.slice(0, 10) // Limit to 10 posts
+  return posts.slice(0, 15) // Increase limit to capture more posts
+}
+
+function extractHashtags(text: string): string[] {
+  const hashtagPattern = /#([a-zA-Z0-9_]+)/g
+  const matches = text.match(hashtagPattern)
+  return matches ? matches.map(tag => tag.toLowerCase().substring(1)) : []
+}
+
+function extractDateFromText(text: string): string | null {
+  const datePatterns = [
+    /(\d{4}-\d{2}-\d{2})/,
+    /(\w+\s+\d{1,2},\s+\d{4})/,
+    /(\d{1,2}\/\d{1,2}\/\d{4})/,
+    /(\d{1,2}-\d{1,2}-\d{4})/
+  ]
+
+  for (const pattern of datePatterns) {
+    const match = text.match(pattern)
+    if (match) {
+      const date = new Date(match[1])
+      if (!isNaN(date.getTime())) {
+        return date.toISOString().split('T')[0]
+      }
+    }
+  }
+
+  return null
 }
