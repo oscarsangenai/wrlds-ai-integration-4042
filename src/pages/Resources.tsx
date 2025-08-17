@@ -26,17 +26,53 @@ const resources: Resource[] = resourcesData.resources;
 
 const Resources = () => {
   const [selectedTag, setSelectedTag] = useState<string>("All");
-  const [selectedChannel, setSelectedChannel] = useState<string>("All");
+  const [selectedSector, setSelectedSector] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  // Function to determine sector based on content
+  const getSector = (resource: Resource): string => {
+    const title = resource.title.toLowerCase();
+    const description = resource.description.toLowerCase();
+    const content = `${title} ${description}`;
+
+    if (content.includes('healthcare') || content.includes('medical') || content.includes('health') || content.includes('autism') || content.includes('patient')) {
+      return 'Healthcare';
+    }
+    if (content.includes('code') || content.includes('coding') || content.includes('developer') || content.includes('programming') || content.includes('software') || content.includes('cli') || content.includes('github')) {
+      return 'Software Engineering';
+    }
+    if (content.includes('finance') || content.includes('financial') || content.includes('banking') || content.includes('investment') || content.includes('money') || content.includes('economic')) {
+      return 'Finance';
+    }
+    if (content.includes('retail') || content.includes('walmart') || content.includes('shopping') || content.includes('fashion') || content.includes('trend') || content.includes('product')) {
+      return 'Retail & Commerce';
+    }
+    if (content.includes('education') || content.includes('learning') || content.includes('course') || content.includes('tutorial') || content.includes('teaching') || content.includes('academic')) {
+      return 'Education & Training';
+    }
+    if (content.includes('job') || content.includes('career') || content.includes('employment') || content.includes('workforce') || content.includes('hiring') || content.includes('professional')) {
+      return 'Career & Employment';
+    }
+    if (content.includes('design') || content.includes('creative') || content.includes('canva') || content.includes('visual') || content.includes('art')) {
+      return 'Design & Creative';
+    }
+    if (content.includes('privacy') || content.includes('security') || content.includes('ethics') || content.includes('risk') || content.includes('safety')) {
+      return 'Ethics & Security';
+    }
+    if (content.includes('research') || content.includes('paper') || content.includes('study') || content.includes('analysis') || content.includes('arxiv')) {
+      return 'Research & Academia';
+    }
+    return 'General AI';
+  };
 
   const availableTags = useMemo(() => {
     const tags = ["All", ...new Set(resources.map(resource => resource.tag))];
     return tags.sort();
   }, []);
 
-  const availableChannels = useMemo(() => {
-    const channels = ["All", ...new Set(resources.filter(r => r.channel).map(resource => resource.channel!))];
-    return channels.sort();
+  const availableSectors = useMemo(() => {
+    const sectors = ["All", ...new Set(resources.map(resource => getSector(resource)))];
+    return sectors.sort();
   }, []);
 
   const filteredResources = useMemo(() => {
@@ -47,9 +83,9 @@ const Resources = () => {
       filtered = filtered.filter(resource => resource.tag === selectedTag);
     }
 
-    // Filter by channel
-    if (selectedChannel !== "All") {
-      filtered = filtered.filter(resource => resource.channel === selectedChannel);
+    // Filter by sector
+    if (selectedSector !== "All") {
+      filtered = filtered.filter(resource => getSector(resource) === selectedSector);
     }
 
     // Filter by search query
@@ -64,7 +100,7 @@ const Resources = () => {
 
     // Sort by date (newest first)
     return filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }, [selectedTag, selectedChannel, searchQuery]);
+  }, [selectedTag, selectedSector, searchQuery]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -139,15 +175,15 @@ const Resources = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-muted-foreground">Channel:</span>
-                  <Select value={selectedChannel} onValueChange={(value) => setSelectedChannel(value)}>
+                  <span className="text-sm font-medium text-muted-foreground">Sector:</span>
+                  <Select value={selectedSector} onValueChange={(value) => setSelectedSector(value)}>
                     <SelectTrigger className="w-48">
-                      <SelectValue placeholder="All Channels" />
+                      <SelectValue placeholder="All Sectors" />
                     </SelectTrigger>
                     <SelectContent>
-                      {availableChannels.map((channel) => (
-                        <SelectItem key={channel} value={channel}>
-                          {channel}
+                      {availableSectors.map((sector) => (
+                        <SelectItem key={sector} value={sector}>
+                          {sector}
                         </SelectItem>
                       ))}
                     </SelectContent>
