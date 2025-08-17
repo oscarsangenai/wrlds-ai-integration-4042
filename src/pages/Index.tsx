@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import PageLayout from '@/components/PageLayout';
 import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Users, Award, ArrowRight } from 'lucide-react';
 
 const Index = () => {
   return (
@@ -25,9 +27,49 @@ const Index = () => {
             We are democratizing AI knowledge
           </h1>
           <p className="mt-4 max-w-2xl text-balance text-muted-foreground">Open, responsible, and future‑proof. Join a global community building practical AI literacy for everyone.</p>
+          
+          {/* Entry CTAs */}
+          <div className="mt-12 grid sm:grid-cols-2 gap-6 w-full max-w-2xl">
+            <Card className="group hover:shadow-lg transition-all duration-300 border-primary/20 hover:border-primary/40">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Award className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Join as Member</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  Have AI credentials? Join our certified member community and access exclusive resources.
+                </p>
+                <Button asChild className="w-full group-hover:scale-105 transition-transform">
+                  <Link to="/join">
+                    Apply Now
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="group hover:shadow-lg transition-all duration-300 border-secondary/20 hover:border-secondary/40">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-secondary/10 flex items-center justify-center">
+                  <Users className="h-6 w-6 text-secondary-foreground" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Get Involved</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  Volunteer your skills and help us democratize AI knowledge for everyone.
+                </p>
+                <Button asChild variant="secondary" className="w-full group-hover:scale-105 transition-transform">
+                  <Link to="/get-involved">
+                    Volunteer
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
           <div className="mt-8 flex items-center gap-4">
-            <Button asChild size="lg" variant="glow" className="relative px-10 py-6 text-base shadow-[0_0_40px_hsl(var(--accent)/0.55)]">
-              <Link to="/community" aria-label="Get involved with the community">Get involved</Link>
+            <Button asChild size="lg" variant="outline" className="px-8 py-6 text-base">
+              <Link to="/community" aria-label="Learn more about our community">Learn More</Link>
             </Button>
           </div>
         </header>
