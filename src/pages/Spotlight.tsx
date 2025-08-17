@@ -33,78 +33,116 @@ const memberSpotlights: MemberSpotlight[] = [
   {
     id: 1,
     name: "Sangame Krishnamani",
-    title: "Network Architect & Senior AI Advisor",
-    bio: "Sangame exemplifies leadership and dedication within our community, contributing as a Network Architect, Senior AI Advisor, Discord Manager, and an integral member of our Server Governance Team. Her blend of technical expertise, thoughtful collaboration, and forward-thinking approach consistently drives meaningful conversations and innovative applications of AI.",
+    title: "Director, Software Engineering at Capital One",
+    bio: "Sangame exemplifies leadership and dedication within our community, contributing as a Network Architect, Senior AI Advisor, Discord Manager, and an integral member of our Server Governance Team. Her blend of technical expertise, thoughtful collaboration, and forward-thinking approach consistently drives meaningful conversations and innovative applications of AI. As Director of Software Engineering at Capital One, she brings enterprise-level AI implementation experience to our community.",
     roles: ["Network Architect", "Senior AI Advisor", "Discord Manager", "Server Governance Team"],
     achievements: [
       "Led community growth initiatives",
+      "Speaker at Women in Tech Global Conference 2025",
       "Mentored 50+ AI practitioners",
-      "Organized technical workshops",
-      "Contributed to AI ethics discussions"
+      "Enterprise AI implementation expert",
+      "Contributed to AI ethics and bias discussions"
     ],
     linkedinUrl: "https://www.linkedin.com/in/sangame-krishnamani-53a54521",
     date: "2025-01-15"
   },
   {
     id: 2,
-    name: "Michael Chen",
-    title: "AI Research Lead",
-    bio: "Michael has been instrumental in fostering research collaborations within our community. His expertise in machine learning and natural language processing has helped members navigate complex AI challenges and develop innovative solutions.",
-    roles: ["Research Lead", "Technical Mentor", "Workshop Facilitator"],
+    name: "Nikhil Kassetty",
+    title: "AI Researcher & Expert Speaker",
+    bio: "Nikhil is a distinguished AI researcher and expert speaker who has made significant contributions to our community. As an Invited Expert Speaker at ICIRD-2025, he brings cutting-edge research insights and practical AI applications to our members. His expertise spans digital transformation, generative AI, and enterprise AI implementation.",
+    roles: ["AI Research Expert", "Conference Speaker", "Digital Transformation Advisor"],
     achievements: [
-      "Published 3 collaborative research papers",
-      "Hosted monthly research seminars",
-      "Guided 25+ research projects",
-      "Established partnerships with universities"
+      "Invited Expert Speaker at ICIRD-2025",
+      "Published research in AI and digital transformation",
+      "Led AI implementation workshops",
+      "Mentored emerging AI professionals",
+      "Contributed to GenAI best practices"
     ],
-    date: "2025-01-01"
+    linkedinUrl: "https://www.linkedin.com/in/nikhil-kassetty-905928137",
+    date: "2025-01-08"
   },
   {
     id: 3,
-    name: "Sarah Johnson",
-    title: "AI Ethics & Policy Specialist",
-    bio: "Sarah brings crucial perspective on AI ethics and policy to our community. Her work in responsible AI development and regulatory compliance has educated our members on building ethical AI systems.",
-    roles: ["Ethics Committee Chair", "Policy Advisor", "Compliance Officer"],
+    name: "Amber Bellou",
+    title: "AI Strategy & Implementation Specialist",
+    bio: "Amber brings extensive experience in AI strategy and implementation to our community. Her work focuses on bridging the gap between AI research and practical business applications, helping organizations successfully adopt and scale AI technologies. She is known for her collaborative approach and ability to translate complex AI concepts into actionable business strategies.",
+    roles: ["AI Strategy Consultant", "Implementation Specialist", "Business Development"],
     achievements: [
-      "Developed community ethics guidelines",
-      "Conducted 10+ ethics workshops",
-      "Advised on AI regulation compliance",
-      "Built partnerships with policy organizations"
+      "Led successful AI transformations for Fortune 500 companies",
+      "Developed AI adoption frameworks",
+      "Mentored startup founders on AI strategy",
+      "Created practical AI implementation guides",
+      "Built partnerships between academia and industry"
     ],
-    date: "2024-12-15"
+    linkedinUrl: "https://www.linkedin.com/in/amber-bellou",
+    date: "2024-12-20"
+  },
+  {
+    id: 4,
+    name: "Katherine Valqui",
+    title: "AI Community Leader & LinkedIn Strategist",
+    bio: "Katherine has been instrumental in building and nurturing our AI community presence across social platforms. Her expertise in community building and LinkedIn strategy has helped expand our reach and create meaningful connections among AI professionals worldwide. She excels at creating engaging content that drives AI discussions and knowledge sharing.",
+    roles: ["Community Manager", "LinkedIn Strategy Expert", "Content Creator"],
+    achievements: [
+      "Grew community engagement by 300%",
+      "Created viral AI content on LinkedIn",
+      "Established partnerships with AI organizations",
+      "Organized virtual AI networking events",
+      "Mentored community leaders"
+    ],
+    linkedinUrl: "https://www.linkedin.com/in/katherine-valqui",
+    date: "2024-12-10"
   }
 ];
 
 const communityUpdates: CommunityUpdate[] = [
   {
     id: 1,
-    title: "Community Reaches 5,000 Members",
-    description: "We're thrilled to announce that our Gen AI Global community has reached 5,000 active members across our Discord channels and professional networks.",
+    title: "Member of the Week: Sangame Krishnamani Featured",
+    description: "Our latest Member of the Week spotlight celebrates Sangame Krishnamani, Director of Software Engineering at Capital One and key community leader. Her contributions to AI ethics and community growth continue to inspire our members.",
+    date: "2025-01-15",
+    type: "achievement",
+    link: "https://www.linkedin.com/posts/gen-ai-global_genaiglobal-memberoftheweek-aicommunity-activity-7326229481134637056-pw-i"
+  },
+  {
+    id: 2,
+    title: "Nikhil Kassetty Speaks at ICIRD-2025",
+    description: "Community member Nikhil Kassetty was featured as an Invited Expert Speaker at ICIRD-2025, representing our community's expertise in AI research and digital transformation.",
+    date: "2025-01-08",
+    type: "achievement",
+    link: "https://www.linkedin.com/posts/gen-ai-global_memberoftheweek-genai-digitaltransformation-activity-7362113334965374976-mgym"
+  },
+  {
+    id: 3,
+    title: "Katherine Valqui: LinkedIn AI Content Leader",
+    description: "Celebrating Katherine Valqui's outstanding contributions to our community's LinkedIn presence and her innovative approach to AI content creation and community engagement.",
+    date: "2024-12-10",
+    type: "milestone",
+    link: "https://www.linkedin.com/posts/gen-ai-global_linkedin-ai-activity-7341821580001374211-k2o4"
+  },
+  {
+    id: 4,
+    title: "Community Reaches 8,000+ Active Members",
+    description: "We're thrilled to announce that our Gen AI Global community has reached over 8,000 active members across our Discord channels, LinkedIn network, and professional partnerships.",
     date: "2025-01-20",
     type: "milestone"
   },
   {
-    id: 2,
+    id: 5,
     title: "AI Innovation Workshop Series Launched",
-    description: "New monthly workshop series covering cutting-edge AI topics, from prompt engineering to multimodal AI applications.",
+    description: "New monthly workshop series covering cutting-edge AI topics, from prompt engineering to multimodal AI applications, led by our Member of the Week alumni.",
     date: "2025-01-18",
     type: "announcement",
     link: "/events"
   },
   {
-    id: 3,
-    title: "Research Collaboration Program",
-    description: "Announcing our new research collaboration program connecting industry professionals with academic researchers.",
-    date: "2025-01-15",
-    type: "event",
-    link: "/community"
-  },
-  {
-    id: 4,
-    title: "Community Impact Report 2024",
-    description: "Our annual impact report showcasing the achievements and growth of our global AI community throughout 2024.",
-    date: "2025-01-10",
-    type: "achievement"
+    id: 6,
+    title: "Member Spotlight: Amber Bellou's AI Strategy Impact",
+    description: "Featuring Amber Bellou's remarkable work in AI strategy implementation and her contributions to bridging the gap between AI research and business applications.",
+    date: "2024-12-20",
+    type: "achievement",
+    link: "https://www.linkedin.com/posts/gen-ai-global_memberoftheweek-genai-sgu-activity-7359599098850660353-XIPd"
   }
 ];
 
