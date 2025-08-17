@@ -88,7 +88,7 @@ const Resources = () => {
   };
 
   return (
-    <PageLayout>
+    <PageLayout showContact={false}>
       <SEO
         title="Resources - AI Articles, Case Studies & Learning Materials"
         description="Access AI-related articles, case studies, and learning materials. Stay updated with the latest in artificial intelligence research and applications."
@@ -99,7 +99,7 @@ const Resources = () => {
         {/* Hero Section */}
         <section className="relative py-20 px-4 text-center">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+            <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent text-balance text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl mb-6">
               Resources
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
