@@ -11,8 +11,6 @@ import { BrightDataScraper } from '@/components/BrightDataScraper';
 import { BrightDataService, LinkedInPost } from '@/utils/BrightDataService';
 import { ExternalLink, Calendar, User, Search, Award, Linkedin, Users, Loader2 } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
-import AuroraNebula from '@/components/visuals/AuroraNebula';
-import ConstellationParticles from '@/components/visuals/ConstellationParticles';
 interface Resource {
   id: number;
   title: string;
@@ -154,12 +152,9 @@ const Resources = () => {
   return <PageLayout showContact={false}>
       <SEO title="Resources - AI Articles, Case Studies & Learning Materials" description="Access AI-related articles, case studies, and learning materials. Stay updated with the latest in artificial intelligence research and applications." keywords={["AI resources", "artificial intelligence articles", "case studies", "learning materials", "AI research"]} />
       
-      <div className="min-h-screen bg-background relative">
-        {/* Futuristic background */}
-        <AuroraNebula />
-        <ConstellationParticles />
+      <div className="min-h-screen bg-background">
         {/* Hero Section */}
-        <section className="relative z-10 pt-20 pb-8 px-4 text-center">
+        <section className="relative pt-20 pb-8 px-4 text-center">
           <div className="max-w-4xl mx-auto">
             <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent text-balance text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl mb-6">
               Resources
@@ -221,7 +216,7 @@ const Resources = () => {
         
 
         {/* Resources Grid */}
-        <section className="relative z-10 py-12 px-4">
+        <section className="py-12 px-4">
           <div className="max-w-6xl mx-auto">
             <div className="grid gap-8 md:gap-6">
               {filteredResources.map(resource => <Card key={resource.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 group">

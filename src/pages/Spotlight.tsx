@@ -7,8 +7,6 @@ import { Button } from '@/components/ui/button';
 import { BrightDataScraper } from '@/components/BrightDataScraper';
 import { LinkedInPost } from '@/utils/BrightDataService';
 import { ExternalLink, Award, Users, Calendar, Star, Linkedin } from 'lucide-react';
-import AuroraNebula from '@/components/visuals/AuroraNebula';
-import ConstellationParticles from '@/components/visuals/ConstellationParticles';
 
 interface MemberSpotlight {
   id: number;
@@ -180,13 +178,9 @@ const Spotlight = () => {
         keywords={["AI community", "member spotlight", "community updates", "AI professionals", "achievements"]}
       />
       
-      <div className="min-h-screen bg-background relative">
-        {/* Futuristic background */}
-        <AuroraNebula />
-        <ConstellationParticles />
-        
+      <div className="min-h-screen bg-background">
         {/* Hero Section */}
-        <section className="relative z-10 pt-20 pb-8 px-4 text-center">
+        <section className="relative pt-20 pb-8 px-4 text-center">
           <div className="max-w-4xl mx-auto">
             <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent text-balance text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl mb-6">
               Spotlight
@@ -198,7 +192,7 @@ const Spotlight = () => {
         </section>
 
         {/* LinkedIn Data Integration Section */}
-        <section className="relative z-10 py-12 px-4 bg-muted/30">
+        <section className="py-12 px-4 bg-muted/30">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
@@ -214,7 +208,7 @@ const Spotlight = () => {
         </section>
 
         {/* Community Updates Section */}
-        <section className="relative z-10 py-12 px-4 bg-muted/30">
+        <section className="py-12 px-4 bg-muted/30">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
@@ -269,7 +263,7 @@ const Spotlight = () => {
         </section>
 
         {/* Member Spotlight Section */}
-        <section className="relative z-10 py-12 px-4">
+        <section className="py-12 px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
