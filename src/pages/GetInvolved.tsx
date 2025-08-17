@@ -113,6 +113,11 @@ const GetInvolved = () => {
 
   const fromJoin = searchParams.get('from') === 'join';
 
+  const handleFilloutRedirect = () => {
+    // Open Fillout form in new tab with volunteer parameter
+    window.open('https://form.fillout.com/t/wHKtxCmdQDus?type=volunteer', '_blank', 'noopener,noreferrer');
+  };
+
   useEffect(() => {
     if (fromJoin) {
       toast({
@@ -312,169 +317,47 @@ const GetInvolved = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Users className="h-5 w-5" />
-                    Volunteer Application
+                    Ready to Get Involved?
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Full Name *</Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        placeholder="Enter your full name"
-                        required
-                      />
+                <CardContent className="space-y-4">
+                  <p className="text-muted-foreground">
+                    Join our volunteer program and help democratize AI knowledge. Click below to access our comprehensive application form.
+                  </p>
+                  
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                      <span>Quick application process</span>
                     </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email Address *</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="your.email@example.com"
-                        required
-                      />
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                      <span>Flexible time commitments</span>
                     </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="timezone">Timezone *</Label>
-                      <Select
-                        value={formData.timezone}
-                        onValueChange={(value) => setFormData(prev => ({ ...prev, timezone: value }))}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select your timezone" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {timezones.map((tz) => (
-                            <SelectItem key={tz} value={tz}>
-                              {tz}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                      <span>Global remote opportunities</span>
                     </div>
-
-                    <div className="space-y-2">
-                      <Label>Skills</Label>
-                      <div className="max-h-32 overflow-y-auto border rounded-md p-2 space-y-1">
-                        {availableSkills.map((skill) => (
-                          <div key={skill} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={skill}
-                              checked={selectedSkills.includes(skill)}
-                              onCheckedChange={() => toggleSkill(skill)}
-                            />
-                            <Label htmlFor={skill} className="text-sm">
-                              {skill}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                      {selectedSkills.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mt-2">
-                          {selectedSkills.map((skill) => (
-                            <Badge key={skill} variant="secondary" className="text-xs">
-                              {skill}
-                            </Badge>
-                          ))}
-                        </div>
-                      )}
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                      <span>Skill-based matching</span>
                     </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="availability">Availability</Label>
-                      <Input
-                        id="availability"
-                        name="availability"
-                        value={formData.availability}
-                        onChange={handleInputChange}
-                        placeholder="e.g., 10 hours/week, weekends"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="preferredDepartment">Preferred Department</Label>
-                      <Select
-                        value={formData.preferredDepartment}
-                        onValueChange={(value) => setFormData(prev => ({ ...prev, preferredDepartment: value }))}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select department" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="any">Any Department</SelectItem>
-                          {departments.map((dept) => (
-                            <SelectItem key={dept} value={dept}>
-                              {dept}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="portfolioUrl">Portfolio URL (Optional)</Label>
-                      <Input
-                        id="portfolioUrl"
-                        name="portfolioUrl"
-                        value={formData.portfolioUrl}
-                        onChange={handleInputChange}
-                        placeholder="https://yourportfolio.com"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="notes">Additional Notes</Label>
-                      <Textarea
-                        id="notes"
-                        name="notes"
-                        value={formData.notes}
-                        onChange={handleInputChange}
-                        placeholder="Tell us about your interest in AI and how you'd like to contribute..."
-                        rows={3}
-                      />
-                    </div>
-
-                    <div className="flex items-start space-x-2">
-                      <Checkbox
-                        id="consent"
-                        checked={formData.consent}
-                        onCheckedChange={(checked) => 
-                          setFormData(prev => ({ ...prev, consent: checked as boolean }))
-                        }
-                      />
-                      <Label htmlFor="consent" className="text-sm leading-relaxed">
-                        I agree to the{' '}
-                        <a href="/terms-of-service" className="text-primary hover:underline">
-                          Terms of Service
-                        </a>{' '}
-                        and{' '}
-                        <a href="/privacy-policy" className="text-primary hover:underline">
-                          Privacy Policy
-                        </a>
-                      </Label>
-                    </div>
+                  </div>
+                  
+                  <form className="space-y-4"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleFilloutRedirect();
+                    }}
+                  >
 
                     <Button 
-                      type="submit" 
+                      onClick={handleFilloutRedirect}
                       className="w-full" 
-                      disabled={isLoading}
+                      size="lg"
                     >
-                      {isLoading ? (
-                        "Submitting Application..."
-                      ) : (
-                        <>
-                          Submit Application
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </>
-                      )}
+                      Apply to Volunteer
+                      <ExternalLink className="ml-2 h-4 w-4" />
                     </Button>
                   </form>
                 </CardContent>
