@@ -70,9 +70,13 @@ export class FirecrawlService {
 
       const scrapeResponse = await this.firecrawlApp.scrapeUrl(companyUrl, {
         formats: ['markdown', 'html'],
-        includeTags: ['article', 'div', 'p', 'span'],
-        excludeTags: ['script', 'style', 'nav', 'header', 'footer'],
-        waitFor: 3000
+        includeTags: ['article', 'div', 'p', 'span', 'time', 'a'],
+        excludeTags: ['script', 'style', 'nav', 'header', 'footer', 'aside'],
+        waitFor: 5000,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        },
+        onlyMainContent: true
       });
 
       if (!scrapeResponse.success) {
@@ -103,74 +107,154 @@ export class FirecrawlService {
   private static parseLinkedInPosts(markdown: string, html: string): LinkedInPost[] {
     const posts: LinkedInPost[] = [];
     
-    // Look for patterns that indicate Member of the Week posts
+    // Enhanced patterns for Member of the Week posts
     const memberSpotlightPatterns = [
-      /🎖️\s*Member Spotlight[:\s]*([^🎖️]*?)🎖️/gi,
-      /Member\s+of\s+the\s+Week[:\s]*([^\.]*?)(?:\.|$)/gi,
-      /\*\*Member\s+Spotlight\*\*[:\s]*([^*]*?)(?:\*\*|$)/gi,
-      /#memberoftheweek\s+([^#]*?)(?:#|$)/gi,
-      /#membersspotlight\s+([^#]*?)(?:#|$)/gi
+      /🎖️.*?Member\s+(?:Spotlight|of\s+the\s+Week)[:\s]*([^🎖️]*?)(?:🎖️|$)/gis,
+      /Member\s+of\s+the\s+Week[:\s]*([^\.]*?)(?:\.|#|$)/gis,
+      /\*\*Member\s+(?:Spotlight|of\s+the\s+Week)\*\*[:\s]*([^*]*?)(?:\*\*|$)/gis,
+      /#memberoftheweek.*?([^#]*?)(?:#|$)/gis,
+      /#membersspotlight.*?([^#]*?)(?:#|$)/gis,
+      /(?:spotlight|featuring|celebrating).*?member[:\s]*([^\.]*?)(?:\.|#|$)/gis,
+      /Gen\s+AI\s+Global.*?Member.*?Week[:\s]*([^\.]*?)(?:\.|#|$)/gis
+    ];
+
+    // Patterns to extract member names
+    const namePatterns = [
+      /\[([^\]]+)\]\([^)]+\)/g, // LinkedIn link format [Name](url)
+      /(?:^|\s)([A-Z][a-z]+\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/g, // Full names
+      /meet\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/gi,
+      /celebrating\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/gi,
+      /spotlight\s+(?:on\s+)?([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/gi
+    ];
+
+    // Patterns to extract titles/roles
+    const titlePatterns = [
+      /(?:director|manager|lead|senior|principal|chief|head|vice president|vp|ceo|cto|cfo)[\s\w,]+/gi,
+      /(?:engineer|developer|analyst|scientist|researcher|consultant|advisor|specialist)[\s\w,]*/gi,
+      /at\s+([A-Z][a-zA-Z\s&]+)(?:\s|$|,|\.|!)/g // Company names after "at"
     ];
 
     let postId = 1;
 
-    // Try to extract posts from markdown content
+    // Enhanced extraction from markdown content
     memberSpotlightPatterns.forEach(pattern => {
       const matches = markdown.matchAll(pattern);
       for (const match of matches) {
-        if (match[1] && match[1].trim().length > 50) {
+        if (match[1] && match[1].trim().length > 30) {
           const content = match[1].trim();
           
-          // Extract member name (usually the first mentioned name)
-          const nameMatch = content.match(/\[([^\]]+)\]\([^)]+\)|([A-Z][a-z]+\s+[A-Z][a-z]+)/);
-          const memberName = nameMatch ? (nameMatch[1] || nameMatch[2]) : 'Unknown Member';
+          // Extract member name with multiple patterns
+          let memberName = 'Community Member';
+          for (const namePattern of namePatterns) {
+            const nameMatch = content.match(namePattern);
+            if (nameMatch) {
+              memberName = nameMatch[1] || nameMatch[0];
+              // Clean up the name
+              memberName = memberName.replace(/[\[\]()]/g, '').trim();
+              if (memberName.split(' ').length >= 2 && memberName.split(' ').length <= 4) {
+                break;
+              }
+            }
+          }
           
-          // Extract description (usually after the name)
-          const descriptionMatch = content.match(/(?:exemplifies|demonstrates|shows|brings|contributes)([^.]*\.)/i);
-          const memberDescription = descriptionMatch ? descriptionMatch[1].trim() : content.substring(0, 200) + '...';
+          // Extract title/role
+          let memberTitle = 'Community Member';
+          for (const titlePattern of titlePatterns) {
+            const titleMatch = content.match(titlePattern);
+            if (titleMatch) {
+              memberTitle = titleMatch[0].trim();
+              // Clean up title
+              memberTitle = memberTitle.charAt(0).toUpperCase() + memberTitle.slice(1);
+              break;
+            }
+          }
+
+          // Extract description (clean and meaningful)
+          let memberDescription = content;
+          // Remove hashtags and clean up
+          memberDescription = memberDescription.replace(/#\w+/g, '').trim();
+          // Limit length
+          if (memberDescription.length > 300) {
+            memberDescription = memberDescription.substring(0, 300) + '...';
+          }
+
+          // Extract potential LinkedIn URL from content
+          const linkedinUrlMatch = content.match(/https:\/\/www\.linkedin\.com\/[^\s)]+/);
+          const linkedinUrl = linkedinUrlMatch ? linkedinUrlMatch[0] : 'https://www.linkedin.com/company/gen-ai-global/posts/';
 
           posts.push({
-            id: `linkedin-${postId++}`,
+            id: `linkedin-motw-${postId++}`,
             content: content,
             author: 'Gen AI Global',
-            date: new Date().toISOString().split('T')[0], // Default to today, could be improved with actual date extraction
+            date: this.extractDateFromContent(content) || new Date().toISOString().split('T')[0],
             type: 'member-spotlight',
-            linkedinUrl: 'https://www.linkedin.com/company/gen-ai-global/posts/',
+            linkedinUrl,
             memberName,
-            memberTitle: 'Community Member', // Could be extracted with more sophisticated parsing
+            memberTitle,
             memberDescription
           });
         }
       }
     });
 
-    // If no member spotlight posts found, look for general posts with member mentions
-    if (posts.length === 0) {
-      const generalPostPatterns = [
-        /(?:congratulations|celebrate|proud to announce|spotlight)([^.]*member[^.]*\.)/gi,
-        /(?:welcome|introducing|meet)([^.]*member[^.]*\.)/gi
-      ];
-
-      generalPostPatterns.forEach(pattern => {
-        const matches = markdown.matchAll(pattern);
+    // Also search HTML content for additional patterns
+    if (html && posts.length < 3) {
+      // Remove HTML tags and extract text
+      const htmlText = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');
+      
+      memberSpotlightPatterns.forEach(pattern => {
+        const matches = htmlText.matchAll(pattern);
         for (const match of matches) {
-          if (match[1] && match[1].trim().length > 30) {
+          if (match[1] && match[1].trim().length > 50 && !posts.find(p => p.content.includes(match[1].substring(0, 50)))) {
+            const content = match[1].trim();
+            
+            let memberName = 'Community Member';
+            for (const namePattern of namePatterns) {
+              const nameMatch = content.match(namePattern);
+              if (nameMatch && nameMatch[1]) {
+                memberName = nameMatch[1].trim();
+                break;
+              }
+            }
+
             posts.push({
-              id: `linkedin-general-${postId++}`,
-              content: match[1].trim(),
+              id: `linkedin-html-${postId++}`,
+              content: content,
               author: 'Gen AI Global',
               date: new Date().toISOString().split('T')[0],
-              type: 'general',
+              type: 'member-spotlight',
               linkedinUrl: 'https://www.linkedin.com/company/gen-ai-global/posts/',
-              memberName: 'Community Member',
-              memberDescription: match[1].trim()
+              memberName,
+              memberTitle: 'Community Member',
+              memberDescription: content.substring(0, 200) + '...'
             });
           }
         }
       });
     }
 
-    return posts.slice(0, 10); // Limit to 10 most recent posts
+    return posts.slice(0, 8); // Limit to 8 most relevant posts
+  }
+
+  private static extractDateFromContent(content: string): string | null {
+    // Try to extract date patterns from content
+    const datePatterns = [
+      /(\d{4}-\d{2}-\d{2})/,
+      /(\w+\s+\d{1,2},\s+\d{4})/,
+      /(\d{1,2}\/\d{1,2}\/\d{4})/
+    ];
+
+    for (const pattern of datePatterns) {
+      const match = content.match(pattern);
+      if (match) {
+        const date = new Date(match[1]);
+        if (!isNaN(date.getTime())) {
+          return date.toISOString().split('T')[0];
+        }
+      }
+    }
+
+    return null;
   }
 
   static async crawlWebsite(url: string): Promise<{ success: boolean; error?: string; data?: any }> {
