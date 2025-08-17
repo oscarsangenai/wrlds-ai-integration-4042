@@ -4,8 +4,8 @@ import SEO from '@/components/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { LinkedInScraper } from '@/components/LinkedInScraper';
-import { LinkedInPost } from '@/utils/FirecrawlService';
+import { BrightDataScraper } from '@/components/BrightDataScraper';
+import { LinkedInPost } from '@/utils/BrightDataService';
 import { ExternalLink, Award, Users, Calendar, Star, Linkedin } from 'lucide-react';
 
 interface MemberSpotlight {
@@ -200,10 +200,10 @@ const Spotlight = () => {
                 Live LinkedIn Integration
               </h2>
               <p className="text-muted-foreground">
-                Load real "Member of the Week" posts directly from LinkedIn.
+                Load real "Member of the Week" posts directly from LinkedIn using enterprise-grade Bright Data scraping.
               </p>
             </div>
-            <LinkedInScraper onPostsLoaded={handleLinkedInPostsLoaded} />
+            <BrightDataScraper onPostsLoaded={handleLinkedInPostsLoaded} />
           </div>
         </section>
 
