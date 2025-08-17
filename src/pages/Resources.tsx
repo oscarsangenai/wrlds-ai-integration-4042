@@ -1,13 +1,16 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import resourcesData from '@/data/resources.json';
 import PageLayout from '@/components/PageLayout';
 import SEO from '@/components/SEO';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { ExternalLink, Calendar, User, Search } from 'lucide-react';
+import { BrightDataScraper } from '@/components/BrightDataScraper';
+import { BrightDataService, LinkedInPost } from '@/utils/BrightDataService';
+import { ExternalLink, Calendar, User, Search, Award, Linkedin, Users, Loader2 } from 'lucide-react';
+import { useToast } from "@/components/ui/use-toast";
 
 interface Resource {
   id: number;
@@ -25,9 +28,44 @@ interface Resource {
 const resources: Resource[] = resourcesData.resources;
 
 const Resources = () => {
+  const { toast } = useToast();
   const [selectedTag, setSelectedTag] = useState<string>("All");
   const [selectedSector, setSelectedSector] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [linkedInPosts, setLinkedInPosts] = useState<LinkedInPost[]>([]);
+  const [isLoadingPosts, setIsLoadingPosts] = useState(false);
+  const [showScraper, setShowScraper] = useState(false);
+
+  // Auto-load LinkedIn posts when page loads
+  useEffect(() => {
+    const loadLinkedInPosts = async () => {
+      setIsLoadingPosts(true);
+      try {
+        const result = await BrightDataService.scrapeLinkedInPosts('https://www.linkedin.com/company/gen-ai-global/posts/?feedView=all');
+        if (result.success && result.posts) {
+          setLinkedInPosts(result.posts);
+          toast({
+            title: "Success",
+            description: `Loaded ${result.posts.length} Member of the Week posts from LinkedIn`,
+            duration: 3000,
+          });
+        } else {
+          console.log('No posts loaded automatically:', result.error);
+        }
+      } catch (error) {
+        console.log('Auto-load failed, manual scraping available');
+      } finally {
+        setIsLoadingPosts(false);
+      }
+    };
+
+    loadLinkedInPosts();
+  }, [toast]);
+
+  const handleLinkedInPostsLoaded = (posts: LinkedInPost[]) => {
+    setLinkedInPosts(posts);
+    setShowScraper(false);
+  };
 
   // Function to determine sector based on content
   const getSector = (resource: Resource): string => {
@@ -140,7 +178,7 @@ const Resources = () => {
               Resources
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Discover {resources.length} curated AI resources from our community Discord channels.
+              Discover {resources.length} curated AI resources and featured Member of the Week posts from our community.
             </p>
             
             {/* Filter Section */}
@@ -198,6 +236,106 @@ const Resources = () => {
                 </p>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Member of the Week Section */}
+        <section className="py-12 px-4 bg-muted/30">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
+                <Award className="h-8 w-8 text-primary" />
+                Member of the Week
+                {linkedInPosts.length > 0 && (
+                  <Badge variant="secondary" className="ml-2">
+                    {linkedInPosts.length} Live Posts
+                  </Badge>
+                )}
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                {linkedInPosts.length > 0 
+                  ? `Latest Member of the Week features from our LinkedIn page.`
+                  : "Loading Member of the Week posts from LinkedIn..."
+                }
+              </p>
+              
+              {isLoadingPosts && (
+                <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Loading LinkedIn posts...</span>
+                </div>
+              )}
+
+              {linkedInPosts.length === 0 && !isLoadingPosts && (
+                <div className="text-center">
+                  <p className="text-muted-foreground mb-4">
+                    No Member of the Week posts loaded automatically.
+                  </p>
+                  <Button 
+                    onClick={() => setShowScraper(!showScraper)}
+                    variant="outline"
+                  >
+                    <Linkedin className="mr-2 h-4 w-4" />
+                    {showScraper ? 'Hide' : 'Show'} LinkedIn Scraper
+                  </Button>
+                </div>
+              )}
+
+              {linkedInPosts.length > 0 && (
+                <Button 
+                  onClick={() => setShowScraper(!showScraper)}
+                  variant="outline"
+                  size="sm"
+                >
+                  <Linkedin className="mr-2 h-4 w-4" />
+                  {showScraper ? 'Hide' : 'Refresh'} LinkedIn Data
+                </Button>
+              )}
+            </div>
+
+            {showScraper && (
+              <div className="mb-12">
+                <BrightDataScraper onPostsLoaded={handleLinkedInPostsLoaded} />
+              </div>
+            )}
+
+            {linkedInPosts.length > 0 && (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {linkedInPosts.map((post) => (
+                  <Card key={post.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 border-l-4 border-l-primary">
+                    <CardHeader className="pb-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <Badge className="bg-primary/10 text-primary">
+                          Member Spotlight
+                        </Badge>
+                        <span className="text-sm text-muted-foreground">{post.date}</span>
+                      </div>
+                      {post.memberName && (
+                        <CardTitle className="text-xl">{post.memberName}</CardTitle>
+                      )}
+                      {post.memberTitle && (
+                        <p className="text-primary font-medium">{post.memberTitle}</p>
+                      )}
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground leading-relaxed mb-4">
+                        {post.memberDescription && post.memberDescription.length > 150
+                          ? post.memberDescription.substring(0, 150) + '...'
+                          : post.memberDescription || post.content.substring(0, 150) + '...'
+                        }
+                      </p>
+                      <Button variant="outline" size="sm" asChild>
+                        <a href={post.linkedinUrl} target="_blank" rel="noopener noreferrer">
+                          <Linkedin className="mr-2 h-4 w-4" />
+                          View on LinkedIn
+                          <ExternalLink className="ml-2 h-4 w-4" />
+                        </a>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
