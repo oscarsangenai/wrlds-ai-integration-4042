@@ -16,7 +16,7 @@ const About = () => {
       />
       <main className="pt-16 md:pt-20 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="container mx-auto max-w-6xl">
-          <header className="mb-8">
+          <header className="mb-8 text-center">
             <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent text-balance text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl mb-2">About Gen AI Global</h1>
             <p className="text-muted-foreground">Interactive organizational chart with search, zoom/pan, collapsible groups, and export options.</p>
           </header>
