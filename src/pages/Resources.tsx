@@ -11,7 +11,6 @@ import { BrightDataScraper } from '@/components/BrightDataScraper';
 import { BrightDataService, LinkedInPost } from '@/utils/BrightDataService';
 import { ExternalLink, Calendar, User, Search, Award, Linkedin, Users, Loader2 } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
-
 interface Resource {
   id: number;
   title: string;
@@ -26,9 +25,10 @@ interface Resource {
 
 // Load resources from JSON file
 const resources: Resource[] = resourcesData.resources;
-
 const Resources = () => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [selectedTag, setSelectedTag] = useState<string>("All");
   const [selectedSector, setSelectedSector] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -47,7 +47,7 @@ const Resources = () => {
           toast({
             title: "Success",
             description: `Loaded ${result.posts.length} Member of the Week posts from LinkedIn`,
-            duration: 3000,
+            duration: 3000
           });
         } else {
           console.log('No posts loaded automatically:', result.error);
@@ -58,10 +58,8 @@ const Resources = () => {
         setIsLoadingPosts(false);
       }
     };
-
     loadLinkedInPosts();
   }, [toast]);
-
   const handleLinkedInPostsLoaded = (posts: LinkedInPost[]) => {
     setLinkedInPosts(posts);
     setShowScraper(false);
@@ -72,7 +70,6 @@ const Resources = () => {
     const title = resource.title.toLowerCase();
     const description = resource.description.toLowerCase();
     const content = `${title} ${description}`;
-
     if (content.includes('healthcare') || content.includes('medical') || content.includes('health') || content.includes('autism') || content.includes('patient')) {
       return 'Healthcare';
     }
@@ -102,17 +99,14 @@ const Resources = () => {
     }
     return 'General AI';
   };
-
   const availableTags = useMemo(() => {
     const tags = ["All", ...new Set(resources.map(resource => resource.tag))];
     return tags.sort();
   }, []);
-
   const availableSectors = useMemo(() => {
     const sectors = ["All", ...new Set(resources.map(resource => getSector(resource)))];
     return sectors.sort();
   }, []);
-
   const filteredResources = useMemo(() => {
     let filtered = resources;
 
@@ -129,26 +123,20 @@ const Resources = () => {
     // Filter by search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(resource => 
-        resource.title.toLowerCase().includes(query) ||
-        resource.description.toLowerCase().includes(query) ||
-        resource.author.toLowerCase().includes(query)
-      );
+      filtered = filtered.filter(resource => resource.title.toLowerCase().includes(query) || resource.description.toLowerCase().includes(query) || resource.author.toLowerCase().includes(query));
     }
 
     // Sort by date (newest first)
     return filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [selectedTag, selectedSector, searchQuery]);
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
     });
   };
-
   const getTagColor = (tag: string) => {
     const tagColors: Record<string, string> = {
       'News/Article': 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300',
@@ -161,14 +149,8 @@ const Resources = () => {
     };
     return tagColors[tag] || tagColors['Other'];
   };
-
-  return (
-    <PageLayout showContact={false}>
-      <SEO
-        title="Resources - AI Articles, Case Studies & Learning Materials"
-        description="Access AI-related articles, case studies, and learning materials. Stay updated with the latest in artificial intelligence research and applications."
-        keywords={["AI resources", "artificial intelligence articles", "case studies", "learning materials", "AI research"]}
-      />
+  return <PageLayout showContact={false}>
+      <SEO title="Resources - AI Articles, Case Studies & Learning Materials" description="Access AI-related articles, case studies, and learning materials. Stay updated with the latest in artificial intelligence research and applications." keywords={["AI resources", "artificial intelligence articles", "case studies", "learning materials", "AI research"]} />
       
       <div className="min-h-screen bg-background">
         {/* Hero Section */}
@@ -186,44 +168,35 @@ const Resources = () => {
               {/* Search Bar */}
               <div className="relative max-w-md mx-auto">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search resources by title, description, or author..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
+                <Input placeholder="Search resources by title, description, or author..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-10" />
               </div>
 
               {/* Filter Dropdowns */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-muted-foreground">Tag:</span>
-                  <Select value={selectedTag} onValueChange={(value) => setSelectedTag(value)}>
+                  <Select value={selectedTag} onValueChange={value => setSelectedTag(value)}>
                     <SelectTrigger className="w-40">
                       <SelectValue placeholder="All Tags" />
                     </SelectTrigger>
                     <SelectContent>
-                      {availableTags.map((tag) => (
-                        <SelectItem key={tag} value={tag}>
+                      {availableTags.map(tag => <SelectItem key={tag} value={tag}>
                           {tag}
-                        </SelectItem>
-                      ))}
+                        </SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-muted-foreground">Sector:</span>
-                  <Select value={selectedSector} onValueChange={(value) => setSelectedSector(value)}>
+                  <Select value={selectedSector} onValueChange={value => setSelectedSector(value)}>
                     <SelectTrigger className="w-48">
                       <SelectValue placeholder="All Sectors" />
                     </SelectTrigger>
                     <SelectContent>
-                      {availableSectors.map((sector) => (
-                        <SelectItem key={sector} value={sector}>
+                      {availableSectors.map(sector => <SelectItem key={sector} value={sector}>
                           {sector}
-                        </SelectItem>
-                      ))}
+                        </SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
@@ -240,111 +213,13 @@ const Resources = () => {
         </section>
 
         {/* Member of the Week Section */}
-        <section className="py-12 px-4 bg-muted/30">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
-                <Award className="h-8 w-8 text-primary" />
-                Member of the Week
-                {linkedInPosts.length > 0 && (
-                  <Badge variant="secondary" className="ml-2">
-                    {linkedInPosts.length} Live Posts
-                  </Badge>
-                )}
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                {linkedInPosts.length > 0 
-                  ? `Latest Member of the Week features from our LinkedIn page.`
-                  : "Loading Member of the Week posts from LinkedIn..."
-                }
-              </p>
-              
-              {isLoadingPosts && (
-                <div className="flex items-center justify-center gap-2 text-muted-foreground">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Loading LinkedIn posts...</span>
-                </div>
-              )}
-
-              {linkedInPosts.length === 0 && !isLoadingPosts && (
-                <div className="text-center">
-                  <p className="text-muted-foreground mb-4">
-                    No Member of the Week posts loaded automatically.
-                  </p>
-                  <Button 
-                    onClick={() => setShowScraper(!showScraper)}
-                    variant="outline"
-                  >
-                    <Linkedin className="mr-2 h-4 w-4" />
-                    {showScraper ? 'Hide' : 'Show'} LinkedIn Scraper
-                  </Button>
-                </div>
-              )}
-
-              {linkedInPosts.length > 0 && (
-                <Button 
-                  onClick={() => setShowScraper(!showScraper)}
-                  variant="outline"
-                  size="sm"
-                >
-                  <Linkedin className="mr-2 h-4 w-4" />
-                  {showScraper ? 'Hide' : 'Refresh'} LinkedIn Data
-                </Button>
-              )}
-            </div>
-
-            {showScraper && (
-              <div className="mb-12">
-                <BrightDataScraper onPostsLoaded={handleLinkedInPostsLoaded} />
-              </div>
-            )}
-
-            {linkedInPosts.length > 0 && (
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {linkedInPosts.map((post) => (
-                  <Card key={post.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 border-l-4 border-l-primary">
-                    <CardHeader className="pb-4">
-                      <div className="flex items-start justify-between mb-2">
-                        <Badge className="bg-primary/10 text-primary">
-                          Member Spotlight
-                        </Badge>
-                        <span className="text-sm text-muted-foreground">{post.date}</span>
-                      </div>
-                      {post.memberName && (
-                        <CardTitle className="text-xl">{post.memberName}</CardTitle>
-                      )}
-                      {post.memberTitle && (
-                        <p className="text-primary font-medium">{post.memberTitle}</p>
-                      )}
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground leading-relaxed mb-4">
-                        {post.memberDescription && post.memberDescription.length > 150
-                          ? post.memberDescription.substring(0, 150) + '...'
-                          : post.memberDescription || post.content.substring(0, 150) + '...'
-                        }
-                      </p>
-                      <Button variant="outline" size="sm" asChild>
-                        <a href={post.linkedinUrl} target="_blank" rel="noopener noreferrer">
-                          <Linkedin className="mr-2 h-4 w-4" />
-                          View on LinkedIn
-                          <ExternalLink className="ml-2 h-4 w-4" />
-                        </a>
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
+        
 
         {/* Resources Grid */}
         <section className="py-12 px-4">
           <div className="max-w-6xl mx-auto">
             <div className="grid gap-8 md:gap-6">
-              {filteredResources.map((resource) => (
-                <Card key={resource.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 group">
+              {filteredResources.map(resource => <Card key={resource.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 group">
                   <CardContent className="p-8">
                     <div className="flex flex-col lg:flex-row lg:items-start gap-6">
                       <div className="flex-1">
@@ -353,11 +228,9 @@ const Resources = () => {
                           <Badge className={getTagColor(resource.tag)}>
                             {resource.tag}
                           </Badge>
-                          {resource.channel && (
-                            <Badge variant="outline" className="text-xs">
+                          {resource.channel && <Badge variant="outline" className="text-xs">
                               {resource.channel}
-                            </Badge>
-                          )}
+                            </Badge>}
                         </div>
 
                         {/* Title */}
@@ -387,51 +260,36 @@ const Resources = () => {
                         {/* Action Buttons */}
                         <div className="flex flex-wrap gap-3">
                           <Button asChild className="group/btn">
-                            <a 
-                              href={resource.resource_url} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                            >
+                            <a href={resource.resource_url} target="_blank" rel="noopener noreferrer">
                               Read More
                               <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
                             </a>
                           </Button>
                           
-                          {resource.discord_url && (
-                            <Button variant="outline" asChild>
-                              <a 
-                                href={resource.discord_url} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                              >
+                          {resource.discord_url && <Button variant="outline" asChild>
+                              <a href={resource.discord_url} target="_blank" rel="noopener noreferrer">
                                 Discord Discussion
                                 <ExternalLink className="ml-2 h-4 w-4" />
                               </a>
-                            </Button>
-                          )}
+                            </Button>}
                         </div>
                       </div>
                     </div>
                   </CardContent>
-                </Card>
-              ))}
+                </Card>)}
             </div>
 
-            {filteredResources.length === 0 && (
-              <div className="text-center py-12">
+            {filteredResources.length === 0 && <div className="text-center py-12">
                 <p className="text-muted-foreground text-lg">
                   No resources found for the current filters.
                 </p>
                 <p className="text-muted-foreground text-sm mt-2">
                   Try adjusting your search or filter criteria.
                 </p>
-              </div>
-            )}
+              </div>}
           </div>
         </section>
       </div>
-    </PageLayout>
-  );
+    </PageLayout>;
 };
-
 export default Resources;
