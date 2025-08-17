@@ -18,6 +18,14 @@ export class BrightDataService {
     try {
       console.log('Scraping LinkedIn posts with Bright Data API via Supabase edge function');
       
+      // Check if Supabase is properly configured
+      if (!supabase) {
+        return {
+          success: false,
+          error: 'Supabase client not properly configured'
+        };
+      }
+
       const { data, error } = await supabase.functions.invoke('scrape-linkedin', {
         body: {
           url: url || 'https://www.linkedin.com/company/gen-ai-global/posts/?feedView=all'
@@ -26,13 +34,22 @@ export class BrightDataService {
 
       if (error) {
         console.error('Supabase function error:', error);
+        
+        // Provide more helpful error messages
+        if (error.message?.includes('Function not found')) {
+          return {
+            success: false,
+            error: 'Scraping function not deployed. Please ensure the Supabase edge function is properly set up.'
+          };
+        }
+        
         return {
           success: false,
           error: error.message || 'Failed to invoke scraping function'
         };
       }
 
-      if (data.error) {
+      if (data?.error) {
         console.error('Bright Data API error:', data.error);
         return {
           success: false,
@@ -40,10 +57,10 @@ export class BrightDataService {
         };
       }
 
-      console.log('Successfully scraped LinkedIn posts:', data.posts);
+      console.log('Successfully scraped LinkedIn posts:', data?.posts);
       return {
         success: true,
-        posts: data.posts || []
+        posts: data?.posts || []
       };
 
     } catch (error) {
