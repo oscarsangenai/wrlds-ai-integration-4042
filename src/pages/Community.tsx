@@ -1,7 +1,10 @@
 import PageLayout from '@/components/PageLayout';
 import SEO from '@/components/SEO';
-import { Linkedin, MessageSquare } from 'lucide-react';
+import { Linkedin, MessageSquare, User, Users, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import AuroraNebula from '@/components/visuals/AuroraNebula';
 import ConstellationParticles from '@/components/visuals/ConstellationParticles';
 
@@ -65,6 +68,94 @@ const Community = () => {
               <MessageSquare className="mr-2 size-5" /> Join our Discord
             </motion.a>
           </div>
+
+          {/* Membership Section */}
+          <motion.div 
+            className="mt-12 w-full max-w-4xl"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.3 }}
+          >
+            <h2 className="text-3xl font-bold mb-6 text-center">Join Our Community</h2>
+            <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
+              Ready to take the next step? Choose your path to become part of our global AI community.
+            </p>
+            
+            <div className="grid sm:grid-cols-2 gap-6">
+              <Card className="group hover:shadow-lg transition-all duration-300 border-primary/20 hover:border-primary/40">
+                <CardContent className="p-8 text-center">
+                  <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
+                    <User className="h-8 w-8 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-semibold mb-4">Join as Member</h3>
+                  <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+                    Have AI credentials or certifications? Join our certified member community and access exclusive resources, networking opportunities, and advanced AI discussions.
+                  </p>
+                  <ul className="text-sm text-muted-foreground space-y-2 text-left mb-6">
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                      <span>Access to exclusive member-only content</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                      <span>Priority in community discussions</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                      <span>Networking with AI professionals</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                      <span>Early access to events and workshops</span>
+                    </li>
+                  </ul>
+                  <Button asChild className="w-full group-hover:scale-105 transition-transform" size="lg">
+                    <Link to="/join">
+                      Apply for Membership
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="group hover:shadow-lg transition-all duration-300 border-secondary/20 hover:border-secondary/40">
+                <CardContent className="p-8 text-center">
+                  <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-secondary/10 flex items-center justify-center">
+                    <Users className="h-8 w-8 text-secondary-foreground" />
+                  </div>
+                  <h3 className="text-2xl font-semibold mb-4">Get Involved</h3>
+                  <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+                    Want to contribute to democratizing AI knowledge? Volunteer your skills and help us build an inclusive AI community for everyone.
+                  </p>
+                  <ul className="text-sm text-muted-foreground space-y-2 text-left mb-6">
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
+                      <span>Contribute to AI education initiatives</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
+                      <span>Help organize community events</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
+                      <span>Create content and resources</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
+                      <span>Build meaningful connections</span>
+                    </li>
+                  </ul>
+                  <Button asChild variant="secondary" className="w-full group-hover:scale-105 transition-transform" size="lg">
+                    <Link to="/get-involved">
+                      Explore Opportunities
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </motion.div>
         </motion.section>
       </main>
     </PageLayout>
