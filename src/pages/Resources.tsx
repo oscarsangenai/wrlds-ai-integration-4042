@@ -134,7 +134,7 @@ const Resources = () => {
       
       <div className="min-h-screen bg-background">
         {/* Hero Section */}
-        <section className="relative py-20 px-4 text-center">
+        <section className="relative pt-20 pb-8 px-4 text-center">
           <div className="max-w-4xl mx-auto">
             <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent text-balance text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl mb-6">
               Resources
