@@ -99,50 +99,33 @@ const memberSpotlights: MemberSpotlight[] = [
 const communityUpdates: CommunityUpdate[] = [
   {
     id: 1,
-    title: "Member of the Week: Sangame Krishnamani Featured",
-    description: "Our latest Member of the Week spotlight celebrates Sangame Krishnamani, Director of Software Engineering at Capital One and key community leader. Her contributions to AI ethics and community growth continue to inspire our members.",
-    date: "2025-01-15",
-    type: "achievement",
-    link: "https://www.linkedin.com/posts/gen-ai-global_genaiglobal-memberoftheweek-aicommunity-activity-7326229481134637056-pw-i"
-  },
-  {
-    id: 2,
-    title: "Nikhil Kassetty Speaks at ICIRD-2025",
-    description: "Community member Nikhil Kassetty was featured as an Invited Expert Speaker at ICIRD-2025, representing our community's expertise in AI research and digital transformation.",
-    date: "2025-01-08",
-    type: "achievement",
-    link: "https://www.linkedin.com/posts/gen-ai-global_memberoftheweek-genai-digitaltransformation-activity-7362113334965374976-mgym"
-  },
-  {
-    id: 3,
-    title: "Katherine Valqui: LinkedIn AI Content Leader",
-    description: "Celebrating Katherine Valqui's outstanding contributions to our community's LinkedIn presence and her innovative approach to AI content creation and community engagement.",
-    date: "2024-12-10",
-    type: "milestone",
-    link: "https://www.linkedin.com/posts/gen-ai-global_linkedin-ai-activity-7341821580001374211-k2o4"
-  },
-  {
-    id: 4,
-    title: "Community Reaches 8,000+ Active Members",
-    description: "We're thrilled to announce that our Gen AI Global community has reached over 8,000 active members across our Discord channels, LinkedIn network, and professional partnerships.",
-    date: "2025-01-20",
+    title: "Community Reaches 5,000 Members",
+    description: "We're thrilled to announce that our Gen AI Global community has reached 5,000 active members across our Discord channels and professional networks.",
+    date: "2025-01-19",
     type: "milestone"
   },
   {
-    id: 5,
+    id: 2,
     title: "AI Innovation Workshop Series Launched",
-    description: "New monthly workshop series covering cutting-edge AI topics, from prompt engineering to multimodal AI applications, led by our Member of the Week alumni.",
-    date: "2025-01-18",
+    description: "New monthly workshop series covering cutting-edge AI topics, from prompt engineering to multimodal AI applications.",
+    date: "2025-01-17",
     type: "announcement",
     link: "/events"
   },
   {
-    id: 6,
-    title: "Member Spotlight: Amber Bellou's AI Strategy Impact",
-    description: "Featuring Amber Bellou's remarkable work in AI strategy implementation and her contributions to bridging the gap between AI research and business applications.",
-    date: "2024-12-20",
-    type: "achievement",
-    link: "https://www.linkedin.com/posts/gen-ai-global_memberoftheweek-genai-sgu-activity-7359599098850660353-XIPd"
+    id: 3,
+    title: "Research Collaboration Program",
+    description: "Announcing our new research collaboration program connecting industry professionals with academic researchers.",
+    date: "2025-01-14",
+    type: "event",
+    link: "/community"
+  },
+  {
+    id: 4,
+    title: "Community Impact Report 2024",
+    description: "Our annual impact report showcasing the achievements and growth of our global AI community throughout 2024.",
+    date: "2025-01-09",
+    type: "achievement"
   }
 ];
 
