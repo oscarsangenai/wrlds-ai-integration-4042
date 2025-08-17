@@ -6,7 +6,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { ExternalLink, Calendar, User } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { ExternalLink, Calendar, User, Search } from 'lucide-react';
 
 interface Resource {
   id: number;
@@ -20,21 +21,50 @@ interface Resource {
   discord_url?: string;
 }
 
-// Sample data based on the provided format - now loaded from JSON
-const sampleResources: Resource[] = resourcesData;
+// Load resources from JSON file
+const resources: Resource[] = resourcesData.resources;
 
 const Resources = () => {
   const [selectedTag, setSelectedTag] = useState<string>("All");
+  const [selectedChannel, setSelectedChannel] = useState<string>("All");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const availableTags = useMemo(() => {
-    const tags = ["All", ...new Set(sampleResources.map(resource => resource.tag))];
-    return tags;
+    const tags = ["All", ...new Set(resources.map(resource => resource.tag))];
+    return tags.sort();
+  }, []);
+
+  const availableChannels = useMemo(() => {
+    const channels = ["All", ...new Set(resources.filter(r => r.channel).map(resource => resource.channel!))];
+    return channels.sort();
   }, []);
 
   const filteredResources = useMemo(() => {
-    if (selectedTag === "All") return sampleResources;
-    return sampleResources.filter(resource => resource.tag === selectedTag);
-  }, [selectedTag]);
+    let filtered = resources;
+
+    // Filter by tag
+    if (selectedTag !== "All") {
+      filtered = filtered.filter(resource => resource.tag === selectedTag);
+    }
+
+    // Filter by channel
+    if (selectedChannel !== "All") {
+      filtered = filtered.filter(resource => resource.channel === selectedChannel);
+    }
+
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(resource => 
+        resource.title.toLowerCase().includes(query) ||
+        resource.description.toLowerCase().includes(query) ||
+        resource.author.toLowerCase().includes(query)
+      );
+    }
+
+    // Sort by date (newest first)
+    return filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [selectedTag, selectedChannel, searchQuery]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -74,24 +104,63 @@ const Resources = () => {
               Resources
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Access AI-related articles, case studies, and learning materials.
+              Discover {resources.length} curated AI resources from our community Discord channels.
             </p>
             
             {/* Filter Section */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-              <span className="text-sm font-medium text-muted-foreground">Filter by Tag:</span>
-              <Select value={selectedTag} onValueChange={(value) => setSelectedTag(value)}>
-                <SelectTrigger className="w-48">
-                  <SelectValue placeholder="Select a tag" />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableTags.map((tag) => (
-                    <SelectItem key={tag} value={tag}>
-                      {tag}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="max-w-4xl mx-auto space-y-6 mb-12">
+              {/* Search Bar */}
+              <div className="relative max-w-md mx-auto">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search resources by title, description, or author..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+
+              {/* Filter Dropdowns */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-muted-foreground">Tag:</span>
+                  <Select value={selectedTag} onValueChange={(value) => setSelectedTag(value)}>
+                    <SelectTrigger className="w-40">
+                      <SelectValue placeholder="All Tags" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableTags.map((tag) => (
+                        <SelectItem key={tag} value={tag}>
+                          {tag}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-muted-foreground">Channel:</span>
+                  <Select value={selectedChannel} onValueChange={(value) => setSelectedChannel(value)}>
+                    <SelectTrigger className="w-48">
+                      <SelectValue placeholder="All Channels" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableChannels.map((channel) => (
+                        <SelectItem key={channel} value={channel}>
+                          {channel}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Results Count */}
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground">
+                  Showing {filteredResources.length} of {resources.length} resources
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -177,7 +246,10 @@ const Resources = () => {
             {filteredResources.length === 0 && (
               <div className="text-center py-12">
                 <p className="text-muted-foreground text-lg">
-                  No resources found for the selected tag.
+                  No resources found for the current filters.
+                </p>
+                <p className="text-muted-foreground text-sm mt-2">
+                  Try adjusting your search or filter criteria.
                 </p>
               </div>
             )}
