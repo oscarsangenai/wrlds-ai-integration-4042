@@ -62,12 +62,13 @@ const Navbar = () => {
           <div className="hidden md:block">
             <NavigationMenu className="text-[hsl(var(--primary-foreground))]">
               <NavigationMenuList>
-                {[
-                  { to: '/', label: 'Home' },
-                  { to: '/about', label: 'About Us' },
-                  { to: '/community', label: 'Community' },
-                  { to: '/resources', label: 'Resources' },
-                ].map((item) => (
+                 {[
+                   { to: '/', label: 'Home' },
+                   { to: '/about', label: 'About Us' },
+                   { to: '/community', label: 'Community' },
+                   { to: '/resources', label: 'Resources' },
+                   { to: '/spotlight', label: 'Spotlight' },
+                 ].map((item) => (
                   <NavigationMenuItem key={item.to}>
                     <NavigationMenuLink
                       asChild
@@ -101,12 +102,13 @@ const Navbar = () => {
       {/* Mobile Navigation Menu */}
       <div className={cn("md:hidden transition-all duration-300 overflow-hidden w-full", isMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0")}> 
         <div className="px-3 pt-2 pb-3 space-y-1 shadow-sm overflow-y-auto max-h-screen bg-[hsl(var(--footer))]"> 
-          {[
-            { to: '/', label: 'Home' },
-            { to: '/about', label: 'About Us' },
-            { to: '/community', label: 'Community' },
-            { to: '/resources', label: 'Resources' },
-          ].map((item) => (
+           {[
+             { to: '/', label: 'Home' },
+             { to: '/about', label: 'About Us' },
+             { to: '/community', label: 'Community' },
+             { to: '/resources', label: 'Resources' },
+             { to: '/spotlight', label: 'Spotlight' },
+           ].map((item) => (
             <Link
               key={item.to}
               to={item.to}
