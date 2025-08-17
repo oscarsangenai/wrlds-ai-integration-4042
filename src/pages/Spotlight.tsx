@@ -207,6 +207,61 @@ const Spotlight = () => {
           </div>
         </section>
 
+        {/* Community Updates Section */}
+        <section className="py-12 px-4 bg-muted/30">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
+                <Users className="h-8 w-8 text-primary" />
+                Community Updates
+              </h2>
+              <p className="text-muted-foreground">
+                Stay informed about the latest happenings in our community.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {communityUpdates.map((update) => (
+                <Card key={update.id} className="hover:shadow-lg transition-all duration-300">
+                  <CardHeader className="pb-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                          {getUpdateIcon(update.type)}
+                        </div>
+                        <div>
+                          <CardTitle className="text-lg mb-2">{update.title}</CardTitle>
+                          <div className="flex items-center gap-3 mb-3">
+                            <Badge className={getUpdateColor(update.type)}>
+                              {update.type.charAt(0).toUpperCase() + update.type.slice(1)}
+                            </Badge>
+                            <span className="text-sm text-muted-foreground">
+                              {formatDate(update.date)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground mb-4 leading-relaxed">
+                      {update.description}
+                    </p>
+                    {update.link && (
+                      <Button variant="outline" size="sm" asChild>
+                        <a href={update.link}>
+                          Learn More
+                          <ExternalLink className="ml-2 h-4 w-4" />
+                        </a>
+                      </Button>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Member Spotlight Section */}
         <section className="py-12 px-4">
           <div className="max-w-6xl mx-auto">
@@ -336,61 +391,6 @@ const Spotlight = () => {
                 </Card>
                 ))}
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Community Updates Section */}
-        <section className="py-12 px-4 bg-muted/30">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
-                <Users className="h-8 w-8 text-primary" />
-                Community Updates
-              </h2>
-              <p className="text-muted-foreground">
-                Stay informed about the latest happenings in our community.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              {communityUpdates.map((update) => (
-                <Card key={update.id} className="hover:shadow-lg transition-all duration-300">
-                  <CardHeader className="pb-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                          {getUpdateIcon(update.type)}
-                        </div>
-                        <div>
-                          <CardTitle className="text-lg mb-2">{update.title}</CardTitle>
-                          <div className="flex items-center gap-3 mb-3">
-                            <Badge className={getUpdateColor(update.type)}>
-                              {update.type.charAt(0).toUpperCase() + update.type.slice(1)}
-                            </Badge>
-                            <span className="text-sm text-muted-foreground">
-                              {formatDate(update.date)}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4 leading-relaxed">
-                      {update.description}
-                    </p>
-                    {update.link && (
-                      <Button variant="outline" size="sm" asChild>
-                        <a href={update.link}>
-                          Learn More
-                          <ExternalLink className="ml-2 h-4 w-4" />
-                        </a>
-                      </Button>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
             </div>
           </div>
         </section>
