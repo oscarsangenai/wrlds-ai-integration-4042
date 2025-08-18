@@ -77,7 +77,7 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-				'space': ['sans-serif'],
+				'space': ['Space Grotesk','sans-serif'],
 			},
 			keyframes: {
 				'accordion-down': {
