@@ -26,7 +26,7 @@ export type OrgMember = {
 export type OrgUnit = {
   id: string;
   name: string;
-  type: 'director' | 'pillar' | 'team';
+  type: 'founder' | 'director' | 'pillar' | 'team';
   icon: keyof typeof CATEGORY_ICON;
   description?: string;
   parentId?: string;
