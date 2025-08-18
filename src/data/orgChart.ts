@@ -66,7 +66,7 @@ export const ORG_UNITS: OrgUnit[] = [
       { name: "Oscar Sanchez", role: "Founder" },
       { name: "Dr. Abel Sanchez", role: "Founder" },
     ],
-
+  },
   // Directors Level
   {
     id: "governance-overview",
@@ -467,5 +467,4 @@ export const ORG_UNITS: OrgUnit[] = [
       { name: "TBD", role: "Member" },
     ],
   },
-    },
 ];
