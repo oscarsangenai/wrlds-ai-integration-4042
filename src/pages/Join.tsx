@@ -5,22 +5,14 @@ import SEO from '@/components/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, User, ArrowRight, FileText, Users } from 'lucide-react';
-
 const Join = () => {
   const navigate = useNavigate();
-
   const handleFilloutRedirect = () => {
     // Open Fillout form in new tab
     window.open('https://form.fillout.com/t/wHKtxCmdQDus', '_blank', 'noopener,noreferrer');
   };
-
-  return (
-    <PageLayout showContact={false}>
-      <SEO
-        title="Join Gen AI Global - Member Application"
-        description="Join our global AI community as a member. Submit your credentials and become part of our network of AI professionals."
-        keywords={["join AI community", "AI membership", "AI professionals", "Gen AI Global"]}
-      />
+  return <PageLayout showContact={false}>
+      <SEO title="Join Gen AI Global - Member Application" description="Join our global AI community as a member. Submit your credentials and become part of our network of AI professionals." keywords={["join AI community", "AI membership", "AI professionals", "Gen AI Global"]} />
       
       <div className="min-h-screen bg-background py-20 px-4">
         <div className="max-w-4xl mx-auto">
@@ -62,11 +54,7 @@ const Join = () => {
                     Early access to events and workshops
                   </li>
                 </ul>
-                <Button 
-                  onClick={handleFilloutRedirect}
-                  className="w-full group-hover:scale-105 transition-transform"
-                  size="lg"
-                >
+                <Button onClick={handleFilloutRedirect} className="w-full group-hover:scale-105 transition-transform" size="lg">
                   Apply for Membership
                   <ExternalLink className="ml-2 h-4 w-4" />
                 </Button>
@@ -82,9 +70,7 @@ const Join = () => {
                 <CardTitle className="text-2xl">Get Involved</CardTitle>
               </CardHeader>
               <CardContent className="text-center space-y-4">
-                <p className="text-muted-foreground">
-                  Want to contribute to democratizing AI knowledge? Volunteer your skills and help us build an inclusive AI community for everyone.
-                </p>
+                <p className="text-muted-foreground">Want to contribute to democratizing AI knowledge? Volunteer your skills and help us build an inclusive AI community for everyone. Learn, build and contribute with us!</p>
                 <ul className="text-sm text-muted-foreground space-y-2 text-left">
                   <li className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
@@ -103,12 +89,7 @@ const Join = () => {
                     Build meaningful connections
                   </li>
                 </ul>
-                <Button 
-                  onClick={() => navigate('/get-involved')}
-                  variant="secondary" 
-                  className="w-full group-hover:scale-105 transition-transform"
-                  size="lg"
-                >
+                <Button onClick={() => navigate('/get-involved')} variant="secondary" className="w-full group-hover:scale-105 transition-transform" size="lg">
                   Explore Opportunities
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -170,8 +151,6 @@ const Join = () => {
           </div>
         </div>
       </div>
-    </PageLayout>
-  );
+    </PageLayout>;
 };
-
 export default Join;
