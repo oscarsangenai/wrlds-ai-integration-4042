@@ -12,6 +12,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
 import { Users, Mail, Globe, Clock, Briefcase, ExternalLink, ArrowRight, Heart } from 'lucide-react';
+import { motion } from 'framer-motion';
+import AuroraNebula from '@/components/visuals/AuroraNebula';
+import ConstellationParticles from '@/components/visuals/ConstellationParticles';
 
 // Mock data - In production, this would come from Supabase
 const volunteerRoles = [
@@ -254,19 +257,28 @@ const GetInvolved = () => {
         keywords={["volunteer AI", "AI volunteer opportunities", "contribute to AI community", "Gen AI Global volunteer"]}
       />
       
-      <div className="min-h-screen bg-background py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          {/* Hero Section */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
-              <Heart className="h-8 w-8 text-red-500" />
-              Get Involved
-            </h1>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Join our volunteer program and help democratize AI knowledge. Contribute your skills, 
-              learn from experts, and make a meaningful impact on the global AI community.
-            </p>
-          </div>
+      <main className="relative pt-16 md:pt-20">
+        {/* Futuristic background */}
+        <AuroraNebula />
+        <ConstellationParticles />
+        
+        {/* Hero Section */}
+        <motion.section 
+          className="relative z-10 container mx-auto flex min-h-[60vh] max-w-5xl flex-col items-center justify-center gap-8 px-4 text-center overflow-visible"
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent text-balance text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl">
+            Get Involved
+          </h1>
+          <p className="max-w-2xl text-balance text-muted-foreground">
+            Join our volunteer community and help democratize AI knowledge. Find opportunities that match your skills and passion.
+          </p>
+        </motion.section>
+        
+        <div className="relative z-10 container mx-auto max-w-6xl px-4 py-16">
 
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Volunteer Opportunities */}
@@ -374,7 +386,7 @@ const GetInvolved = () => {
             </p>
           </div>
         </div>
-      </div>
+      </main>
     </PageLayout>
   );
 };

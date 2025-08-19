@@ -11,6 +11,9 @@ import { BrightDataScraper } from '@/components/BrightDataScraper';
 import { BrightDataService, LinkedInPost } from '@/utils/BrightDataService';
 import { ExternalLink, Calendar, User, Search, Award, Linkedin, Users, Loader2 } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
+import { motion } from 'framer-motion';
+import AuroraNebula from '@/components/visuals/AuroraNebula';
+import ConstellationParticles from '@/components/visuals/ConstellationParticles';
 interface Resource {
   id: number;
   title: string;

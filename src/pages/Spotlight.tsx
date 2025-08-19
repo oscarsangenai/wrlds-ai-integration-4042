@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button';
 import { BrightDataScraper } from '@/components/BrightDataScraper';
 import { LinkedInPost } from '@/utils/BrightDataService';
 import { ExternalLink, Award, Users, Calendar, Star, Linkedin } from 'lucide-react';
+import { motion } from 'framer-motion';
+import AuroraNebula from '@/components/visuals/AuroraNebula';
+import ConstellationParticles from '@/components/visuals/ConstellationParticles';
 
 interface MemberSpotlight {
   id: number;
