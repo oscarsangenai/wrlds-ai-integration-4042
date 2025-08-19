@@ -11,7 +11,6 @@ import { BrightDataScraper } from '@/components/BrightDataScraper';
 import { BrightDataService, LinkedInPost } from '@/utils/BrightDataService';
 import { ExternalLink, Calendar, User, Search, Award, Linkedin, Users, Loader2, Star } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
-
 interface Resource {
   id: number;
   title: string;
@@ -26,9 +25,10 @@ interface Resource {
 
 // Load resources from JSON file
 const resources: Resource[] = resourcesData.resources;
-
 const Resources = () => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [selectedTag, setSelectedTag] = useState<string>("All");
   const [selectedSector, setSelectedSector] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -60,7 +60,6 @@ const Resources = () => {
     };
     loadLinkedInPosts();
   }, [toast]);
-
   const handleLinkedInPostsLoaded = (posts: LinkedInPost[]) => {
     setLinkedInPosts(posts);
     setShowScraper(false);
@@ -100,17 +99,14 @@ const Resources = () => {
     }
     return 'General AI';
   };
-
   const availableTags = useMemo(() => {
     const tags = ["All", ...new Set(resources.map(resource => resource.tag))];
     return tags.sort();
   }, []);
-
   const availableSectors = useMemo(() => {
     const sectors = ["All", ...new Set(resources.map(resource => getSector(resource)))];
     return sectors.sort();
   }, []);
-
   const filteredResources = useMemo(() => {
     let filtered = resources;
 
@@ -127,17 +123,12 @@ const Resources = () => {
     // Filter by search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(resource => 
-        resource.title.toLowerCase().includes(query) || 
-        resource.description.toLowerCase().includes(query) || 
-        resource.author.toLowerCase().includes(query)
-      );
+      filtered = filtered.filter(resource => resource.title.toLowerCase().includes(query) || resource.description.toLowerCase().includes(query) || resource.author.toLowerCase().includes(query));
     }
 
     // Sort by date (newest first)
     return filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [selectedTag, selectedSector, searchQuery]);
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -146,7 +137,6 @@ const Resources = () => {
       day: 'numeric'
     });
   };
-
   const getTagColor = (tag: string) => {
     const tagColors: Record<string, string> = {
       'News/Article': 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300',
@@ -159,14 +149,8 @@ const Resources = () => {
     };
     return tagColors[tag] || tagColors['Other'];
   };
-
-  return (
-    <PageLayout showContact={false}>
-      <SEO 
-        title="Resources - AI Articles, Case Studies & Learning Materials" 
-        description="Access AI-related articles, case studies, and learning materials. Stay updated with the latest in artificial intelligence research and applications." 
-        keywords={["AI resources", "artificial intelligence articles", "case studies", "learning materials", "AI research"]} 
-      />
+  return <PageLayout showContact={false}>
+      <SEO title="Resources - AI Articles, Case Studies & Learning Materials" description="Access AI-related articles, case studies, and learning materials. Stay updated with the latest in artificial intelligence research and applications." keywords={["AI resources", "artificial intelligence articles", "case studies", "learning materials", "AI research"]} />
       
       <div className="min-h-screen bg-background">
         {/* Hero Section */}
@@ -182,105 +166,7 @@ const Resources = () => {
         </section>
 
         {/* Community Updates Section */}
-        <section className="py-12 px-4 bg-muted/30">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
-                <Users className="h-8 w-8 text-primary" />
-                Community Updates
-              </h2>
-              <p className="text-muted-foreground">
-                Stay informed about the latest happenings in our community.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card className="hover:shadow-lg transition-all duration-300">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                      <Users className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg">5,000 Members</CardTitle>
-                      <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300 mt-1">
-                        Milestone
-                      </Badge>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    Our community has reached 5,000 active members across Discord and professional networks.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-all duration-300">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                      <Calendar className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg">New Workshops</CardTitle>
-                      <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300 mt-1">
-                        Event
-                      </Badge>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    Monthly workshop series covering cutting-edge AI topics and applications.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-all duration-300">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                      <Award className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg">Research Program</CardTitle>
-                      <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300 mt-1">
-                        Achievement
-                      </Badge>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    New collaboration program connecting industry professionals with researchers.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-all duration-300">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                      <Star className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg">Impact Report</CardTitle>
-                      <Badge className="bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-300 mt-1">
-                        Announcement
-                      </Badge>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    2024 community impact report showcasing achievements and growth.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
+        
 
         {/* Filters Section */}
         <section className="py-8 px-4">
@@ -290,12 +176,7 @@ const Resources = () => {
               {/* Search Bar */}
               <div className="relative max-w-md mx-auto">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input 
-                  placeholder="Search resources by title, description, or author..." 
-                  value={searchQuery} 
-                  onChange={e => setSearchQuery(e.target.value)} 
-                  className="pl-10" 
-                />
+                <Input placeholder="Search resources by title, description, or author..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-10" />
               </div>
 
               {/* Filter Dropdowns */}
@@ -307,11 +188,9 @@ const Resources = () => {
                       <SelectValue placeholder="All Tags" />
                     </SelectTrigger>
                     <SelectContent>
-                      {availableTags.map(tag => (
-                        <SelectItem key={tag} value={tag}>
+                      {availableTags.map(tag => <SelectItem key={tag} value={tag}>
                           {tag}
-                        </SelectItem>
-                      ))}
+                        </SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
@@ -323,11 +202,9 @@ const Resources = () => {
                       <SelectValue placeholder="All Sectors" />
                     </SelectTrigger>
                     <SelectContent>
-                      {availableSectors.map(sector => (
-                        <SelectItem key={sector} value={sector}>
+                      {availableSectors.map(sector => <SelectItem key={sector} value={sector}>
                           {sector}
-                        </SelectItem>
-                      ))}
+                        </SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
@@ -347,8 +224,7 @@ const Resources = () => {
         <section className="py-12 px-4">
           <div className="max-w-6xl mx-auto">
             <div className="grid gap-8 md:gap-6">
-              {filteredResources.map(resource => (
-                <Card key={resource.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 group">
+              {filteredResources.map(resource => <Card key={resource.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 group">
                   <CardContent className="p-8">
                     <div className="flex flex-col lg:flex-row lg:items-start gap-6">
                       <div className="flex-1">
@@ -357,11 +233,9 @@ const Resources = () => {
                           <Badge className={getTagColor(resource.tag)}>
                             {resource.tag}
                           </Badge>
-                          {resource.channel && (
-                            <Badge variant="outline" className="text-xs">
+                          {resource.channel && <Badge variant="outline" className="text-xs">
                               {resource.channel}
-                            </Badge>
-                          )}
+                            </Badge>}
                         </div>
 
                         {/* Title */}
@@ -397,37 +271,30 @@ const Resources = () => {
                             </a>
                           </Button>
                           
-                          {resource.discord_url && (
-                            <Button variant="outline" asChild>
+                          {resource.discord_url && <Button variant="outline" asChild>
                               <a href={resource.discord_url} target="_blank" rel="noopener noreferrer">
                                 Discord Discussion
                                 <ExternalLink className="ml-2 h-4 w-4" />
                               </a>
-                            </Button>
-                          )}
+                            </Button>}
                         </div>
                       </div>
                     </div>
                   </CardContent>
-                </Card>
-              ))}
+                </Card>)}
             </div>
 
-            {filteredResources.length === 0 && (
-              <div className="text-center py-12">
+            {filteredResources.length === 0 && <div className="text-center py-12">
                 <p className="text-muted-foreground text-lg">
                   No resources found for the current filters.
                 </p>
                 <p className="text-muted-foreground text-sm mt-2">
                   Try adjusting your search or filter criteria.
                 </p>
-              </div>
-            )}
+              </div>}
           </div>
         </section>
       </div>
-    </PageLayout>
-  );
+    </PageLayout>;
 };
-
 export default Resources;
