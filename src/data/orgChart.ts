@@ -26,7 +26,7 @@ export type OrgMember = {
 export type OrgUnit = {
   id: string;
   name: string;
-  type: 'founder' | 'director' | 'pillar' | 'team';
+  type: 'director' | 'pillar' | 'team';
   icon: keyof typeof CATEGORY_ICON;
   description?: string;
   parentId?: string;
@@ -57,8 +57,8 @@ export const CATEGORY_ICON = {
 export const ORG_UNITS: OrgUnit[] = [
   // Founder Level
   {
-    id: "founders",
-    name: "Founders",
+    id: "founder-overview",
+    name: "Founder Overview",
     type: "founder",
     icon: "Crown",
     description: "Founding Members",
@@ -67,59 +67,18 @@ export const ORG_UNITS: OrgUnit[] = [
       { name: "Dr. Abel Sanchez", role: "Founder" },
     ],
   },
-  // Directors Level under Founders
+  // Directors Level
   {
     id: "governance-overview",
     name: "Governance Overview",
     type: "director",
     icon: "Crown",
-    parentId: "founders",
     description: "Executive leadership and organizational oversight",
     members: [
       { name: "Oscar Sanchez", role: "Founder" },
       { name: "Dr. Abel Sanchez", role: "Founder" },
       { name: "Rodrigo Reyes Jara", role: "Head of Directors" },
     ],
-  },
-  {
-    id: "product-development-director",
-    name: "Product Development",
-    type: "director",
-    icon: "FlaskConical",
-    parentId: "founders",
-    description: "Product strategy and development oversight",
-  },
-  {
-    id: "education-learning-director",
-    name: "Education & Learning",
-    type: "director",
-    icon: "GraduationCap",
-    parentId: "founders",
-    description: "Educational programs and learning initiatives",
-  },
-  {
-    id: "technology-director",
-    name: "Technology",
-    type: "director",
-    icon: "Cpu",
-    parentId: "founders",
-    description: "Technology strategy and infrastructure",
-  },
-  {
-    id: "business-operations-director",
-    name: "Business Operations",
-    type: "director",
-    icon: "Boxes",
-    parentId: "founders",
-    description: "Operational strategy and business management",
-  },
-  {
-    id: "marketing-communications-director",
-    name: "Marketing & Communications",
-    type: "director",
-    icon: "Megaphone",
-    parentId: "founders",
-    description: "Marketing strategy and external communications",
   },
 
   // Product Development Pillar
@@ -135,7 +94,7 @@ export const ORG_UNITS: OrgUnit[] = [
     name: "AI Forge (Ideation)",
     type: "team",
     icon: "FlaskConical",
-    parentId: "product-development-director",
+    parentId: "product-development",
     description: "Ideation, program design, discovery feeds to Agile Delivery",
     members: [
       { name: "Diellza Ahmetaj", role: "Director of AI Forge" },
@@ -148,7 +107,7 @@ export const ORG_UNITS: OrgUnit[] = [
     name: "Agile Delivery",
     type: "team",
     icon: "Zap",
-    parentId: "product-development-director",
+    parentId: "product-development",
     description: "Agile delivery management and oversight operations",
     members: [
       { name: "Deidré Luzmore", role: "Director of Agile Delivery" },

@@ -31,12 +31,12 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({ classNa
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       const count = Math.floor(density * (width * height) / (1280 * 720));
-      points = new Array(Math.max(30, count)).fill(0).map(() => ({
+      points = new Array(Math.max(20, count)).fill(0).map(() => ({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.15,
-        vy: (Math.random() - 0.5) * 0.15,
-        r: Math.random() * 1.5 + 0.8,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 1.2 + 0.4,
       }));
     };
 
@@ -62,9 +62,9 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({ classNa
       }
 
       // Links
-      const linkDist = Math.min(120, Math.max(60, Math.hypot(width, height) / 12));
-      ctx.strokeStyle = `hsl(var(--accent) / 0.45)`;
-      ctx.lineWidth = 1.5;
+      const linkDist = Math.min(140, Math.max(80, Math.hypot(width, height) / 16));
+      ctx.strokeStyle = `hsl(var(--accent) / 0.35)`;
+      ctx.lineWidth = 1;
       for (let i = 0; i < points.length; i++) {
         for (let j = i + 1; j < points.length; j++) {
           const a = points[i], b = points[j];
@@ -118,7 +118,7 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({ classNa
     };
   }, [density]);
 
-  return <canvas ref={ref} className={"pointer-events-none fixed top-0 right-0 z-0 " + (className || "")} />;
+  return <canvas ref={ref} className={"pointer-events-none absolute inset-0 z-0 " + (className || "")} />;
 };
 
 export default ConstellationParticles;

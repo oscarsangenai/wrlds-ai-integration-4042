@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { BrightDataScraper } from '@/components/BrightDataScraper';
 import { BrightDataService, LinkedInPost } from '@/utils/BrightDataService';
-import { ExternalLink, Calendar, User, Search, Award, Linkedin, Users, Loader2, Star } from 'lucide-react';
+import { ExternalLink, Calendar, User, Search, Award, Linkedin, Users, Loader2 } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 interface Resource {
   id: number;
@@ -162,15 +162,7 @@ const Resources = () => {
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Discover {resources.length} curated AI resources and featured Member of the Week posts from our community.
             </p>
-          </div>
-        </section>
-
-        {/* Community Updates Section */}
-        
-
-        {/* Filters Section */}
-        <section className="py-8 px-4">
-          <div className="max-w-4xl mx-auto">
+            
             {/* Filter Section */}
             <div className="max-w-4xl mx-auto space-y-6 mb-12">
               {/* Search Bar */}
@@ -219,6 +211,9 @@ const Resources = () => {
             </div>
           </div>
         </section>
+
+        {/* Member of the Week Section */}
+        
 
         {/* Resources Grid */}
         <section className="py-12 px-4">
