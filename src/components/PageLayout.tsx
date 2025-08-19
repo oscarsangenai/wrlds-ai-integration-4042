@@ -26,9 +26,9 @@ const PageLayout = ({ children, showContact = true }: PageLayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col bg-background w-full max-w-[100vw] overflow-x-hidden relative">
       {/* Background animations - fixed top-right, responsive */}
-      <div className="fixed top-16 right-0 w-80 h-80 md:w-96 md:h-96 lg:w-[30rem] lg:h-[30rem] z-0 pointer-events-none">
+      <div className="fixed top-16 right-0 w-96 h-96 md:w-[28rem] md:h-[28rem] lg:w-[32rem] lg:h-[32rem] z-0 pointer-events-none">
         <AuroraNebula className="w-full h-full" />
-        <ConstellationParticles className="w-full h-full" density={40} />
+        <ConstellationParticles className="w-full h-full" density={60} />
       </div>
       
       <Navbar />

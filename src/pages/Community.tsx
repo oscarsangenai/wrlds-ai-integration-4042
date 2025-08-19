@@ -81,50 +81,6 @@ const Community = () => {
               />
               <Linkedin className="mr-2 size-5" /> Follow on LinkedIn
             </motion.a>
-            
-            <motion.a 
-              href="https://discord.gg/Qxt2TAS5" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="group ripple-pulse relative inline-flex items-center justify-center overflow-hidden rounded-xl border bg-card px-6 py-5 text-lg shadow-[0_0_28px_hsl(var(--accent)/0.35)] ring-1 ring-accent/40" 
-              aria-label="Join our Discord" 
-              initial={{
-                opacity: 0,
-                y: 14,
-                scale: 0.98
-              }} 
-              whileInView={{
-                opacity: 1,
-                y: 0,
-                scale: 1
-              }} 
-              whileHover={{
-                scale: 1.02
-              }} 
-              transition={{
-                type: 'spring',
-                stiffness: 200,
-                damping: 20,
-                mass: 0.8,
-                delay: 0.05
-              }}
-            >
-              <motion.span 
-                className="pointer-events-none absolute inset-0 -z-10" 
-                style={{
-                  background: 'radial-gradient(400px 200px at 90% 10%, hsl(var(--accent) / 0.20), transparent 60%)'
-                }} 
-                animate={{
-                  x: ['5%', '-5%', '5%']
-                }} 
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: 'easeInOut'
-                }} 
-              />
-              <MessageSquare className="mr-2 size-5" /> Join our Discord
-            </motion.a>
           </div>
 
           {/* Membership Section */}
@@ -211,7 +167,7 @@ const Community = () => {
                     </li>
                   </ul>
                   <Button 
-                    onClick={() => window.open('https://form.fillout.com/t/wHKtxCmdQDus?type=volunteer', '_blank', 'noopener,noreferrer')} 
+                    onClick={() => window.location.href = '/get-involved'} 
                     variant="secondary" 
                     className="w-full group-hover:scale-105 transition-transform" 
                     size="lg"
