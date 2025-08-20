@@ -9,7 +9,7 @@ const Index = () => {
       <SEO 
         title="Gen AI Global — Responsible AI Community" 
         description="Gen AI Global: An open, responsible AI community. Content pending verification." 
-        imageUrl="/lovable-uploads/eed53564-63d3-42ef-ba27-84f9b10a41b0.png"
+        imageUrl="/lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png"
         keywords={['Gen AI Global', 'responsible AI', 'AI community', 'education', 'research']}
       />
       <main className="relative pt-16 md:pt-20">

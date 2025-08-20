@@ -21,7 +21,7 @@ const SEO: React.FC<SEOProps> = ({
   description = 'Gen AI Global: An open, responsible AI community. Content pending verification.',
   type = 'website',
   name = 'Gen AI Global',
-  imageUrl = '/lovable-uploads/eed53564-63d3-42ef-ba27-84f9b10a41b0.png',
+  imageUrl = '/lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png',
   publishDate,
   modifiedDate,
   author,
@@ -72,7 +72,7 @@ const SEO: React.FC<SEOProps> = ({
     '@type': 'Organization',
     name: 'Gen AI Global',
     url: 'https://genaiglobal.org',
-    logo: 'https://genaiglobal.org/lovable-uploads/eed53564-63d3-42ef-ba27-84f9b10a41b0.png',
+    logo: 'https://genaiglobal.org/lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png',
     description: 'An open, responsible AI community.',
     sameAs: [
       'https://www.linkedin.com/company/gen-ai-global/'
@@ -106,7 +106,7 @@ const SEO: React.FC<SEOProps> = ({
       name: 'Gen AI Global',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://genaiglobal.org/lovable-uploads/eed53564-63d3-42ef-ba27-84f9b10a41b0.png',
+        url: 'https://genaiglobal.org/lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png',
         width: 512,
         height: 512
       },

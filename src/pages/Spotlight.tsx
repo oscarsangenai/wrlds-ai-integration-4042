@@ -211,44 +211,70 @@ const Spotlight = () => {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              {communityUpdates.map((update) => (
-                <Card key={update.id} className="hover:shadow-lg transition-all duration-300">
-                  <CardHeader className="pb-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                          {getUpdateIcon(update.type)}
-                        </div>
-                        <div>
-                          <CardTitle className="text-lg mb-2">{update.title}</CardTitle>
-                          <div className="flex items-center gap-3 mb-3">
-                            <Badge className={getUpdateColor(update.type)}>
-                              {update.type.charAt(0).toUpperCase() + update.type.slice(1)}
-                            </Badge>
-                            <span className="text-sm text-muted-foreground">
-                              {formatDate(update.date)}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4 leading-relaxed">
-                      {update.description}
-                    </p>
-                    {update.link && (
-                      <Button variant="outline" size="sm" asChild>
-                        <a href={update.link}>
-                          Learn More
-                          <ExternalLink className="ml-2 h-4 w-4" />
-                        </a>
-                      </Button>
-                    )}
-                  </CardContent>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="text-center"
+              >
+                <Card className="p-6 h-full bg-card/80 backdrop-blur-sm">
+                  <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-blue-500/10 flex items-center justify-center">
+                    <Users className="h-6 w-6 text-blue-500" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-blue-500 mb-2">5,000+</h3>
+                  <p className="text-sm text-muted-foreground">Active Community Members</p>
                 </Card>
-              ))}
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="text-center"
+              >
+                <Card className="p-6 h-full bg-card/80 backdrop-blur-sm">
+                  <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-green-500/10 flex items-center justify-center">
+                    <Award className="h-6 w-6 text-green-500" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-green-500 mb-2">25+</h3>
+                  <p className="text-sm text-muted-foreground">AI Workshops Hosted</p>
+                </Card>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="text-center"
+              >
+                <Card className="p-6 h-full bg-card/80 backdrop-blur-sm">
+                  <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-purple-500/10 flex items-center justify-center">
+                    <Calendar className="h-6 w-6 text-purple-500" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-purple-500 mb-2">12</h3>
+                  <p className="text-sm text-muted-foreground">Monthly Events</p>
+                </Card>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="text-center"
+              >
+                <Card className="p-6 h-full bg-card/80 backdrop-blur-sm">
+                  <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-orange-500/10 flex items-center justify-center">
+                    <ExternalLink className="h-6 w-6 text-orange-500" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-orange-500 mb-2">500+</h3>
+                  <p className="text-sm text-muted-foreground">AI Resources Curated</p>
+                </Card>
+              </motion.div>
             </div>
           </div>
         </section>

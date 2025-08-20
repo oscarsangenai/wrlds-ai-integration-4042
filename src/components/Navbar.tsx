@@ -54,7 +54,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center">
-              <img src="/lovable-uploads/eed53564-63d3-42ef-ba27-84f9b10a41b0.png" alt="Gen AI Global Logo" className="h-8 w-auto md:h-10" />
+              <img src="/lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png" alt="Gen AI Global Logo" className="h-8 w-auto md:h-10" />
             </Link>
           </div>
           
