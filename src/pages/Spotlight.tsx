@@ -181,9 +181,13 @@ const Spotlight = () => {
         keywords={["AI community", "member spotlight", "community updates", "AI professionals", "achievements"]}
       />
       
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen">
+        {/* Futuristic background */}
+        <AuroraNebula />
+        <ConstellationParticles />
+        
         {/* Hero Section */}
-        <section className="relative pt-20 pb-8 px-4 text-center">
+        <section className="relative z-10 pt-20 pb-8 px-4 text-center">
           <div className="max-w-4xl mx-auto">
             <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent text-balance text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl mb-6">
               Spotlight
@@ -194,24 +198,8 @@ const Spotlight = () => {
           </div>
         </section>
 
-        {/* LinkedIn Data Integration Section */}
-        <section className="py-12 px-4 bg-muted/30">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
-                <Linkedin className="h-8 w-8 text-primary" />
-                Live LinkedIn Integration
-              </h2>
-              <p className="text-muted-foreground">
-                Load real "Member of the Week" posts directly from LinkedIn using enterprise-grade Bright Data scraping.
-              </p>
-            </div>
-            <BrightDataScraper onPostsLoaded={handleLinkedInPostsLoaded} />
-          </div>
-        </section>
-
         {/* Community Updates Section */}
-        <section className="py-12 px-4 bg-muted/30">
+        <section className="relative z-10 py-12 px-4 bg-muted/30">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
@@ -266,7 +254,7 @@ const Spotlight = () => {
         </section>
 
         {/* Member Spotlight Section */}
-        <section className="py-12 px-4">
+        <section className="relative z-10 py-12 px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">

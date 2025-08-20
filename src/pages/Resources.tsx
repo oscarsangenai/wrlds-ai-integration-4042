@@ -155,9 +155,13 @@ const Resources = () => {
   return <PageLayout showContact={false}>
       <SEO title="Resources - AI Articles, Case Studies & Learning Materials" description="Access AI-related articles, case studies, and learning materials. Stay updated with the latest in artificial intelligence research and applications." keywords={["AI resources", "artificial intelligence articles", "case studies", "learning materials", "AI research"]} />
       
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen">
+        {/* Futuristic background */}
+        <AuroraNebula />
+        <ConstellationParticles />
+        
         {/* Hero Section */}
-        <section className="relative pt-20 pb-8 px-4 text-center">
+        <section className="relative z-10 pt-20 pb-8 px-4 text-center">
           <div className="max-w-4xl mx-auto">
             <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent text-balance text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl mb-6">
               Resources
@@ -218,8 +222,89 @@ const Resources = () => {
         {/* Member of the Week Section */}
         
 
+        {/* Community Updates Section */}
+        <section className="relative z-10 py-12 px-4 bg-muted/30">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
+                <Users className="h-8 w-8 text-primary" />
+                Community Updates
+              </h2>
+              <p className="text-muted-foreground">
+                Stay informed about the latest happenings in our community.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="text-center"
+              >
+                <Card className="p-6 h-full bg-card/80 backdrop-blur-sm">
+                  <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-blue-500/10 flex items-center justify-center">
+                    <Users className="h-6 w-6 text-blue-500" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-blue-500 mb-2">5,000+</h3>
+                  <p className="text-sm text-muted-foreground">Active Community Members</p>
+                </Card>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="text-center"
+              >
+                <Card className="p-6 h-full bg-card/80 backdrop-blur-sm">
+                  <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-green-500/10 flex items-center justify-center">
+                    <Award className="h-6 w-6 text-green-500" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-green-500 mb-2">25+</h3>
+                  <p className="text-sm text-muted-foreground">AI Workshops Hosted</p>
+                </Card>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="text-center"
+              >
+                <Card className="p-6 h-full bg-card/80 backdrop-blur-sm">
+                  <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-purple-500/10 flex items-center justify-center">
+                    <Calendar className="h-6 w-6 text-purple-500" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-purple-500 mb-2">12</h3>
+                  <p className="text-sm text-muted-foreground">Monthly Events</p>
+                </Card>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="text-center"
+              >
+                <Card className="p-6 h-full bg-card/80 backdrop-blur-sm">
+                  <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-orange-500/10 flex items-center justify-center">
+                    <ExternalLink className="h-6 w-6 text-orange-500" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-orange-500 mb-2">500+</h3>
+                  <p className="text-sm text-muted-foreground">AI Resources Curated</p>
+                </Card>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+        
         {/* Resources Grid */}
-        <section className="py-12 px-4">
+        <section className="relative z-10 py-12 px-4">
           <div className="max-w-6xl mx-auto">
             <div className="grid gap-8 md:gap-6">
               {filteredResources.map(resource => <Card key={resource.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 group">
