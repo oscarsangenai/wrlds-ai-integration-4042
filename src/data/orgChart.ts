@@ -55,18 +55,6 @@ export const CATEGORY_ICON = {
 };
 
 export const ORG_UNITS: OrgUnit[] = [
-  // Founder Level
-  {
-    id: "founder-overview",
-    name: "Founder Overview",
-    type: "founder",
-    icon: "Crown",
-    description: "Founding Members",
-    members: [
-      { name: "Oscar Sanchez", role: "Founder" },
-      { name: "Dr. Abel Sanchez", role: "Founder" },
-    ],
-  },
   // Directors Level
   {
     id: "governance-overview",
