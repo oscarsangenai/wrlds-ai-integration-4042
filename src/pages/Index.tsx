@@ -71,17 +71,12 @@ const Index = () => {
         keywords={['Gen AI Global', 'responsible AI', 'AI community', 'education', 'research']}
       />
       
-      {/* Background Animations */}
-      <div className="fixed inset-0 -z-10 pointer-events-none">
-        <AuroraNebula className="opacity-30" />
-        <ConstellationParticles className="opacity-20" />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/20 to-background/60" />
-      </div>
-      
-      {/* Hero Section */}
       <main className="relative pt-16 md:pt-20">
+        {/* Futuristic background */}
+        <AuroraNebula />
+        <ConstellationParticles />
         
-        <header className="container mx-auto flex min-h-[calc(100vh-6rem)] max-w-5xl flex-col items-center justify-center overflow-visible px-4 pb-6 text-center">
+        <header className="relative z-10 container mx-auto flex min-h-[calc(100vh-6rem)] max-w-5xl flex-col items-center justify-center overflow-visible px-4 pb-6 text-center">
           <h1 className="animate-fade-in bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-balance text-5xl font-bold leading-[1.12] tracking-tight text-transparent sm:text-7xl">
             We are democratizing AI knowledge
           </h1>
