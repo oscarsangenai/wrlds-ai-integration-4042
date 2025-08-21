@@ -71,13 +71,15 @@ const Index = () => {
         keywords={['Gen AI Global', 'responsible AI', 'AI community', 'education', 'research']}
       />
       
+      {/* Background Animations */}
+      <div className="fixed inset-0 -z-10 pointer-events-none">
+        <AuroraNebula className="opacity-30" />
+        <ConstellationParticles className="opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/20 to-background/60" />
+      </div>
+      
       {/* Hero Section */}
       <main className="relative pt-16 md:pt-20">
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <AuroraNebula className="opacity-30" />
-          <ConstellationParticles className="opacity-20" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/40 to-background/80" />
-        </div>
         
         <header className="container mx-auto flex min-h-[calc(100vh-6rem)] max-w-5xl flex-col items-center justify-center overflow-visible px-4 pb-6 text-center">
           <h1 className="animate-fade-in bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-balance text-5xl font-bold leading-[1.12] tracking-tight text-transparent sm:text-7xl">
@@ -211,64 +213,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Governance & Founders */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto max-w-6xl px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Leadership & Governance</h2>
-            <p className="text-xl text-muted-foreground mb-8">
-              Transitioning to nonprofit organization for maximum global impact
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="bg-card rounded-lg p-8 border">
-              <h3 className="text-2xl font-semibold mb-6">Our Founders</h3>
-              <div className="space-y-6">
-                <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center text-white font-bold text-xl">
-                    OS
-                  </div>
-                  <div>
-                    <h4 className="font-semibold">Oscar Sanchez</h4>
-                    <p className="text-muted-foreground">Co-Founder & CEO</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center text-white font-bold text-xl">
-                    AS
-                  </div>
-                  <div>
-                    <h4 className="font-semibold">Dr. Abel Sanchez</h4>
-                    <p className="text-muted-foreground">Co-Founder & CTO</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-card rounded-lg p-8 border">
-              <h3 className="text-2xl font-semibold mb-4">Nonprofit Transition</h3>
-              <p className="text-muted-foreground mb-6">
-                We're committed to operating as a nonprofit organization to ensure our mission remains focused on global AI education accessibility rather than profit.
-              </p>
-              <div className="space-y-3">
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
-                  <span className="text-sm">Transparent governance structure</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
-                  <span className="text-sm">Community-driven decision making</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
-                  <span className="text-sm">Open financial reporting</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Impact Metrics */}
       <section className="py-16 bg-gradient-to-r from-primary/5 via-background to-accent/5">
