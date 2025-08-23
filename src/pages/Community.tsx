@@ -72,9 +72,9 @@ const Community = () => {
             transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
           >
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold mb-2">Our Global Presence</h2>
+              <h2 className="text-2xl font-bold mb-2">Global Community Map</h2>
               <p className="text-muted-foreground">
-                Community members and contributors from around the world
+                Interactive map showing our community members and contributors from around the world
               </p>
             </div>
             <CommunityMap />
@@ -223,14 +223,6 @@ const Community = () => {
               </CardContent>
             </Card>
 
-            <div className="mt-8 text-center">
-              <p className="text-sm text-muted-foreground">
-                Have questions about joining?{' '}
-                <a href="mailto:hello@genaiglobal.org" className="text-primary hover:underline">
-                  Contact our team
-                </a>
-              </p>
-            </div>
           </motion.div>
         </motion.section>
       </main>

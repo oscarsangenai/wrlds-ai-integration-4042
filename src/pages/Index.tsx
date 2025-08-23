@@ -98,6 +98,35 @@ const Index = () => {
       </main>
 
 
+      {/* Impact Metrics */}
+      <section className="py-16 bg-gradient-to-r from-primary/5 via-background to-accent/5">
+        <div className="container mx-auto max-w-6xl px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">Global Impact</h2>
+            <p className="text-xl text-muted-foreground">
+              Measuring our progress in democratizing AI knowledge worldwide
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { icon: Users, label: 'Learners Reached', value: animatedCounts.learners, suffix: '+' },
+              { icon: Lightbulb, label: 'Projects Completed', value: animatedCounts.projects, suffix: '+' },
+              { icon: Share, label: 'Contributors', value: animatedCounts.contributors, suffix: '+' },
+              { icon: Globe, label: 'Countries', value: animatedCounts.countries, suffix: '' }
+            ].map((metric) => (
+              <div key={metric.label} className="text-center bg-card/50 rounded-lg p-6 border backdrop-blur-sm">
+                <metric.icon className="h-8 w-8 text-primary mx-auto mb-4" />
+                <div className="text-3xl font-bold text-foreground mb-2">
+                  {metric.value.toLocaleString()}{metric.suffix}
+                </div>
+                <div className="text-sm text-muted-foreground">{metric.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Program Blocks */}
       <section className="py-16 bg-background">
         <div className="container mx-auto max-w-6xl px-4">
@@ -141,36 +170,6 @@ const Index = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-
-      {/* Impact Metrics */}
-      <section className="py-16 bg-gradient-to-r from-primary/5 via-background to-accent/5">
-        <div className="container mx-auto max-w-6xl px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Global Impact</h2>
-            <p className="text-xl text-muted-foreground">
-              Measuring our progress in democratizing AI knowledge worldwide
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { icon: Users, label: 'Learners Reached', value: animatedCounts.learners, suffix: '+' },
-              { icon: Lightbulb, label: 'Projects Completed', value: animatedCounts.projects, suffix: '+' },
-              { icon: Share, label: 'Contributors', value: animatedCounts.contributors, suffix: '+' },
-              { icon: Globe, label: 'Countries', value: animatedCounts.countries, suffix: '' }
-            ].map((metric) => (
-              <div key={metric.label} className="text-center bg-card/50 rounded-lg p-6 border backdrop-blur-sm">
-                <metric.icon className="h-8 w-8 text-primary mx-auto mb-4" />
-                <div className="text-3xl font-bold text-foreground mb-2">
-                  {metric.value.toLocaleString()}{metric.suffix}
-                </div>
-                <div className="text-sm text-muted-foreground">{metric.label}</div>
               </div>
             ))}
           </div>

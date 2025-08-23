@@ -45,12 +45,8 @@ const Hackathon = () => {
       
       <main className="pt-16 md:pt-20">
         {/* Hero Section */}
-        <section className="relative py-16 bg-gradient-to-br from-primary/10 via-background to-accent/5">
+        <section className="relative py-16">
           <div className="container mx-auto max-w-6xl px-4 text-center">
-            <div className="flex flex-wrap justify-center gap-3 mb-6">
-              <Badge variant="secondary" className="text-lg px-4 py-2">Hack-GenAIGlobal</Badge>
-              <Badge variant="outline" className="text-lg px-4 py-2">V1.0</Badge>
-            </div>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Hack-GenAIGlobal V1.0
@@ -101,58 +97,6 @@ const Hackathon = () => {
           </div>
         </section>
 
-        {/* Mission Pillars */}
-        <section className="py-16 bg-background">
-          <div className="container mx-auto max-w-6xl px-4">
-            <h2 className="text-4xl font-bold text-center mb-12">Mission Pillars</h2>
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  icon: BookOpen,
-                  title: 'Open-Source Education',
-                  bullets: [
-                    'Free AI literacy programs for all skill levels',
-                    'Community-driven curriculum development',
-                    'Open access to educational resources'
-                  ]
-                },
-                {
-                  icon: Share,
-                  title: 'Collaboration Hub',
-                  bullets: [
-                    'Cross-industry project partnerships',
-                    'Global team formation and networking',
-                    'Shared innovation workspace'
-                  ]
-                },
-                {
-                  icon: Lightbulb,
-                  title: 'Knowledge Sharing',
-                  bullets: [
-                    'Open research publication platform',
-                    'Community-contributed content library',
-                    'Peer-to-peer learning initiatives'
-                  ]
-                }
-              ].map((pillar) => (
-                <Card key={pillar.title} className="rounded-2xl hover:shadow-lg transition-shadow">
-                  <CardContent className="p-8">
-                    <pillar.icon className="h-12 w-12 text-primary mb-4" />
-                    <h3 className="text-2xl font-semibold mb-4">{pillar.title}</h3>
-                    <ul className="space-y-2">
-                      {pillar.bullets.map((bullet, index) => (
-                        <li key={index} className="flex items-start gap-2 text-muted-foreground">
-                          <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                          <span className="text-sm">{bullet}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* Concept & Guardrails */}
         <section className="py-16 bg-muted/30">
@@ -420,31 +364,6 @@ const Hackathon = () => {
           </div>
         </section>
 
-        {/* Next Steps */}
-        <section className="py-16 bg-background">
-          <div className="container mx-auto max-w-4xl px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">Next Steps</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              {[
-                'Suggest innovative fundraising ideas for community voting',
-                'Enhance GenAI educational package with community input',
-                'Define clear deliverables and success metrics for each team',
-                'Set ambitious but achievable fundraising goal for maximum impact'
-              ].map((step, index) => (
-                <Card key={index} className="rounded-2xl">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <span className="text-primary font-semibold text-sm">{index + 1}</span>
-                      </div>
-                      <p className="text-muted-foreground">{step}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* Footer CTA */}
         <section className="py-16 bg-primary/10">
