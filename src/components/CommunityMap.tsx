@@ -24,8 +24,8 @@ const CommunityMap: React.FC<CommunityMapProps> = ({ className }) => {
   useEffect(() => {
     if (!mapContainer.current) return;
 
-    // Use placeholder token - should be replaced with environment variable
-    const accessToken = process.env.MAPBOX_ACCESS_TOKEN || 'your-mapbox-token-here';
+    // Use environment variable for Mapbox token
+    const accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || 'your-mapbox-token-here';
     
     // Only initialize if we have a proper token
     if (accessToken === 'your-mapbox-token-here') {

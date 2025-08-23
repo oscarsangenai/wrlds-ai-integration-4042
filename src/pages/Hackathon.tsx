@@ -33,8 +33,8 @@ const Hackathon = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const givebutterUrl = process.env.PUBLIC_GIVEBUTTER_URL || "https://givebutter.com/genai-global";
-  const discordUrl = process.env.PUBLIC_DISCORD_URL || "#";
+  const givebutterUrl = import.meta.env.VITE_GIVEBUTTER_URL || "https://givebutter.com/genai-global";
+  const discordUrl = import.meta.env.VITE_DISCORD_URL || "#";
 
   return (
     <PageLayout>
