@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import AuroraNebula from '@/components/visuals/AuroraNebula';
 import ConstellationParticles from '@/components/visuals/ConstellationParticles';
+import CommunityMap from '@/components/CommunityMap';
 
 // Optional: Provide LinkedIn post URNs to embed latest posts. Example: "urn:li:share:123"
 const LINKEDIN_POST_URNS: string[] = [];
@@ -61,6 +62,23 @@ const Community = () => {
               <Linkedin className="mr-2 size-5" /> Follow on LinkedIn
             </motion.a>
           </div>
+
+          {/* Global Community Map */}
+          <motion.div 
+            className="mt-12 w-full max-w-5xl"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
+          >
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold mb-2">Our Global Presence</h2>
+              <p className="text-muted-foreground">
+                Community members and contributors from around the world
+              </p>
+            </div>
+            <CommunityMap />
+          </motion.div>
 
           {/* Membership Section */}
           <motion.div className="mt-12 w-full max-w-4xl" initial={{

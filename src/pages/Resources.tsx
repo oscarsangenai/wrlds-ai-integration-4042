@@ -7,8 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { BrightDataScraper } from '@/components/BrightDataScraper';
-import { BrightDataService, LinkedInPost } from '@/utils/BrightDataService';
 import { ExternalLink, Calendar, User, Search, Award, Linkedin, Users, Loader2 } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from 'framer-motion';
@@ -35,38 +33,6 @@ const Resources = () => {
   const [selectedTag, setSelectedTag] = useState<string>("All");
   const [selectedSector, setSelectedSector] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [linkedInPosts, setLinkedInPosts] = useState<LinkedInPost[]>([]);
-  const [isLoadingPosts, setIsLoadingPosts] = useState(false);
-  const [showScraper, setShowScraper] = useState(false);
-
-  // Auto-load LinkedIn posts when page loads
-  useEffect(() => {
-    const loadLinkedInPosts = async () => {
-      setIsLoadingPosts(true);
-      try {
-        const result = await BrightDataService.scrapeLinkedInPosts('https://www.linkedin.com/company/gen-ai-global/posts/?feedView=all');
-        if (result.success && result.posts) {
-          setLinkedInPosts(result.posts);
-          toast({
-            title: "Success",
-            description: `Loaded ${result.posts.length} Member of the Week posts from LinkedIn`,
-            duration: 3000
-          });
-        } else {
-          console.log('No posts loaded automatically:', result.error);
-        }
-      } catch (error) {
-        console.log('Auto-load failed, manual scraping available');
-      } finally {
-        setIsLoadingPosts(false);
-      }
-    };
-    loadLinkedInPosts();
-  }, [toast]);
-  const handleLinkedInPostsLoaded = (posts: LinkedInPost[]) => {
-    setLinkedInPosts(posts);
-    setShowScraper(false);
-  };
 
   // Function to determine sector based on content
   const getSector = (resource: Resource): string => {

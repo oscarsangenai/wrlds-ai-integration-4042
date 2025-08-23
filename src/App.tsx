@@ -14,6 +14,7 @@ import DevelopmentProcess from "./pages/DevelopmentProcess";
 import TechDetails from "./pages/TechDetails";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Spotlight from "./pages/Spotlight";
+import Hackathon from "./pages/Hackathon";
 
 import GetInvolved from "./pages/GetInvolved";
 import Placeholder from "./pages/Placeholder"; // Terms of Service placeholder
@@ -37,6 +38,7 @@ const AnimatedRoutes = () => {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<TransitionRoute><Index /></TransitionRoute>} />
         <Route path="/about" element={<TransitionRoute><About /></TransitionRoute>} />
+        <Route path="/hackathon" element={<TransitionRoute><Hackathon /></TransitionRoute>} />
         <Route path="/community" element={<TransitionRoute><Community /></TransitionRoute>} />
         <Route path="/resources" element={<TransitionRoute><Resources /></TransitionRoute>} />
         <Route path="/spotlight" element={<TransitionRoute><Spotlight /></TransitionRoute>} />
