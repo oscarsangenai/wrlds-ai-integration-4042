@@ -64,18 +64,22 @@ const Community = () => {
           </div>
 
           {/* Global Community Map */}
-          <motion.div 
-            className="mt-12 w-full max-w-5xl"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
-          >
+          <motion.div className="mt-12 w-full max-w-5xl" initial={{
+          opacity: 0,
+          y: 20
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true
+        }} transition={{
+          duration: 0.6,
+          ease: 'easeOut',
+          delay: 0.2
+        }}>
             <div className="text-center mb-6">
               <h2 className="text-2xl font-bold mb-2">Global Community Map</h2>
-              <p className="text-muted-foreground">
-                Interactive map showing our community members and contributors from around the world
-              </p>
+              
             </div>
             <CommunityMap />
           </motion.div>
@@ -125,11 +129,7 @@ const Community = () => {
                       <span>Early access to events and workshops</span>
                     </li>
                   </ul>
-                  <Button 
-                    onClick={() => window.open('https://form.fillout.com/t/wHKtxCmdQDus', '_blank', 'noopener,noreferrer')}
-                    className="w-full group-hover:scale-105 transition-transform" 
-                    size="lg"
-                  >
+                  <Button onClick={() => window.open('https://form.fillout.com/t/wHKtxCmdQDus', '_blank', 'noopener,noreferrer')} className="w-full group-hover:scale-105 transition-transform" size="lg">
                     Apply for Membership
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -173,13 +173,19 @@ const Community = () => {
           </motion.div>
 
           {/* How It Works Section */}
-          <motion.div 
-            className="mt-12 w-full max-w-4xl"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.4 }}
-          >
+          <motion.div className="mt-12 w-full max-w-4xl" initial={{
+          opacity: 0,
+          y: 20
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true
+        }} transition={{
+          duration: 0.6,
+          ease: 'easeOut',
+          delay: 0.4
+        }}>
             <Card className="bg-muted/30">
               <CardContent className="p-8">
                 <div className="text-center mb-6">
