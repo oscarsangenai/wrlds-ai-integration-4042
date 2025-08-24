@@ -10,7 +10,7 @@ const CommunityMap: React.FC<CommunityMapProps> = ({ className }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
 
-  // Country coordinates for pins
+  // Country coordinates for pins - matching the reference image
   const countries = [
     { name: 'Netherlands', coordinates: [5.2913, 52.1326] },
     { name: 'India', coordinates: [78.9629, 20.5937] },
@@ -40,7 +40,7 @@ const CommunityMap: React.FC<CommunityMapProps> = ({ className }) => {
               </p>
               <div class="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
                 ${countries.map(country => `<div class="flex items-center gap-1">
-                  <div class="w-2 h-2 bg-primary rounded-full"></div>
+                  <div class="w-2 h-2 bg-red-500 rounded-full"></div>
                   ${country.name}
                 </div>`).join('')}
               </div>
@@ -64,9 +64,9 @@ const CommunityMap: React.FC<CommunityMapProps> = ({ className }) => {
     map.current.on('load', () => {
       // Add markers for each country
       countries.forEach((country) => {
-        // Create a custom marker element
+        // Create a custom marker element (red pin style like reference image)
         const markerElement = document.createElement('div');
-        markerElement.className = 'w-4 h-4 bg-primary rounded-full border-2 border-background shadow-lg cursor-pointer';
+        markerElement.className = 'w-6 h-6 bg-red-500 rounded-full border-2 border-white shadow-lg cursor-pointer transform translate-y-[-50%]';
         markerElement.setAttribute('aria-label', `Pin for ${country.name}`);
         
         // Create popup for hover

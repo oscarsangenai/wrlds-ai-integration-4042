@@ -45,7 +45,7 @@ const Hackathon = () => {
       
       <main className="pt-16 md:pt-20">
         {/* Hero Section */}
-        <section className="relative py-16 bg-gradient-to-br from-primary/5 via-background to-accent/5">
+        <section className="relative py-16 bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20">
           <div className="container mx-auto max-w-6xl px-4 text-center">
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
@@ -365,51 +365,6 @@ const Hackathon = () => {
         </section>
 
 
-        {/* Judges Section */}
-        <section className="py-16 bg-background">
-          <div className="container mx-auto max-w-6xl px-4">
-            <h2 className="text-4xl font-bold text-center mb-12">Hackathon Judges</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                {
-                  name: 'Dr. Sarah Chen',
-                  designation: 'AI Research Director',
-                  linkedin: 'https://linkedin.com/in/sarahchen'
-                },
-                {
-                  name: 'Marcus Rodriguez',
-                  designation: 'Innovation Lead',
-                  linkedin: 'https://linkedin.com/in/marcusrodriguez'
-                },
-                {
-                  name: 'Prof. Anita Sharma',
-                  designation: 'Tech Ethics Advisor',
-                  linkedin: 'https://linkedin.com/in/anitasharma'
-                },
-                {
-                  name: 'David Kim',
-                  designation: 'Community Builder',
-                  linkedin: 'https://linkedin.com/in/davidkim'
-                }
-              ].map((judge, index) => (
-                <Card key={index} className="rounded-2xl text-center">
-                  <CardContent className="p-6">
-                    <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gray-200 flex items-center justify-center">
-                      <span className="text-4xl text-gray-400">?</span>
-                    </div>
-                    <h3 className="text-lg font-bold mb-2">{judge.name}</h3>
-                    <p className="text-muted-foreground mb-4">{judge.designation}</p>
-                    <Button asChild variant="outline" size="sm">
-                      <a href={judge.linkedin} target="_blank" rel="noopener noreferrer">
-                        LinkedIn Profile
-                      </a>
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* Footer CTA */}
         <section className="py-16 bg-primary/10">
