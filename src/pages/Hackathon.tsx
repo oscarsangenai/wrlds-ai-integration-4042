@@ -43,7 +43,7 @@ const Hackathon = () => {
         description="Join our global non-coders hackathon - democratizing AI knowledge through community fundraising and education. No coding required!"
       />
       
-      <main className="pt-16 md:pt-20">
+      <main className="pt-0">
         {/* Hero Section */}
         <section className="relative py-16 bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20">
           <div className="container mx-auto max-w-6xl px-4 text-center">
@@ -197,89 +197,6 @@ const Hackathon = () => {
           </div>
         </section>
 
-        {/* Fundraising Tactics */}
-        <section className="py-16 bg-muted/30">
-          <div className="container mx-auto max-w-6xl px-4">
-            <h2 className="text-4xl font-bold text-center mb-12">Fundraising Tactics</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              {[
-                {
-                  letter: 'A',
-                  title: 'AI Ad Premiere',
-                  hook: 'Launch viral AI-generated content campaigns',
-                  steps: [
-                    'Create compelling AI-generated promotional content',
-                    'Schedule coordinated social media releases',
-                    'Engage community for sharing and amplification',
-                    'Track metrics and optimize for maximum reach'
-                  ],
-                  meta: 'Focus on creative storytelling and visual impact'
-                },
-                {
-                  letter: 'B',
-                  title: 'Workshop Telethon',
-                  hook: 'Host live educational events with donation goals',
-                  steps: [
-                    'Plan interactive AI workshops and presentations',
-                    'Set up live streaming with donation integration',
-                    'Invite community experts as guest speakers',
-                    'Create engaging Q&A and interactive segments'
-                  ],
-                  meta: 'Combine education with fundraising for dual impact'
-                },
-                {
-                  letter: 'C',
-                  title: 'Stealth Drop',
-                  hook: 'Surprise community with unexpected value offerings',
-                  steps: [
-                    'Develop exclusive resources or early access content',
-                    'Build anticipation through cryptic social media hints',
-                    'Execute coordinated reveal across all platforms',
-                    'Convert excitement into donation momentum'
-                  ],
-                  meta: 'Leverage surprise and exclusivity for maximum engagement'
-                },
-                {
-                  letter: 'D',
-                  title: 'Choose Your Own',
-                  hook: 'Design your unique fundraising approach',
-                  steps: [
-                    'Identify your team\'s unique strengths and resources',
-                    'Develop a custom strategy aligned with community values',
-                    'Implement your approach with clear success metrics',
-                    'Document and share learnings with the community'
-                  ],
-                  meta: 'Innovation and creativity encouraged - think outside the box'
-                }
-              ].map((tactic) => (
-                <Card key={tactic.letter} className="rounded-2xl">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">
-                        {tactic.letter}
-                      </div>
-                      <div>
-                        <div className="text-xl">{tactic.title}</div>
-                        <div className="text-sm text-muted-foreground font-normal">{tactic.hook}</div>
-                      </div>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ol className="space-y-2 mb-4">
-                      {tactic.steps.map((step, index) => (
-                        <li key={index} className="flex items-start gap-2 text-sm">
-                          <span className="text-primary font-semibold">{index + 1}.</span>
-                          <span className="text-muted-foreground">{step}</span>
-                        </li>
-                      ))}
-                    </ol>
-                    <p className="text-xs text-muted-foreground italic">{tactic.meta}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* Donor Rewards */}
         <section className="py-16 bg-background">
