@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { MapPin } from 'lucide-react';
 import worldMapImage from '../assets/world-map.png';
 
 interface Country {
@@ -41,44 +42,38 @@ const WorldMapWithPins: React.FC = () => {
         className="absolute inset-0 w-full h-full object-contain opacity-60"
       />
       
-      {/* SVG overlay for pins */}
-      <svg
-        viewBox="0 0 800 400"
-        className="absolute inset-0 w-full h-full"
-        role="img"
-        aria-label="World map with community locations"
-      >
-
-        {/* Country Pins */}
-        {countries.map((country) => {
-          const pos = project(country.lat, country.lng);
-          return (
-            <g key={country.iso2}>
-              <circle
-                cx={pos.x}
-                cy={pos.y}
-                r={hoveredCountry === country.iso2 ? "8" : "6"}
-                fill="#dc2626"
-                stroke="white"
-                strokeWidth="2"
-                className="cursor-pointer transition-all duration-200 hover:scale-110 drop-shadow-sm"
-                style={{ filter: hoveredCountry === country.iso2 ? 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' : 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))' }}
-                onMouseEnter={() => setHoveredCountry(country.iso2)}
-                onMouseLeave={() => setHoveredCountry(null)}
-                onClick={() => handleCountrySelect(country.iso2)}
-                tabIndex={0}
-                role="button"
-                aria-label={`${country.name} community location`}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    handleCountrySelect(country.iso2);
-                  }
-                }}
-              />
-            </g>
-          );
-        })}
-      </svg>
+      {/* Push Pin Icons */}
+      {countries.map((country) => {
+        const pos = project(country.lat, country.lng);
+        return (
+          <div
+            key={country.iso2}
+            className="absolute cursor-pointer transition-all duration-200 hover:scale-110"
+            style={{
+              left: `${(pos.x / 800) * 100}%`,
+              top: `${(pos.y / 400) * 100}%`,
+              transform: 'translate(-50%, -100%)',
+              filter: hoveredCountry === country.iso2 ? 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' : 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
+            }}
+            onMouseEnter={() => setHoveredCountry(country.iso2)}
+            onMouseLeave={() => setHoveredCountry(null)}
+            onClick={() => handleCountrySelect(country.iso2)}
+            tabIndex={0}
+            role="button"
+            aria-label={`${country.name} community location`}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handleCountrySelect(country.iso2);
+              }
+            }}
+          >
+            <MapPin 
+              size={hoveredCountry === country.iso2 ? 28 : 24}
+              className="text-red-600 fill-current"
+            />
+          </div>
+        );
+      })}
 
       {/* Tooltip */}
       {hoveredCountry && (
