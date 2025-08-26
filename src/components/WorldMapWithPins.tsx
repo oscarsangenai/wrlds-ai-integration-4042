@@ -21,11 +21,16 @@ const countries: Country[] = [
 const WorldMapWithPins: React.FC = () => {
   const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
 
-  // Simple Mercator projection
+  // Enhanced Mercator projection with better accuracy
   const project = (lat: number, lng: number) => {
-    const x = ((lng + 180) / 360) * 800;
+    // Convert to radians
     const latRad = (lat * Math.PI) / 180;
-    const y = ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * 400;
+    const lngRad = (lng * Math.PI) / 180;
+    
+    // Enhanced projection with better scaling
+    const x = ((lng + 180) / 360) * 800;
+    const y = (1 - (Math.log(Math.tan(Math.PI / 4 + latRad / 2)) / Math.PI)) * 200 + 100;
+    
     return { x, y };
   };
 
@@ -34,12 +39,15 @@ const WorldMapWithPins: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full h-96 bg-gradient-to-br from-pink-200 via-purple-200 to-amber-200 rounded-lg overflow-hidden">
+    <div className="relative w-full h-96 bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 rounded-xl overflow-hidden shadow-xl border border-slate-200/50">
+      {/* Modern overlay for depth */}
+      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-slate-200/20 pointer-events-none" />
+      
       {/* World Map Background Image */}
       <img 
         src={worldMapImage}
         alt="World map"
-        className="absolute inset-0 w-full h-full object-cover opacity-80"
+        className="absolute inset-0 w-full h-full object-cover opacity-90 filter contrast-110 saturate-110"
       />
       
       {/* Push Pin Icons */}
@@ -69,7 +77,8 @@ const WorldMapWithPins: React.FC = () => {
           >
             <MapPin 
               size={hoveredCountry === country.iso2 ? 28 : 24}
-              className="text-red-600 fill-current"
+              className="text-red-500 fill-red-500 drop-shadow-lg"
+              strokeWidth={2}
             />
           </div>
         );
