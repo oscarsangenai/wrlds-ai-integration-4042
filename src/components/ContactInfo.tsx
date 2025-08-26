@@ -17,24 +17,24 @@ const ContactInfo = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
             {
-              name: 'Dr. Sarah Chen',
+              name: 'Judge 1',
               designation: 'AI Research Director',
-              linkedin: 'https://linkedin.com/in/sarahchen'
+              linkedin: 'https://linkedin.com/in/judge1'
             },
             {
-              name: 'Marcus Rodriguez',
+              name: 'Judge 2',
               designation: 'Innovation Lead',
-              linkedin: 'https://linkedin.com/in/marcusrodriguez'
+              linkedin: 'https://linkedin.com/in/judge2'
             },
             {
-              name: 'Prof. Anita Sharma',
+              name: 'Judge 3',
               designation: 'Tech Ethics Advisor',
-              linkedin: 'https://linkedin.com/in/anitasharma'
+              linkedin: 'https://linkedin.com/in/judge3'
             },
             {
-              name: 'David Kim',
+              name: 'Judge 4',
               designation: 'Community Builder',
-              linkedin: 'https://linkedin.com/in/davidkim'
+              linkedin: 'https://linkedin.com/in/judge4'
             }
           ].map((judge, index) => (
             <div key={index} className="bg-white rounded-xl shadow-xl p-6 border border-gray-700 text-center">
@@ -43,13 +43,14 @@ const ContactInfo = () => {
               </div>
               <h3 className="text-lg font-bold text-gray-900 mb-2">{judge.name}</h3>
               <p className="text-gray-600 mb-4">{judge.designation}</p>
-              <a 
+               <a 
                 href={judge.linkedin} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors text-sm"
+                className="inline-flex items-center justify-center w-8 h-8 bg-[#0077B5] text-white rounded hover:bg-[#005885] transition-colors"
+                aria-label={`${judge.name} LinkedIn Profile`}
               >
-                LinkedIn Profile
+                in
               </a>
             </div>
           ))}

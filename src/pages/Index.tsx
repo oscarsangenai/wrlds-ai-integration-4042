@@ -77,7 +77,7 @@ const Index = () => {
         <ConstellationParticles />
         
         <header className="relative z-10 container mx-auto flex min-h-[calc(100vh-6rem)] max-w-5xl flex-col items-center justify-center overflow-visible px-4 pb-6 text-center">
-          <h1 className="animate-fade-in bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-balance text-5xl font-bold leading-[1.12] tracking-tight text-transparent sm:text-7xl">
+          <h1 className="animate-fade-in bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-balance text-5xl font-bold leading-[1.12] tracking-tight text-transparent sm:text-7xl font-sans">
             We are democratizing AI knowledge
           </h1>
           <p className="mt-4 max-w-2xl text-balance text-lg text-muted-foreground">

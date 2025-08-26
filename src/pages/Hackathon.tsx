@@ -43,12 +43,12 @@ const Hackathon = () => {
         description="Join our global non-coders hackathon - democratizing AI knowledge through community fundraising and education. No coding required!"
       />
       
-      <main className="pt-0">
+      <main className="-mt-4">
         {/* Hero Section */}
         <section className="relative py-16 bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20">
           <div className="container mx-auto max-w-6xl px-4 text-center">
             
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent font-sans">
               Hack-GenAIGlobal V1.0
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">

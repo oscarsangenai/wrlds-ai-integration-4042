@@ -182,7 +182,7 @@ const Spotlight = () => {
         {/* Hero Section */}
         <section className="relative z-10 pt-20 pb-8 px-4 text-center">
           <div className="max-w-4xl mx-auto">
-            <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent text-balance text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl mb-6">
+            <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent text-balance text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl mb-6 font-sans">
               Spotlight
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
