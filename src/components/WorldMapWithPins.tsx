@@ -39,7 +39,7 @@ const WorldMapWithPins: React.FC = () => {
       <img 
         src={worldMapImage}
         alt="World map"
-        className="absolute inset-0 w-full h-full object-contain opacity-60"
+        className="absolute inset-0 w-full h-full object-cover opacity-80"
       />
       
       {/* Push Pin Icons */}
