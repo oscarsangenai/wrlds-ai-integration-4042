@@ -249,14 +249,14 @@ const GetInvolved = () => {
         keywords={["volunteer AI", "AI volunteer opportunities", "contribute to AI community", "Gen AI Global volunteer"]}
       />
       
-      <main className="relative pt-16 md:pt-20">
+      <main className="relative pt-8 md:pt-12">
         {/* Futuristic background */}
         <AuroraNebula />
         <ConstellationParticles />
         
         {/* Hero Section */}
         <motion.section 
-          className="relative z-10 container mx-auto flex min-h-[60vh] max-w-5xl flex-col items-center justify-center gap-8 px-4 text-center overflow-visible"
+          className="relative z-10 container mx-auto flex min-h-[40vh] max-w-5xl flex-col items-center justify-center gap-6 px-4 text-center overflow-visible"
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
