@@ -270,7 +270,7 @@ const GetInvolved = () => {
           </p>
         </motion.section>
         
-        <div className="relative z-10 container mx-auto max-w-6xl px-4 py-16">
+        <div className="relative z-10 container mx-auto max-w-6xl px-4 py-4">
 
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Volunteer Opportunities */}
@@ -369,14 +369,6 @@ const GetInvolved = () => {
             </div>
           </div>
 
-          <div className="mt-8 text-center">
-            <p className="text-sm text-muted-foreground">
-              Have questions about volunteering?{' '}
-              <a href="mailto:volunteer@genaiglobal.org" className="text-primary hover:underline">
-                Contact our volunteer coordinator
-              </a>
-            </p>
-          </div>
         </div>
       </main>
     </PageLayout>

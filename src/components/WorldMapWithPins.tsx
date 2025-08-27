@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MapPin } from 'lucide-react';
-import worldMapImage from '../assets/world-map.png';
+import flatWorldMap from '../assets/flat-world-map.jpg';
 
 interface Country {
   name: string;
@@ -10,12 +10,12 @@ interface Country {
 }
 
 const countries: Country[] = [
-  { name: 'India', iso2: 'IN', lat: 20.5937, lng: 78.9629 },
-  { name: 'United States', iso2: 'US', lat: 39.8283, lng: -98.5795 },
-  { name: 'Switzerland', iso2: 'CH', lat: 46.8182, lng: 8.2275 },
-  { name: 'United Arab Emirates', iso2: 'AE', lat: 23.4241, lng: 53.8478 },
-  { name: 'Mexico', iso2: 'MX', lat: 23.6345, lng: -102.5528 },
-  { name: 'Spain', iso2: 'ES', lat: 40.4637, lng: -3.7492 }
+  { name: 'India', iso2: 'IN', lat: 28.6139, lng: 77.2090 }, // New Delhi
+  { name: 'United States', iso2: 'US', lat: 38.9072, lng: -77.0369 }, // Washington D.C.
+  { name: 'Switzerland', iso2: 'CH', lat: 46.9481, lng: 7.4474 }, // Bern
+  { name: 'United Arab Emirates', iso2: 'AE', lat: 24.4539, lng: 54.3773 }, // Abu Dhabi
+  { name: 'Mexico', iso2: 'MX', lat: 19.4326, lng: -99.1332 }, // Mexico City
+  { name: 'Spain', iso2: 'ES', lat: 40.4168, lng: -3.7038 } // Madrid
 ];
 
 const WorldMapWithPins: React.FC = () => {
@@ -36,12 +36,12 @@ const WorldMapWithPins: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full h-96 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 rounded-xl overflow-hidden shadow-2xl border border-primary/20">
-      {/* World Map Background Image */}
+    <div className="relative w-full h-96 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-blue-900 dark:to-indigo-900 rounded-xl overflow-hidden shadow-2xl border border-primary/20">
+      {/* Flat World Map Background Image */}
       <img 
-        src={worldMapImage}
-        alt="World map showing global community presence"
-        className="absolute inset-0 w-full h-full object-cover opacity-90 mix-blend-luminosity"
+        src={flatWorldMap}
+        alt="Flat design world map showing global community presence"
+        className="absolute inset-0 w-full h-full object-cover opacity-70 dark:opacity-60"
       />
       
       {/* Push Pin Icons */}
@@ -71,14 +71,25 @@ const WorldMapWithPins: React.FC = () => {
               }
             }}
           >
-            <MapPin 
-              size={hoveredCountry === country.iso2 ? 32 : 26}
-              className={`transition-all duration-300 ${
+            <div className="relative">
+              <div className={`absolute inset-0 rounded-full ${
                 hoveredCountry === country.iso2 
-                  ? 'text-blue-400 fill-blue-500' 
-                  : 'text-red-500 fill-red-600'
-              }`}
-            />
+                  ? 'bg-red-500 shadow-lg shadow-red-500/50' 
+                  : 'bg-red-500 shadow-md shadow-red-500/30'
+              } transition-all duration-300`} 
+              style={{
+                width: hoveredCountry === country.iso2 ? '20px' : '16px',
+                height: hoveredCountry === country.iso2 ? '20px' : '16px',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)'
+              }} />
+              <MapPin 
+                size={hoveredCountry === country.iso2 ? 28 : 24}
+                className="relative text-white fill-red-500 transition-all duration-300"
+                style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}
+              />
+            </div>
           </div>
         );
       })}
