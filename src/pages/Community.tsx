@@ -31,7 +31,7 @@ const Community = () => {
         duration: 0.6,
         ease: 'easeOut'
       }}>
-          <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent text-balance text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl">Get Involved</h1>
+          <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent text-balance text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl">GenAIGlobal Community</h1>
           <p className="max-w-2xl text-balance text-muted-foreground">Stay in the loop, meet contributors, and help democratize AI knowledge.</p>
           <div className="mt-2 flex justify-center">
             <motion.a href="https://www.linkedin.com/company/gen-ai-global/" target="_blank" rel="noopener noreferrer" className="group ripple-pulse relative inline-flex items-center justify-center overflow-hidden rounded-xl border bg-card px-6 py-5 text-lg shadow-[0_0_28px_hsl(var(--accent)/0.35)] ring-1 ring-accent/40" aria-label="Follow on LinkedIn" initial={{
