@@ -16,55 +16,47 @@ import { motion } from 'framer-motion';
 import AuroraNebula from '@/components/visuals/AuroraNebula';
 import ConstellationParticles from '@/components/visuals/ConstellationParticles';
 
-// Mock data - In production, this would come from Supabase
+// Current volunteer opportunities - Static data as specified
 const volunteerRoles = [
   {
     id: 1,
-    title: "Community Manager",
-    department: "Community",
-    description: "Help build and nurture our global AI community across platforms.",
-    skills: ["Community Building", "Social Media", "Communication"],
+    title: "Agile Leader",
+    department: "Enterprise Agility & Operational Excellence",
+    description: "Help lead agile-driven infrastructure, community engagement, workshop facilitation, and cross-team collaboration. Includes training roles like Enterprise Design Thinking Coach & Agile Scrum Master.",
+    skills: ["Agile", "Coaching", "Collaboration", "Design Thinking"],
     status: "open"
   },
   {
     id: 2,
-    title: "Content Creator",
-    department: "Content",
-    description: "Create engaging AI-related content, articles, and educational materials.",
-    skills: ["Content Writing", "AI Knowledge", "Video Production"],
+    title: "Deputy / Instructors",
+    department: "Agent Development",
+    description: "Scaling agent development programs with 25+ individuals onboarded. Focus on structured onboarding, module deployment, and leadership expansion.",
+    skills: ["Training", "Automation", "Leadership", "Agent Ops"],
     status: "open"
   },
   {
     id: 3,
-    title: "Technical Writer",
-    department: "Documentation",
-    description: "Document AI tools, write tutorials, and create technical guides.",
-    skills: ["Technical Writing", "AI/ML", "Documentation"],
+    title: "DevOps Engineer",
+    department: "Cloud Infrastructure",
+    description: "Building the GenAIGlobal community tech infrastructure. Requires AWS and DevOps expertise to launch scalable systems.",
+    skills: ["DevOps", "AWS", "Infrastructure", "Cloud"],
     status: "open"
   },
   {
     id: 4,
-    title: "Event Coordinator",
-    department: "Events",
-    description: "Organize virtual and in-person AI events, workshops, and meetups.",
-    skills: ["Event Planning", "Project Management", "Networking"],
+    title: "UI Developer, Backend Developer",
+    department: "Website Development",
+    description: "Creating V2 of the community website with backend integration, login, onboarding, and hackathon support.",
+    skills: ["Web Development", "Backend", "Frontend", "Hackathons"],
     status: "open"
   },
   {
     id: 5,
-    title: "Research Analyst",
-    department: "Research",
-    description: "Research AI trends, compile reports, and analyze industry developments.",
-    skills: ["Research", "Data Analysis", "AI Trends"],
+    title: "Programs Lead, Volunteer Coordinator, Engagement Specialist, Data Analyst, Communications Specialist",
+    department: "Community Experience & Volunteer Strategy",
+    description: "Launching programs for onboarding, events, newsletters, volunteer coordination, and community recognition. Includes feedback loops and growth routes for volunteers.",
+    skills: ["Community Building", "Events", "Volunteering", "Engagement"],
     status: "open"
-  },
-  {
-    id: 6,
-    title: "UI/UX Designer",
-    department: "Design",
-    description: "Design user experiences for our platforms and digital assets.",
-    skills: ["UI/UX Design", "Figma", "User Research"],
-    status: "closed"
   }
 ];
 
@@ -118,7 +110,7 @@ const GetInvolved = () => {
 
   const handleFilloutRedirect = () => {
     // Open Fillout form in new tab with volunteer parameter
-    window.open('https://form.fillout.com/t/wHKtxCmdQDus?type=volunteer', '_blank', 'noopener,noreferrer');
+    window.open('https://form.fillout.com/t/xb99AybuLUus', '_blank', 'noopener,noreferrer');
   };
 
   useEffect(() => {

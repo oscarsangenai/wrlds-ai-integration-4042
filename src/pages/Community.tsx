@@ -129,7 +129,7 @@ const Community = () => {
                       <span>Early access to events and workshops</span>
                     </li>
                   </ul>
-                  <Button onClick={() => window.open('https://form.fillout.com/t/wHKtxCmdQDus', '_blank', 'noopener,noreferrer')} className="w-full group-hover:scale-105 transition-transform" size="lg">
+                  <Button onClick={() => window.open('https://form.fillout.com/t/6UAeDRhG7Bus', '_blank', 'noopener,noreferrer')} className="w-full group-hover:scale-105 transition-transform" size="lg">
                     Apply for Membership
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>

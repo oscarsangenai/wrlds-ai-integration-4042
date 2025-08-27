@@ -21,12 +21,14 @@ const countries: Country[] = [
 const WorldMapWithPins: React.FC = () => {
   const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
 
-  // Simple Mercator projection
+  // Enhanced Mercator projection with better accuracy
   const project = (lat: number, lng: number) => {
-    const x = ((lng + 180) / 360) * 800;
+    // Adjust for better map alignment
+    const x = ((lng + 180) / 360) * 100;
     const latRad = (lat * Math.PI) / 180;
-    const y = ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * 400;
-    return { x, y };
+    const mercatorY = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
+    const y = 50 - (mercatorY * 180) / (Math.PI * 5.5); // Adjusted scaling for better accuracy
+    return { x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) };
   };
 
   const handleCountrySelect = (countryCode: string) => {
@@ -34,12 +36,12 @@ const WorldMapWithPins: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full h-96 bg-gradient-to-br from-pink-200 via-purple-200 to-amber-200 rounded-lg overflow-hidden">
+    <div className="relative w-full h-96 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 rounded-xl overflow-hidden shadow-2xl border border-primary/20">
       {/* World Map Background Image */}
       <img 
         src={worldMapImage}
-        alt="World map"
-        className="absolute inset-0 w-full h-full object-cover opacity-80"
+        alt="World map showing global community presence"
+        className="absolute inset-0 w-full h-full object-cover opacity-90 mix-blend-luminosity"
       />
       
       {/* Push Pin Icons */}
@@ -48,12 +50,14 @@ const WorldMapWithPins: React.FC = () => {
         return (
           <div
             key={country.iso2}
-            className="absolute cursor-pointer transition-all duration-200 hover:scale-110"
+            className="absolute cursor-pointer transition-all duration-300 hover:scale-125 z-10"
             style={{
-              left: `${(pos.x / 800) * 100}%`,
-              top: `${(pos.y / 400) * 100}%`,
+              left: `${pos.x}%`,
+              top: `${pos.y}%`,
               transform: 'translate(-50%, -100%)',
-              filter: hoveredCountry === country.iso2 ? 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' : 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
+              filter: hoveredCountry === country.iso2 
+                ? 'drop-shadow(0 8px 16px rgba(59, 130, 246, 0.5)) drop-shadow(0 0 12px rgba(59, 130, 246, 0.8))' 
+                : 'drop-shadow(0 4px 8px rgba(0,0,0,0.4)) drop-shadow(0 0 6px rgba(239, 68, 68, 0.6))'
             }}
             onMouseEnter={() => setHoveredCountry(country.iso2)}
             onMouseLeave={() => setHoveredCountry(null)}
@@ -68,19 +72,29 @@ const WorldMapWithPins: React.FC = () => {
             }}
           >
             <MapPin 
-              size={hoveredCountry === country.iso2 ? 28 : 24}
-              className="text-red-600 fill-current"
+              size={hoveredCountry === country.iso2 ? 32 : 26}
+              className={`transition-all duration-300 ${
+                hoveredCountry === country.iso2 
+                  ? 'text-blue-400 fill-blue-500' 
+                  : 'text-red-500 fill-red-600'
+              }`}
             />
           </div>
         );
       })}
 
-      {/* Tooltip */}
+      {/* Modern Tooltip */}
       {hoveredCountry && (
-        <div className="absolute top-4 left-4 bg-background/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg border border-border text-sm font-medium">
-          {countries.find(c => c.iso2 === hoveredCountry)?.name}
+        <div className="absolute top-4 left-4 bg-card/95 backdrop-blur-md px-4 py-3 rounded-xl shadow-xl border border-primary/30 text-sm font-semibold z-20">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+            {countries.find(c => c.iso2 === hoveredCountry)?.name}
+          </div>
         </div>
       )}
+      
+      {/* Overlay gradient for depth */}
+      <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent pointer-events-none"></div>
     </div>
   );
 };
