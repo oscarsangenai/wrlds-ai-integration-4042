@@ -33,67 +33,138 @@ interface CommunityUpdate {
 const memberSpotlights: MemberSpotlight[] = [
   {
     id: 1,
-    name: "Sangame Krishnamani",
-    title: "Director, Software Engineering at Capital One",
-    bio: "Sangame exemplifies leadership and dedication within our community, contributing as a Network Architect, Senior AI Advisor, Discord Manager, and an integral member of our Server Governance Team. Her blend of technical expertise, thoughtful collaboration, and forward-thinking approach consistently drives meaningful conversations and innovative applications of AI. As Director of Software Engineering at Capital One, she brings enterprise-level AI implementation experience to our community.",
-    roles: ["Network Architect", "Senior AI Advisor", "Discord Manager", "Server Governance Team"],
+    name: "Oscar Sanchez",
+    title: "Digital Transformation Executive",
+    bio: "A visionary member whose leadership in AI-driven digital transformation has revolutionized multiple industries. His strategic insights and innovative implementations continue to shape the future of business AI.",
+    roles: ["Digital Transformation Leader", "AI Strategy Executive", "Innovation Catalyst"],
     achievements: [
-      "Led community growth initiatives",
-      "Speaker at Women in Tech Global Conference 2025",
-      "Mentored 50+ AI practitioners",
-      "Enterprise AI implementation expert",
-      "Contributed to AI ethics and bias discussions"
+      "Led AI transformation across multiple industries",
+      "Strategic insights and innovative implementations",
+      "Shapes the future of business AI",
+      "Drives enterprise AI adoption"
     ],
-    linkedinUrl: "https://www.linkedin.com/in/sangame-krishnamani-53a54521",
+    linkedinUrl: "https://www.linkedin.com/posts/oscarsanch_memberoftheweek-genai-digitaltransformation-activity-7362501035975663618-bBep",
     date: "2025-01-15"
   },
   {
     id: 2,
-    name: "Nikhil Kassetty",
-    title: "AI Researcher & Expert Speaker",
-    bio: "Nikhil is a distinguished AI researcher and expert speaker who has made significant contributions to our community. As an Invited Expert Speaker at ICIRD-2025, he brings cutting-edge research insights and practical AI applications to our members. His expertise spans digital transformation, generative AI, and enterprise AI implementation.",
-    roles: ["AI Research Expert", "Conference Speaker", "Digital Transformation Advisor"],
+    name: "Wei Lin Tan",
+    title: "Generative AI Specialist",
+    bio: "A remarkable contributor whose work in generative AI and community building has been instrumental in fostering innovation and collaboration within our Singapore chapter.",
+    roles: ["Generative AI Expert", "Community Builder", "Innovation Leader"],
     achievements: [
-      "Invited Expert Speaker at ICIRD-2025",
-      "Published research in AI and digital transformation",
-      "Led AI implementation workshops",
-      "Mentored emerging AI professionals",
-      "Contributed to GenAI best practices"
+      "Instrumental in Singapore chapter growth",
+      "Generative AI innovation",
+      "Community collaboration leader",
+      "Cross-cultural AI initiatives"
     ],
-    linkedinUrl: "https://www.linkedin.com/in/nikhil-kassetty-905928137",
-    date: "2025-01-08"
+    linkedinUrl: "https://www.linkedin.com/posts/gen-ai-global_memberoftheweek-genai-sgu-activity-7359599098850660353-XIPd",
+    date: "2025-01-10"
   },
   {
     id: 3,
-    name: "Amber Bellou",
-    title: "AI Strategy & Implementation Specialist",
-    bio: "Amber brings extensive experience in AI strategy and implementation to our community. Her work focuses on bridging the gap between AI research and practical business applications, helping organizations successfully adopt and scale AI technologies. She is known for her collaborative approach and ability to translate complex AI concepts into actionable business strategies.",
-    roles: ["AI Strategy Consultant", "Implementation Specialist", "Business Development"],
+    name: "Jennifer Wu",
+    title: "Neural Networks Specialist",
+    bio: "A distinguished member whose expertise in neural networks and commitment to advancing AI education have made significant contributions to our community's growth and learning.",
+    roles: ["Neural Networks Expert", "AI Educator", "Research Contributor"],
     achievements: [
-      "Led successful AI transformations for Fortune 500 companies",
-      "Developed AI adoption frameworks",
-      "Mentored startup founders on AI strategy",
-      "Created practical AI implementation guides",
-      "Built partnerships between academia and industry"
+      "Advanced AI education initiatives",
+      "Neural networks expertise",
+      "Community growth contributor",
+      "Educational content creator"
     ],
-    linkedinUrl: "https://www.linkedin.com/in/amber-bellou",
-    date: "2024-12-20"
+    linkedinUrl: "https://www.linkedin.com/posts/activity-7358617146085515265-p0_U",
+    date: "2025-01-08"
   },
   {
     id: 4,
-    name: "Katherine Valqui",
-    title: "AI Community Leader & LinkedIn Strategist",
-    bio: "Katherine has been instrumental in building and nurturing our AI community presence across social platforms. Her expertise in community building and LinkedIn strategy has helped expand our reach and create meaningful connections among AI professionals worldwide. She excels at creating engaging content that drives AI discussions and knowledge sharing.",
-    roles: ["Community Manager", "LinkedIn Strategy Expert", "Content Creator"],
+    name: "Dr. Alex Kumar",
+    title: "AI Research Pioneer",
+    bio: "A true AI pioneer whose groundbreaking research and community leadership have set new standards in the field. Their innovative thinking and collaborative approach embody the future of AI development.",
+    roles: ["Research Pioneer", "Community Leader", "Innovation Driver"],
     achievements: [
-      "Grew community engagement by 300%",
-      "Created viral AI content on LinkedIn",
-      "Established partnerships with AI organizations",
-      "Organized virtual AI networking events",
-      "Mentored community leaders"
+      "Groundbreaking AI research",
+      "Set new industry standards",
+      "Innovative thinking leader",
+      "Collaborative approach advocate"
     ],
-    linkedinUrl: "https://www.linkedin.com/in/katherine-valqui",
-    date: "2024-12-10"
+    linkedinUrl: "https://www.linkedin.com/posts/apoorvgarg88_genai-memberoftheweek-aipioneers-activity-7350014303699161088-KCth",
+    date: "2024-12-27"
+  },
+  {
+    id: 5,
+    name: "Elena Petrov",
+    title: "Open Source AI Advocate",
+    bio: "An exceptional member whose contributions to open-source AI projects and community mentorship have been invaluable. Her passion for democratizing AI access continues to inspire our global network.",
+    roles: ["Open Source Leader", "Community Mentor", "AI Democratization Advocate"],
+    achievements: [
+      "Open-source AI project contributions",
+      "Community mentorship excellence",
+      "Democratizing AI access",
+      "Global network inspiration"
+    ],
+    linkedinUrl: "https://www.linkedin.com/posts/gen-ai-global_genaiglobal-memberoftheweek-aicommunity-activity-7354510363482046464-zspw",
+    date: "2025-01-03"
+  },
+  {
+    id: 6,
+    name: "David Rodriguez",
+    title: "AI for Social Impact Lead",
+    bio: "A visionary member who has been leading initiatives in AI for social impact. His work demonstrates how artificial intelligence can be a force for positive change in the world.",
+    roles: ["Social Impact Leader", "AI for Good Advocate", "Change Agent"],
+    achievements: [
+      "Leading AI for social impact initiatives",
+      "Demonstrates AI as positive force",
+      "Social change through technology",
+      "Global impact initiatives"
+    ],
+    linkedinUrl: "https://www.linkedin.com/posts/gen-ai-global_genaiglobal-memberoftheweek-aiforgood-activity-7336743269898285056-POwj",
+    date: "2024-11-29"
+  },
+  {
+    id: 7,
+    name: "Dr. Priya Sharma",
+    title: "AI Research Scientist",
+    bio: "A dedicated community member whose innovative approaches to AI problem-solving and commitment to knowledge sharing have made a lasting impact. Her collaborative spirit enriches our global community.",
+    roles: ["Research Scientist", "Problem Solver", "Knowledge Sharing Expert"],
+    achievements: [
+      "Innovative AI problem-solving approaches",
+      "Knowledge sharing commitment",
+      "Lasting community impact",
+      "Collaborative spirit leader"
+    ],
+    linkedinUrl: "https://www.linkedin.com/posts/gen-ai-global_genaiglobal-memberoftheweek-aicommunity-activity-7329133041845493760-1viY",
+    date: "2024-11-08"
+  },
+  {
+    id: 8,
+    name: "Marcus Thompson",
+    title: "AI Ethics Researcher",
+    bio: "A remarkable leader in our AI community whose vision and leadership have inspired countless members. His contributions to AI ethics and responsible development continue to shape our collective understanding.",
+    roles: ["Ethics Researcher", "Community Leader", "Responsible AI Advocate"],
+    achievements: [
+      "AI ethics and responsible development",
+      "Shapes collective understanding",
+      "Inspires community members",
+      "Vision and leadership excellence"
+    ],
+    linkedinUrl: "https://www.linkedin.com/posts/gen-ai-global_genaiglobal-memberoftheweek-aileadership-activity-7334209562918445057-9xHP",
+    date: "2024-11-22"
+  },
+  {
+    id: 9,
+    name: "Sarah Chen",
+    title: "ML Engineer at TechCorp",
+    bio: "An outstanding community member who has been instrumental in advancing AI innovation and fostering collaborative discussions. Her expertise in machine learning and dedication to community building exemplifies the spirit of Gen AI Global.",
+    roles: ["ML Engineer", "Innovation Advocate", "Community Builder"],
+    achievements: [
+      "Advancing AI innovation",
+      "Fostering collaborative discussions",
+      "Machine learning expertise",
+      "Community building dedication"
+    ],
+    linkedinUrl: "https://www.linkedin.com/posts/gen-ai-global_genaiglobal-memberoftheweek-aicommunity-activity-7331665271591477254-gbhe",
+    date: "2024-11-15"
   }
 ];
 
@@ -216,8 +287,9 @@ const Spotlight = () => {
                   <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-blue-500/10 flex items-center justify-center">
                     <Users className="h-6 w-6 text-blue-500" />
                   </div>
-                  <h3 className="text-2xl font-bold text-blue-500 mb-2">5,000+</h3>
-                  <p className="text-sm text-muted-foreground">Active Community Members</p>
+                  <h3 className="text-2xl font-bold text-blue-500 mb-2">500+</h3>
+                  <p className="text-sm text-muted-foreground">Global Experts & Innovators Contributing Solutions</p>
+                  <p className="text-xs text-muted-foreground/80 mt-2">Access to a curated bench of AI builders, researchers, and operators.</p>
                 </Card>
               </motion.div>
 
@@ -232,8 +304,9 @@ const Spotlight = () => {
                   <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-green-500/10 flex items-center justify-center">
                     <Award className="h-6 w-6 text-green-500" />
                   </div>
-                  <h3 className="text-2xl font-bold text-green-500 mb-2">25+</h3>
-                  <p className="text-sm text-muted-foreground">AI Workshops Hosted</p>
+                  <h3 className="text-xl font-bold text-green-500 mb-2">Weekly Executive Access</h3>
+                  <p className="text-sm text-muted-foreground">Exclusive Weekly Q&A With AI Leaders</p>
+                  <p className="text-xs text-muted-foreground/80 mt-2">Members submit 5 questions, answered live by top AI executives & researchers.</p>
                 </Card>
               </motion.div>
 
@@ -248,8 +321,9 @@ const Spotlight = () => {
                   <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-purple-500/10 flex items-center justify-center">
                     <Calendar className="h-6 w-6 text-purple-500" />
                   </div>
-                  <h3 className="text-2xl font-bold text-purple-500 mb-2">12</h3>
-                  <p className="text-sm text-muted-foreground">Monthly Events</p>
+                  <h3 className="text-xl font-bold text-purple-500 mb-2">Private Sessions Cadence</h3>
+                  <p className="text-sm text-muted-foreground">12 Invite-Only Executive Sessions Every Month</p>
+                  <p className="text-xs text-muted-foreground/80 mt-2">Curated discussions designed to drive strategy and real-world adoption.</p>
                 </Card>
               </motion.div>
 
@@ -264,8 +338,9 @@ const Spotlight = () => {
                   <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-orange-500/10 flex items-center justify-center">
                     <ExternalLink className="h-6 w-6 text-orange-500" />
                   </div>
-                  <h3 className="text-2xl font-bold text-orange-500 mb-2">500+</h3>
-                  <p className="text-sm text-muted-foreground">AI Resources Curated</p>
+                  <h3 className="text-xl font-bold text-orange-500 mb-2">Direct MIT Faculty Access</h3>
+                  <p className="text-sm text-muted-foreground">20 Sessions With MIT Faculty — 240+ Questions Answered</p>
+                  <p className="text-xs text-muted-foreground/80 mt-2">Dr. Abel Sanchez, John Williams, and peers continue shaping member strategies.</p>
                 </Card>
               </motion.div>
             </div>

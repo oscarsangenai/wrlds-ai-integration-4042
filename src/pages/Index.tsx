@@ -41,7 +41,7 @@ const Index = () => {
 
   // Animated counters
   useEffect(() => {
-    const targets = { learners: 2500, projects: 150, contributors: 850, countries: 45 };
+    const targets = { learners: 1000, projects: 30, contributors: 500, countries: 60 };
     const duration = 2000;
     const steps = 60;
     const stepTime = duration / steps;
@@ -110,10 +110,10 @@ const Index = () => {
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { icon: Users, label: 'Learners Reached', value: animatedCounts.learners, suffix: '+' },
-              { icon: Lightbulb, label: 'Projects Completed', value: animatedCounts.projects, suffix: '+' },
-              { icon: Share, label: 'Contributors', value: animatedCounts.contributors, suffix: '+' },
-              { icon: Globe, label: 'Countries', value: animatedCounts.countries, suffix: '' }
+              { icon: Users, label: 'Talent Pipeline', value: animatedCounts.learners, suffix: '+ AI Professionals & Rising Talent Trained' },
+              { icon: Lightbulb, label: 'Program Delivery', value: animatedCounts.projects, suffix: ' Open-Source AI Learning Cohorts Completed' },
+              { icon: Share, label: 'Open Innovation Network', value: animatedCounts.contributors, suffix: '+ Global Experts & Innovators Contributing Solutions' },
+              { icon: Globe, label: 'Global Footprint', value: animatedCounts.countries, suffix: ' Countries — Local Insights, Global Scale' }
             ].map((metric) => (
               <div key={metric.label} className="text-center bg-card/50 rounded-lg p-6 border backdrop-blur-sm">
                 <metric.icon className="h-8 w-8 text-primary mx-auto mb-4" />
@@ -133,7 +133,7 @@ const Index = () => {
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4">Our Programs</h2>
             <p className="text-xl text-muted-foreground">
-              Three pillars of AI democratization for global impact
+              🔑 Exec takeaway: "Our community produces curated, enterprise-grade insights at the speed of need."
             </p>
           </div>
           
@@ -141,21 +141,21 @@ const Index = () => {
             {[
               {
                 icon: BookOpen,
-                title: 'Education',
-                description: 'Comprehensive AI literacy programs, workshops, and certification courses designed for all skill levels.',
-                features: ['Interactive Workshops', 'Certification Programs', 'Mentorship Network']
+                title: 'Open-Source Education',
+                description: 'Comprehensive programs for all levels, from non-coders to advanced practitioners.',
+                features: ['Non-Coders Course — AI for beginners and non-technical professionals', 'Agent Dev Class — Hands-on training for agent development', 'Interactive Workshops — Skill-building and collaboration with experts']
               },
               {
                 icon: Share,
                 title: 'Collaboration',
-                description: 'Cross-industry partnerships and team-based projects that drive real-world AI innovation.',
-                features: ['Industry Partnerships', 'Project Teams', 'Innovation Labs']
+                description: 'Cross-industry build space that turns high-value problems into open-source agents and measurable pilots.',
+                features: ['AI Forge Sprints — Foresight → design → prototype with expert/faculty reviews', 'Ethical AI Scorecard — Governance baked into every build (risk, privacy, bias)', 'Agent Ops — Deployment runbooks, evals, and metrics (time saved, quality lift)', 'Business Model Canvas — Adoption plan and ROI case for real-world rollout']
               },
               {
                 icon: Lightbulb,
-                title: 'Knowledge Sharing',
-                description: 'Open resources, research publications, and community-driven content for global accessibility.',
-                features: ['Open Resources', 'Research Hub', 'Community Forums']
+                title: 'Knowledge-Sharing Platform',
+                description: 'Accessible, peer-driven content and thought leadership for global impact.',
+                features: ['LinkedIn Submissions — Public contributions and project showcases', 'Discussion Channels — Community-driven Q&A and brainstorming', 'In-Person Events — Networking and strategic meetups', 'Research Hub & Open Resources — Curated knowledge for enterprise decision-making']
               }
             ].map((program) => (
               <div key={program.title} className="bg-card rounded-lg p-8 border hover:shadow-lg transition-shadow">
@@ -164,8 +164,8 @@ const Index = () => {
                 <p className="text-muted-foreground mb-6">{program.description}</p>
                 <ul className="space-y-2">
                   {program.features.map((feature) => (
-                    <li key={feature} className="flex items-center text-sm">
-                      <div className="w-1.5 h-1.5 bg-primary rounded-full mr-3"></div>
+                    <li key={feature} className="flex items-start text-sm">
+                      <div className="w-1.5 h-1.5 bg-primary rounded-full mr-3 mt-2 flex-shrink-0"></div>
                       {feature}
                     </li>
                   ))}
