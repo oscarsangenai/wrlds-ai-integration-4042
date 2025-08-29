@@ -1,5 +1,5 @@
 import React from 'react';
-import WorldMapWithPins from './WorldMapWithPins';
+import ProfessionalMap from './ProfessionalMap';
 
 interface CommunityMapProps {
   className?: string;
@@ -13,7 +13,7 @@ const CommunityMap: React.FC<CommunityMapProps> = ({ className }) => {
       role="img"
       aria-label="Interactive world map showing Gen AI Global community presence in 7 countries"
     >
-      <WorldMapWithPins />
+      <ProfessionalMap />
     </div>
   );
 };

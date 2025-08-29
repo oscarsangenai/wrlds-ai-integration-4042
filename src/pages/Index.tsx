@@ -114,15 +114,22 @@ const Index = () => {
             {[
               { icon: Users, label: 'Talent Pipeline', value: animatedCounts.learners, suffix: '+ AI Professionals & Rising Talent Trained' },
               { icon: Lightbulb, label: 'Program Delivery', value: animatedCounts.projects, suffix: ' Open-Source AI Learning Cohorts Completed' },
-              { icon: Share, label: 'Open Innovation Network', value: animatedCounts.contributors, suffix: '+ Global Experts & Innovators Driving Solutions' },
-              { icon: Globe, label: 'Global Footprint', value: animatedCounts.countries, suffix: ' Countries — Connecting 60+ Countries — Local Insights, Global Impact' }
+              { icon: Share, label: 'Open Innovation Network', value: animatedCounts.contributors, suffix: '+ Active Members' },
+              { icon: Globe, label: 'Global Footprint', value: animatedCounts.countries, suffix: ' Countries Connected' }
             ].map((metric) => (
               <div key={metric.label} className="text-center bg-card/50 rounded-lg p-6 border backdrop-blur-sm group hover:bg-card/70 transition-all duration-300">
                 <metric.icon className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
                 <div className="text-sm font-semibold text-primary mb-2">{metric.label}</div>
-                <div className="text-2xl font-bold text-foreground">
-                  {metric.value.toLocaleString()}{metric.suffix}
+                <div className="text-xl font-semibold text-foreground">
+                  <span className={metric.label === 'Open Innovation Network' ? 'text-primary' : ''}>{metric.value.toLocaleString()}</span>{metric.suffix}
                 </div>
+                {metric.label === 'Open Innovation Network' && (
+                  <div className="text-sm text-muted-foreground mt-1">
+                    Global Experts & Innovators Contributing Solutions
+                    <br />
+                    Access to a curated bench of AI builders, researchers, and operators.
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -174,6 +181,12 @@ const Index = () => {
                 </ul>
               </div>
             ))}
+          </div>
+          
+          <div className="text-center mt-8">
+            <p className="text-lg text-muted-foreground">
+              🔑 <span className="font-semibold">Exec takeaway:</span> "Our community produces curated, enterprise-grade insights at the speed of need."
+            </p>
           </div>
         </div>
       </section>
