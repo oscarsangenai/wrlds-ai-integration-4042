@@ -33,171 +33,255 @@ interface CommunityUpdate {
 const memberSpotlights: MemberSpotlight[] = [
   {
     id: 1,
-    name: "Oscar Sanchez",
-    title: "Digital Transformation Executive",
-    bio: "A visionary member whose leadership in AI-driven digital transformation has revolutionized multiple industries. His strategic insights and innovative implementations continue to shape the future of business AI.",
-    roles: ["Digital Transformation Leader", "AI Strategy Executive", "Innovation Catalyst"],
+    name: "Sangame Krishnamani",
+    title: "Network Architect, Senior AI Advisor",
+    bio: "Sangame exemplifies leadership and dedication within our community, contributing as a Network Architect, Senior AI Advisor, Discord Manager, and an integral member of our Server Governance Team. Her blend of technical expertise, thoughtful collaboration, and forward-thinking approach consistently drives meaningful conversations and innovative applications of AI. Her commitment to sharing knowledge and fostering growth embodies the very spirit of our community.",
+    roles: ["Network Architect", "Senior AI Advisor", "Discord Manager", "Server Governance Team"],
     achievements: [
-      "Led AI transformation across multiple industries",
-      "Strategic insights and innovative implementations",
-      "Shapes the future of business AI",
-      "Drives enterprise AI adoption"
+      "Outstanding leadership and community inspiration",
+      "Drives meaningful AI conversations",
+      "Thoughtful collaboration and forward-thinking approach",
+      "Knowledge sharing and fostering growth"
     ],
-    linkedinUrl: "https://www.linkedin.com/posts/oscarsanch_memberoftheweek-genai-digitaltransformation-activity-7362501035975663618-bBep",
-    date: "2025-01-15"
+    date: "2025-01-20"
   },
   {
     id: 2,
-    name: "Wei Lin Tan",
-    title: "Generative AI Specialist",
-    bio: "A remarkable contributor whose work in generative AI and community building has been instrumental in fostering innovation and collaboration within our Singapore chapter.",
-    roles: ["Generative AI Expert", "Community Builder", "Innovation Leader"],
+    name: "Dragana Linfield",
+    title: "Generative AI Strategy Leader",
+    bio: "Before our LinkedIn space was even live, Dragana Linfield was already setting the tone for what Gen AI Global stands for—insightful leadership, meaningful collaboration, and a passion for advancing generative AI. Dragana brings a powerful blend of strategic insight and collaborative spirit to our community. Her consistent contributions exemplify what it means to lead with purpose in the era of generative AI.",
+    roles: ["Strategy Leader", "Collaborative Spirit", "Thought Leader"],
     achievements: [
-      "Instrumental in Singapore chapter growth",
-      "Generative AI innovation",
-      "Community collaboration leader",
-      "Cross-cultural AI initiatives"
+      "Setting tone for Gen AI Global vision",
+      "Insightful leadership and meaningful collaboration",
+      "Strategic insight and collaborative spirit",
+      "Leading with purpose in generative AI era"
     ],
-    linkedinUrl: "https://www.linkedin.com/posts/gen-ai-global_memberoftheweek-genai-sgu-activity-7359599098850660353-XIPd",
-    date: "2025-01-10"
+    date: "2025-01-19"
   },
   {
     id: 3,
-    name: "Jennifer Wu",
-    title: "Neural Networks Specialist",
-    bio: "A distinguished member whose expertise in neural networks and commitment to advancing AI education have made significant contributions to our community's growth and learning.",
-    roles: ["Neural Networks Expert", "AI Educator", "Research Contributor"],
+    name: "Jose Cordovilla",
+    title: "AI Innovation Advocate",
+    bio: "Jose stands out for his active engagement, generous knowledge-sharing, and deep commitment to responsible AI innovation. His contributions consistently spark meaningful discussions and reflect the kind of cross-industry collaboration that powers our community. Jose helps build a smarter and more connected community while exploring the frontiers of generative AI.",
+    roles: ["Innovation Advocate", "Knowledge Sharer", "Community Builder"],
     achievements: [
-      "Advanced AI education initiatives",
-      "Neural networks expertise",
-      "Community growth contributor",
-      "Educational content creator"
+      "Active engagement and generous knowledge-sharing",
+      "Deep commitment to responsible AI innovation",
+      "Sparks meaningful discussions",
+      "Cross-industry collaboration leader"
     ],
-    linkedinUrl: "https://www.linkedin.com/posts/activity-7358617146085515265-p0_U",
-    date: "2025-01-08"
+    date: "2025-01-18"
   },
   {
     id: 4,
-    name: "Dr. Alex Kumar",
-    title: "AI Research Pioneer",
-    bio: "A true AI pioneer whose groundbreaking research and community leadership have set new standards in the field. Their innovative thinking and collaborative approach embody the future of AI development.",
-    roles: ["Research Pioneer", "Community Leader", "Innovation Driver"],
+    name: "Rodrigo Reyes",
+    title: "Network Architect & MIT Learning Facilitator",
+    bio: "Rodrigo is a dynamic force in our community, seamlessly blending technical expertise with a passion for education and innovation. As a Network Architect at Gen AI Global, he plays a pivotal role in shaping our community's structure and fostering meaningful connections among members. Beyond his contributions here, Rodrigo serves as a Learning Facilitator for MIT Professional Education, guiding professionals through the complexities of Generative AI and digital transformation.",
+    roles: ["Network Architect", "MIT Learning Facilitator", "Education Leader"],
     achievements: [
-      "Groundbreaking AI research",
-      "Set new industry standards",
-      "Innovative thinking leader",
-      "Collaborative approach advocate"
+      "Shaping community structure and connections",
+      "MIT Professional Education facilitator",
+      "Technical expertise with education passion",
+      "Guiding professionals in GenAI transformation"
     ],
-    linkedinUrl: "https://www.linkedin.com/posts/apoorvgarg88_genai-memberoftheweek-aipioneers-activity-7350014303699161088-KCth",
-    date: "2024-12-27"
+    date: "2025-01-17"
   },
   {
     id: 5,
-    name: "Elena Petrov",
-    title: "Open Source AI Advocate",
-    bio: "An exceptional member whose contributions to open-source AI projects and community mentorship have been invaluable. Her passion for democratizing AI access continues to inspire our global network.",
-    roles: ["Open Source Leader", "Community Mentor", "AI Democratization Advocate"],
+    name: "Marie Ribbelöv",
+    title: "AI Governance & Ethics Leader",
+    bio: "Marie's contributions to the Gen AI Global community have sparked meaningful conversations around AI governance and ethics. Her leadership is a powerful reminder that technology creates the greatest impact when it empowers people. Marie leads with expertise and uplifts others through knowledge and purpose, helping shape the future of our community with a focus on growth, equity, and innovation.",
+    roles: ["AI Governance Expert", "Ethics Leader", "Community Advocate"],
     achievements: [
-      "Open-source AI project contributions",
-      "Community mentorship excellence",
-      "Democratizing AI access",
-      "Global network inspiration"
+      "Sparked meaningful AI governance conversations",
+      "Leadership in AI ethics",
+      "Technology that empowers people",
+      "Focus on growth, equity, and innovation"
     ],
-    linkedinUrl: "https://www.linkedin.com/posts/gen-ai-global_genaiglobal-memberoftheweek-aicommunity-activity-7354510363482046464-zspw",
-    date: "2025-01-03"
+    date: "2025-01-16"
   },
   {
     id: 6,
-    name: "David Rodriguez",
-    title: "AI for Social Impact Lead",
-    bio: "A visionary member who has been leading initiatives in AI for social impact. His work demonstrates how artificial intelligence can be a force for positive change in the world.",
-    roles: ["Social Impact Leader", "AI for Good Advocate", "Change Agent"],
+    name: "Prabhat Kumar",
+    title: "Enterprise AI Solutions Expert",
+    bio: "With deep expertise in integrating AI into scalable enterprise solutions, Prabhat has been a trusted voice in sharing best practices and frameworks that empower our members. His inspiring contributions demonstrate how innovation happens when diverse voices unite, generous mentorship sparks breakthroughs, and prompt design becomes a creative act with real impact.",
+    roles: ["Enterprise AI Expert", "Best Practices Advocate", "Community Mentor"],
     achievements: [
-      "Leading AI for social impact initiatives",
-      "Demonstrates AI as positive force",
-      "Social change through technology",
-      "Global impact initiatives"
+      "Deep expertise in scalable enterprise AI solutions",
+      "Trusted voice in best practices and frameworks",
+      "Innovation through diverse voices unity",
+      "Creative prompt design with real impact"
     ],
-    linkedinUrl: "https://www.linkedin.com/posts/gen-ai-global_genaiglobal-memberoftheweek-aiforgood-activity-7336743269898285056-POwj",
-    date: "2024-11-29"
+    date: "2025-01-15"
   },
   {
     id: 7,
-    name: "Dr. Priya Sharma",
-    title: "AI Research Scientist",
-    bio: "A dedicated community member whose innovative approaches to AI problem-solving and commitment to knowledge sharing have made a lasting impact. Her collaborative spirit enriches our global community.",
-    roles: ["Research Scientist", "Problem Solver", "Knowledge Sharing Expert"],
+    name: "Katherine Valqui",
+    title: "Content Lead for LinkedIn Presence",
+    bio: "Katherine, our Content Lead for Gen AI Global's LinkedIn presence, shapes narratives that inform, inspire, and amplify diverse voices across the generative AI ecosystem. Through her thoughtful storytelling and strategic lens, Kat brings our vision to life: Creating a space for democratized, open-source sharing of AI knowledge across industries. She embodies leadership with clarity in communication, connection across cultures, and commitment to continuous growth.",
+    roles: ["Content Lead", "LinkedIn Strategy", "Narrative Shaper"],
     achievements: [
-      "Innovative AI problem-solving approaches",
-      "Knowledge sharing commitment",
-      "Lasting community impact",
-      "Collaborative spirit leader"
+      "Shapes inspiring narratives across GenAI ecosystem",
+      "Democratized, open-source AI knowledge sharing",
+      "Clarity in communication",
+      "Connection across cultures and industries"
     ],
-    linkedinUrl: "https://www.linkedin.com/posts/gen-ai-global_genaiglobal-memberoftheweek-aicommunity-activity-7329133041845493760-1viY",
-    date: "2024-11-08"
+    date: "2025-01-14"
   },
   {
     id: 8,
-    name: "Marcus Thompson",
-    title: "AI Ethics Researcher",
-    bio: "A remarkable leader in our AI community whose vision and leadership have inspired countless members. His contributions to AI ethics and responsible development continue to shape our collective understanding.",
-    roles: ["Ethics Researcher", "Community Leader", "Responsible AI Advocate"],
+    name: "Andrea Hickethier",
+    title: "Conversational Leader & AI Security Manager",
+    bio: "Andrea is a standout leader blending business strategy with real-world AI innovation. As a recent graduate of MIT's Generative AI for Digital Transformation program, she's built her own PEACH Framework to help Sales & Marketing leaders assess AI use cases through process, ethics, agility, compliance, and human oversight. She's a certified AI Security Manager (ISO 42001) and passionate advocate for responsible AI.",
+    roles: ["Conversational Leader", "AI Security Manager", "Framework Developer"],
     achievements: [
-      "AI ethics and responsible development",
-      "Shapes collective understanding",
-      "Inspires community members",
-      "Vision and leadership excellence"
+      "MIT Generative AI for Digital Transformation graduate",
+      "Built PEACH Framework for AI use cases",
+      "Certified AI Security Manager (ISO 42001)",
+      "Advocate for responsible AI adoption"
     ],
-    linkedinUrl: "https://www.linkedin.com/posts/gen-ai-global_genaiglobal-memberoftheweek-aileadership-activity-7334209562918445057-9xHP",
-    date: "2024-11-22"
+    date: "2025-01-13"
   },
   {
     id: 9,
-    name: "Sarah Chen",
-    title: "ML Engineer at TechCorp",
-    bio: "An outstanding community member who has been instrumental in advancing AI innovation and fostering collaborative discussions. Her expertise in machine learning and dedication to community building exemplifies the spirit of Gen AI Global.",
-    roles: ["ML Engineer", "Innovation Advocate", "Community Builder"],
+    name: "Amber Bellou",
+    title: "Head of Onboarding",
+    bio: "Amber is the Head of Onboarding at Gen AI Global Community, a powerhouse of strategy, onboarding, and AI-driven impact. With a multifaceted background spanning marketing, research, AI strategy, and political science, she combines data-driven thinking with storytelling to fuel real-world transformation. Her leadership ensures that every new member feels welcomed, supported, and ready to thrive in our community.",
+    roles: ["Head of Onboarding", "Strategy Leader", "Member Experience Architect"],
     achievements: [
-      "Advancing AI innovation",
-      "Fostering collaborative discussions",
-      "Machine learning expertise",
-      "Community building dedication"
+      "Architect of member experience",
+      "Guiding global cohort through onboarding",
+      "Scaling engagement across time zones",
+      "Shaping vibrant, inclusive ecosystem"
     ],
-    linkedinUrl: "https://www.linkedin.com/posts/gen-ai-global_genaiglobal-memberoftheweek-aicommunity-activity-7331665271591477254-gbhe",
-    date: "2024-11-15"
-  }
-];
-
-const communityUpdates: CommunityUpdate[] = [
-  {
-    id: 1,
-    title: "Community Reaches 5,000 Members",
-    description: "We're thrilled to announce that our Gen AI Global community has reached 5,000 active members across our Discord channels and professional networks.",
-    date: "2025-01-19",
-    type: "milestone"
+    date: "2025-01-12"
   },
   {
-    id: 2,
-    title: "AI Innovation Workshop Series Launched",
-    description: "New monthly workshop series covering cutting-edge AI topics, from prompt engineering to multimodal AI applications.",
-    date: "2025-01-17",
-    type: "announcement",
-    link: "/events"
+    id: 10,
+    name: "Diellza Ahmetaj",
+    title: "Head of Agile & AIOps",
+    bio: "From shaping sovereign cloud strategies at IBM to driving AI-native collaboration in her current role as Head of Agile & AIOps, Diellza is a force behind the operational backbone of our AI-driven community. She brings a unique blend of cloud leadership, design thinking, and deep community empathy. Whether orchestrating smart content-routing or championing agentic AI tools, she's helping us turn member challenges into system-level solutions.",
+    roles: ["Head of Agile & AIOps", "Cloud Leadership", "Design Thinking Expert"],
+    achievements: [
+      "IBM sovereign cloud strategies experience",
+      "AI-native collaboration driving",
+      "Smart content-routing orchestration",
+      "Turning challenges into system-level solutions"
+    ],
+    date: "2025-01-11"
   },
   {
-    id: 3,
-    title: "Research Collaboration Program",
-    description: "Announcing our new research collaboration program connecting industry professionals with academic researchers.",
-    date: "2025-01-14",
-    type: "event",
-    link: "/community"
+    id: 11,
+    name: "Oscar Jesús García",
+    title: "Conversational Leader",
+    bio: "With over 8 years of experience leading IT transformation, Oscar blends technical precision with human-centered leadership. From implementing mission-critical RP systems to facilitating multilingual, multicultural collaboration, he's helped teams move from complexity to clarity, and from strategy to success. Oscar believes great projects are built not just with code, but with trust, continuous learning, and empowered teams.",
+    roles: ["Conversational Leader", "IT Transformation", "Multicultural Facilitator"],
+    achievements: [
+      "8+ years leading IT transformation",
+      "Technical precision with human-centered leadership",
+      "Multilingual, multicultural collaboration",
+      "Building projects with trust and empowered teams"
+    ],
+    date: "2025-01-10"
   },
   {
-    id: 4,
-    title: "Community Impact Report 2024",
-    description: "Our annual impact report showcasing the achievements and growth of our global AI community throughout 2024.",
-    date: "2025-01-09",
-    type: "achievement"
+    id: 12,
+    name: "Apoorv Garg",
+    title: "AI Strategy & Innovation Trailblazer",
+    bio: "Apoorv is a dynamic voice in the Gen AI Global Community and a trailblazer in the world of AI strategy and innovation. He shares how this community is shaping the future of generative AI through collaboration, experimentation, and purpose-driven dialogue. His contributions, curiosity, and vision for what AI can achieve continue to accelerate responsible AI adoption across industries.",
+    roles: ["AI Strategy", "Innovation Trailblazer", "Community Voice"],
+    achievements: [
+      "Trailblazer in AI strategy and innovation",
+      "Shaping future through collaboration",
+      "Purpose-driven dialogue leadership",
+      "Accelerating responsible AI adoption"
+    ],
+    date: "2025-01-09"
+  },
+  {
+    id: 13,
+    name: "Dr. Shabana Islam",
+    title: "Life Sciences & AI Ethics Leader",
+    bio: "Dr. Shabana Islam is a trailblazer blending life sciences expertise with generative AI leadership. With over a decade of experience in global product line management and a sharp eye on AI's ethical and societal impacts, Shabana helps bridge scientific rigor with emerging AI strategy. Her work as a Conversational Leader consistently sparks meaningful dialogue on leadership, ethics, and innovation.",
+    roles: ["Life Sciences Expert", "AI Ethics Leader", "Conversational Leader"],
+    achievements: [
+      "Decade+ in global product line management",
+      "Bridging scientific rigor with AI strategy",
+      "Focus on AI's ethical and societal impacts",
+      "Sparking dialogue on leadership and ethics"
+    ],
+    date: "2025-01-08"
+  },
+  {
+    id: 14,
+    name: "Arturo Cuevas",
+    title: "Agent Ops Team Leader",
+    bio: "At Gen AI Global, Arturo leads our Agent ops team, setting secure, responsible standards for how we run and scale the community's AI infrastructure. We celebrate his leadership, vision, and commitment, along with his global mindset and ability to bridge strategy, technology, and human connection. Arturo turns innovation into outcomes with his strategic approach.",
+    roles: ["Agent Ops Leader", "Infrastructure Security", "Strategy Bridge"],
+    achievements: [
+      "Leading Agent ops team",
+      "Setting secure, responsible standards",
+      "Scaling community AI infrastructure",
+      "Turning innovation into outcomes"
+    ],
+    date: "2025-01-07"
+  },
+  {
+    id: 15,
+    name: "Frédérique Lambers",
+    title: "Digital Transformation Strategist",
+    bio: "A tech-savvy strategist with 10+ years in digital transformation and innovation, Frédérique bridges business and technology to deliver sustainable growth. She aligns emerging tech with corporate strategy, leads high-performing teams, and steers complex change, always with a data-driven, inclusive mindset. As a Gen AI Global community advocate, she turns vision into execution.",
+    roles: ["Digital Transformation", "Strategic Leader", "Community Advocate"],
+    achievements: [
+      "10+ years in digital transformation",
+      "Bridging business and technology",
+      "Leading high-performing teams",
+      "Data-driven, inclusive mindset"
+    ],
+    date: "2025-01-06"
+  },
+  {
+    id: 16,
+    name: "Deidré Luzmore",
+    title: "AI Transformation & Agile Leadership",
+    bio: "Deidré is driving real impact at the intersection of AI strategy, ethics, education, and operational excellence, all with a human-first mindset. From architecting scalable AI solution lifecycles to championing responsible governance aligned with ISO 42001 and the EU AI Act, her contributions to our AI Education Program and pursuit of clarity, collaboration, and inclusion are building a future-ready, globally connected community.",
+    roles: ["AI Transformation", "Agile Leadership", "Ethics Champion"],
+    achievements: [
+      "AI strategy, ethics, education intersection",
+      "Architecting scalable AI solution lifecycles",
+      "ISO 42001 and EU AI Act governance",
+      "Building future-ready global community"
+    ],
+    date: "2025-01-05"
+  },
+  {
+    id: 17,
+    name: "Nikhil Kassetty",
+    title: "Volunteer Director of Finance & Technology Operations",
+    bio: "At Gen AI Global, Nikhil serves as our Volunteer Director of Finance & Technology Operations, helping us run secure, scalable, and impactful programs for the community. He streamlines finance and tech operations so members can learn, build, and collaborate. As a content contributor and member-first leader, he bridges strategy and execution to turn ideas into outcomes.",
+    roles: ["Finance Director", "Technology Operations", "Content Contributor"],
+    achievements: [
+      "Volunteer Director of Finance & Technology",
+      "Running secure, scalable programs",
+      "Streamlining finance and tech operations",
+      "Bridging strategy and execution"
+    ],
+    date: "2025-01-04"
+  },
+  {
+    id: 18,
+    name: "Ash Mikhail, MBA",
+    title: "Co-head of Non Coders",
+    bio: "Ash Mikhail is a visionary transformation and strategy leader making waves across both the financial sector and our Gen AI Global Community. As Co-head of non coders, Ash brings unmatched clarity and curiosity to critical conversations around real-world AI applications. With a 20+ year journey driving strategic execution and enterprise transformation at organizations like CIBC, Ash exemplifies what it means to lead with purpose and deliver impact.",
+    roles: ["Co-head Non Coders", "Transformation Leader", "Strategy Expert"],
+    achievements: [
+      "Visionary transformation and strategy leader",
+      "20+ years strategic execution experience",
+      "Enterprise transformation at CIBC",
+      "Leading with purpose and delivering impact"
+    ],
+    date: "2025-01-03"
   }
 ];
 
