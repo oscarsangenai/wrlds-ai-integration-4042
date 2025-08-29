@@ -81,7 +81,9 @@ const Index = () => {
             We are democratizing AI knowledge
           </h1>
             <p className="mt-4 max-w-2xl text-balance text-lg text-muted-foreground">
-              Make AI accessible and ethical by empowering a global peer-driven community where learning, collaboration, and open innovation drive growth and real-world impact. Join a global community building practical AI literacy for everyone.
+              Make AI accessible and ethical by empowering a global peer-driven community where learning, collaboration, and open innovation drive growth and real-world impact. 
+              <br /><br />
+              Join a global community building practical AI literacy for everyone.
             </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
             <Button asChild size="lg" variant="glow" className="relative px-10 py-6 text-base shadow-[0_0_40px_hsl(var(--accent)/0.55)]">
@@ -112,8 +114,8 @@ const Index = () => {
             {[
               { icon: Users, label: 'Talent Pipeline', value: animatedCounts.learners, suffix: '+ AI Professionals & Rising Talent Trained' },
               { icon: Lightbulb, label: 'Program Delivery', value: animatedCounts.projects, suffix: ' Open-Source AI Learning Cohorts Completed' },
-              { icon: Share, label: 'Open Innovation Network', value: animatedCounts.contributors, suffix: '+ Global Experts & Innovators Contributing Solutions' },
-              { icon: Globe, label: 'Global Footprint', value: animatedCounts.countries, suffix: ' Countries — Local Insights, Global Scale' }
+              { icon: Share, label: 'Open Innovation Network', value: animatedCounts.contributors, suffix: '+ Global Experts & Innovators Driving Solutions' },
+              { icon: Globe, label: 'Global Footprint', value: animatedCounts.countries, suffix: ' Countries — Connecting 60+ Countries — Local Insights, Global Impact' }
             ].map((metric) => (
               <div key={metric.label} className="text-center bg-card/50 rounded-lg p-6 border backdrop-blur-sm group hover:bg-card/70 transition-all duration-300">
                 <metric.icon className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
@@ -133,7 +135,7 @@ const Index = () => {
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4">Our Programs</h2>
             <p className="text-xl text-muted-foreground">
-              🔑 Exec takeaway: "Our community produces curated, enterprise-grade insights at the speed of need."
+              Three pillars of AI democratization for global impact
             </p>
           </div>
           
@@ -142,7 +144,7 @@ const Index = () => {
               {
                 icon: BookOpen,
                 title: 'Open-Source Education',
-                description: 'Comprehensive programs for all levels, from non-coders to advanced practitioners.',
+                description: 'Comprehensive programs and Projects for all levels, from non-coders to advanced practitioners.',
                 features: ['Non-Coders Course — AI for beginners and non-technical professionals', 'Agent Dev Class — Hands-on training for agent development', 'Interactive Workshops — Skill-building and collaboration with experts', 'Self-Managed Infrastructure — Securely own and operate our website, bots, and cloud environment with enterprise-grade reliability and built-in cybersecurity']
               },
               {
