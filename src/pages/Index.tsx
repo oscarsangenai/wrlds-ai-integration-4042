@@ -115,12 +115,12 @@ const Index = () => {
               { icon: Users, label: 'Talent Pipeline', value: animatedCounts.learners, suffix: '+ AI Professionals & Rising Talent Trained' },
               { icon: Lightbulb, label: 'Program Delivery', value: animatedCounts.projects, suffix: ' Open-Source AI Learning Cohorts Completed' },
               { icon: Share, label: 'Open Innovation Network', value: animatedCounts.contributors, suffix: '+ Global Experts & Innovators Driving Solutions' },
-              { icon: Globe, label: 'Global Footprint', value: animatedCounts.countries, suffix: ' Countries — Connecting 60+ Countries — Local Insights, Global Impact' }
+              { icon: Globe, label: 'Global Footprint', value: animatedCounts.countries, suffix: ' Countries Connected— Local Insights, Global Impact' }
             ].map((metric) => (
               <div key={metric.label} className="text-center bg-card/50 rounded-lg p-6 border backdrop-blur-sm group hover:bg-card/70 transition-all duration-300">
                 <metric.icon className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
                 <div className="text-sm font-semibold text-primary mb-2">{metric.label}</div>
-                <div className="text-2xl font-bold text-foreground">
+                <div className="text-xl font-bold text-foreground">
                   {metric.value.toLocaleString()}{metric.suffix}
                 </div>
               </div>
@@ -136,6 +136,12 @@ const Index = () => {
             <h2 className="text-4xl font-bold mb-4">Our Programs</h2>
             <p className="text-xl text-muted-foreground">
               Three pillars of AI democratization for global impact
+            </p>
+          </div>
+          
+          <div className="text-center mb-8">
+            <p className="text-lg text-muted-foreground font-semibold">
+              🔑 Exec takeaway: "Our community produces curated, enterprise-grade insights at the speed of need."
             </p>
           </div>
           

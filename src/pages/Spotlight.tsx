@@ -371,9 +371,9 @@ const Spotlight = () => {
                   <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-blue-500/10 flex items-center justify-center">
                     <Users className="h-6 w-6 text-blue-500" />
                   </div>
-                  <h3 className="text-2xl font-bold text-blue-500 mb-2">500+</h3>
-                  <p className="text-sm text-muted-foreground">Active Members</p>
-                  <p className="text-xs text-muted-foreground/80 mt-2">Growing community of AI professionals and practitioners.</p>
+                  <h3 className="text-2xl font-bold text-blue-500 mb-2">500+ Active Members</h3>
+                  <p className="text-sm text-muted-foreground">Global Experts & Innovators Contributing Solutions</p>
+                  <p className="text-xs text-muted-foreground/80 mt-2">Access to a curated bench of AI builders, researchers, and operators.</p>
                 </Card>
               </motion.div>
 
