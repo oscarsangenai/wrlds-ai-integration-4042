@@ -373,7 +373,7 @@ const Spotlight = () => {
                   </div>
                   <h3 className="text-xl font-bold text-blue-500 mb-2">500+ Active<br />Members</h3>
                   <p className="text-sm text-muted-foreground">Global Experts & Innovators Contributing Solutions</p>
-                  <p className="text-xs text-muted-foreground/80 mt-2">Access to a curated bench of AI builders, researchers, and operators.</p>
+                  <p className="text-xs text-muted-foreground/80 mt-2">Access to a curated bench of AI builders, mentors, researchers, and experts.</p>
                 </Card>
               </motion.div>
 
