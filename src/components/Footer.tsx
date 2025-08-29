@@ -76,7 +76,7 @@ const Footer = () => {
               className="h-10 w-auto mb-6" 
             />
             <p className="text-gray-300 mb-6">
-              Content Pending — verified organization summary will appear here.
+              Make AI accessible and ethical by empowering a global peer-driven community.
             </p>
             <div className="flex space-x-4">
               <a 
@@ -100,8 +100,8 @@ const Footer = () => {
           </div>
           
           <div>
-            <h3 className="text-lg font-bold mb-4 text-white">Legal</h3>
-            <p className="text-gray-400">Privacy Policy — Terms of Service (Content Pending)</p>
+            <h3 className="text-lg font-bold mb-4 text-white">Connect</h3>
+            <p className="text-gray-400">Join our global community of AI innovators and practitioners</p>
           </div>
         </div>
         

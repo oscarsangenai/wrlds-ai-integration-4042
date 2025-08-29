@@ -34,7 +34,7 @@ const memberSpotlights: MemberSpotlight[] = [
   {
     id: 1,
     name: "Sangame Krishnamani",
-    title: "Network Architect, Senior AI Advisor",
+    title: "Advisor, Technology Strategy & Digital Architecture | Volunteer",
     bio: "Sangame exemplifies leadership and dedication within our community, contributing as a Network Architect, Senior AI Advisor, Discord Manager, and an integral member of our Server Governance Team. Her blend of technical expertise, thoughtful collaboration, and forward-thinking approach consistently drives meaningful conversations and innovative applications of AI. Her commitment to sharing knowledge and fostering growth embodies the very spirit of our community.",
     roles: ["Network Architect", "Senior AI Advisor", "Discord Manager", "Server Governance Team"],
     achievements: [
@@ -62,7 +62,7 @@ const memberSpotlights: MemberSpotlight[] = [
   {
     id: 3,
     name: "Jose Cordovilla",
-    title: "AI Innovation Advocate",
+    title: "Director of Systems Integration & Architecture",
     bio: "Jose stands out for his active engagement, generous knowledge-sharing, and deep commitment to responsible AI innovation. His contributions consistently spark meaningful discussions and reflect the kind of cross-industry collaboration that powers our community. Jose helps build a smarter and more connected community while exploring the frontiers of generative AI.",
     roles: ["Innovation Advocate", "Knowledge Sharer", "Community Builder"],
     achievements: [
@@ -76,7 +76,7 @@ const memberSpotlights: MemberSpotlight[] = [
   {
     id: 4,
     name: "Rodrigo Reyes",
-    title: "Network Architect & MIT Learning Facilitator",
+    title: "Head of Directors",
     bio: "Rodrigo is a dynamic force in our community, seamlessly blending technical expertise with a passion for education and innovation. As a Network Architect at Gen AI Global, he plays a pivotal role in shaping our community's structure and fostering meaningful connections among members. Beyond his contributions here, Rodrigo serves as a Learning Facilitator for MIT Professional Education, guiding professionals through the complexities of Generative AI and digital transformation.",
     roles: ["Network Architect", "MIT Learning Facilitator", "Education Leader"],
     achievements: [
@@ -372,8 +372,8 @@ const Spotlight = () => {
                     <Users className="h-6 w-6 text-blue-500" />
                   </div>
                   <h3 className="text-2xl font-bold text-blue-500 mb-2">500+</h3>
-                  <p className="text-sm text-muted-foreground">Global Experts & Innovators Contributing Solutions</p>
-                  <p className="text-xs text-muted-foreground/80 mt-2">Access to a curated bench of AI builders, researchers, and operators.</p>
+                  <p className="text-sm text-muted-foreground">Active Members</p>
+                  <p className="text-xs text-muted-foreground/80 mt-2">Growing community of AI professionals and practitioners.</p>
                 </Card>
               </motion.div>
 

@@ -65,7 +65,6 @@ const Navbar = () => {
                  {[
                    { to: '/', label: 'Home' },
                    { to: '/about', label: 'About Us' },
-                   { to: '/hackathon', label: 'Hackathon' },
                    { to: '/community', label: 'Community' },
                    { to: '/resources', label: 'Resources' },
                    { to: '/spotlight', label: 'Spotlight' },
@@ -106,7 +105,6 @@ const Navbar = () => {
            {[
              { to: '/', label: 'Home' },
              { to: '/about', label: 'About Us' },
-             { to: '/hackathon', label: 'Hackathon' },
              { to: '/community', label: 'Community' },
              { to: '/resources', label: 'Resources' },
              { to: '/spotlight', label: 'Spotlight' },

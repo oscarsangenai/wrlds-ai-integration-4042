@@ -80,9 +80,9 @@ const Index = () => {
           <h1 className="animate-fade-in bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-balance text-5xl font-bold leading-[1.12] tracking-tight text-transparent sm:text-7xl font-sans">
             We are democratizing AI knowledge
           </h1>
-          <p className="mt-4 max-w-2xl text-balance text-lg text-muted-foreground">
-            Open, responsible, and future‑proof. Join a global community building practical AI literacy for everyone.
-          </p>
+            <p className="mt-4 max-w-2xl text-balance text-lg text-muted-foreground">
+              Make AI accessible and ethical by empowering a global peer-driven community where learning, collaboration, and open innovation drive growth and real-world impact. Join a global community building practical AI literacy for everyone.
+            </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
             <Button asChild size="lg" variant="glow" className="relative px-10 py-6 text-base shadow-[0_0_40px_hsl(var(--accent)/0.55)]">
               <Link to="/get-involved" aria-label="Get involved with the community">Get Involved</Link>
@@ -115,12 +115,12 @@ const Index = () => {
               { icon: Share, label: 'Open Innovation Network', value: animatedCounts.contributors, suffix: '+ Global Experts & Innovators Contributing Solutions' },
               { icon: Globe, label: 'Global Footprint', value: animatedCounts.countries, suffix: ' Countries — Local Insights, Global Scale' }
             ].map((metric) => (
-              <div key={metric.label} className="text-center bg-card/50 rounded-lg p-6 border backdrop-blur-sm">
-                <metric.icon className="h-8 w-8 text-primary mx-auto mb-4" />
-                <div className="text-3xl font-bold text-foreground mb-2">
+              <div key={metric.label} className="text-center bg-card/50 rounded-lg p-6 border backdrop-blur-sm group hover:bg-card/70 transition-all duration-300">
+                <metric.icon className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
+                <div className="text-sm font-semibold text-primary mb-2">{metric.label}</div>
+                <div className="text-2xl font-bold text-foreground">
                   {metric.value.toLocaleString()}{metric.suffix}
                 </div>
-                <div className="text-sm text-muted-foreground">{metric.label}</div>
               </div>
             ))}
           </div>
@@ -143,7 +143,7 @@ const Index = () => {
                 icon: BookOpen,
                 title: 'Open-Source Education',
                 description: 'Comprehensive programs for all levels, from non-coders to advanced practitioners.',
-                features: ['Non-Coders Course — AI for beginners and non-technical professionals', 'Agent Dev Class — Hands-on training for agent development', 'Interactive Workshops — Skill-building and collaboration with experts']
+                features: ['Non-Coders Course — AI for beginners and non-technical professionals', 'Agent Dev Class — Hands-on training for agent development', 'Interactive Workshops — Skill-building and collaboration with experts', 'Self-Managed Infrastructure — Securely own and operate our website, bots, and cloud environment with enterprise-grade reliability and built-in cybersecurity']
               },
               {
                 icon: Share,
@@ -184,9 +184,9 @@ const Index = () => {
             Be part of the global movement to democratize AI knowledge for everyone
           </p>
           <Button asChild size="lg" variant="glow" className="px-12 py-6 text-lg shadow-[0_0_40px_hsl(var(--accent)/0.55)]">
-            <a href="https://form.fillout.com/t/wHKtxCmdQDus" target="_blank" rel="noopener noreferrer">
-              Apply for Membership
-            </a>
+            <Link to="/community">
+              Join Us
+            </Link>
           </Button>
         </div>
       </section>
