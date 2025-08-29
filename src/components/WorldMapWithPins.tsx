@@ -18,20 +18,28 @@ const countries: Country[] = [
   { name: 'Australia', iso2: 'AU', lat: -25.2744, lng: 133.7751 },
   { name: 'Dubai', iso2: 'AE', lat: 25.2048, lng: 55.2708 },
   { name: 'Netherlands', iso2: 'NL', lat: 52.1326, lng: 5.2913 },
-  { name: 'Geneva', iso2: 'CH', lat: 46.2044, lng: 6.1432 }
+  { name: 'Geneva', iso2: 'CH', lat: 46.2044, lng: 6.1432 },
+  { name: 'South America', iso2: 'SA', lat: -8.7832, lng: -55.4915 }
 ];
 
 const WorldMapWithPins: React.FC = () => {
   const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
 
-  // Enhanced Mercator projection with better accuracy
+  // Enhanced Mercator projection with adjustable positioning
   const project = (lat: number, lng: number) => {
-    // Adjust for better map alignment
-    const x = ((lng + 180) / 360) * 100;
+    // Base projection
+    const baseX = ((lng + 180) / 360) * 100;
     const latRad = (lat * Math.PI) / 180;
     const mercatorY = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
-    const y = 50 - (mercatorY * 180) / (Math.PI * 5.5); // Adjusted scaling for better accuracy
-    return { x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) };
+    const baseY = 50 - (mercatorY * 180) / (Math.PI * 5.5);
+    
+    // Apply adjustments: horizontally closer by 20%, vertically expand by 30%
+    const centerX = 50;
+    const centerY = 50;
+    const adjustedX = centerX + (baseX - centerX) * 0.8; // 20% closer horizontally
+    const adjustedY = centerY + (baseY - centerY) * 1.3; // 30% more spread vertically
+    
+    return { x: Math.max(0, Math.min(100, adjustedX)), y: Math.max(0, Math.min(100, adjustedY)) };
   };
 
   const handleCountrySelect = (countryCode: string) => {
@@ -120,7 +128,7 @@ const WorldMapWithPins: React.FC = () => {
       <div className="absolute bottom-4 right-4 bg-slate-800/90 backdrop-blur-md px-3 py-2 rounded-lg shadow-lg border border-cyan-400/20 text-xs font-medium z-20">
         <div className="flex items-center gap-2">
           <Globe className="w-3 h-3 text-cyan-400" />
-          <span className="text-cyan-300">60 Countries</span>
+          <span className="text-cyan-300">60 Countries Connected</span>
         </div>
       </div>
     </div>
