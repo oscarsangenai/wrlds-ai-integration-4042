@@ -115,7 +115,7 @@ const Index = () => {
               { icon: Users, label: 'Talent Pipeline', value: animatedCounts.learners, suffix: '+ AI Professionals & Rising Talent Trained' },
               { icon: Lightbulb, label: 'Program Delivery', value: animatedCounts.projects, suffix: ' Open-Source AI Learning Cohorts Completed' },
               { icon: Share, label: 'Open Innovation Network', value: animatedCounts.contributors, suffix: '+ Global Experts & Innovators Driving Solutions' },
-              { icon: Globe, label: 'Global Footprint', value: animatedCounts.countries, suffix: ' Countries Connected— Local Insights, Global Impact' }
+              { icon: Globe, label: 'Global Footprint', value: animatedCounts.countries, suffix: ' Countries— Local Insights, Global Impact' }
             ].map((metric) => (
               <div key={metric.label} className="text-center bg-card/50 rounded-lg p-6 border backdrop-blur-sm group hover:bg-card/70 transition-all duration-300">
                 <metric.icon className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
