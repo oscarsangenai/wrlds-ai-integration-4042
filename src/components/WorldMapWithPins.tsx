@@ -56,7 +56,7 @@ const WorldMapWithPins: React.FC = () => {
       <img 
         src={networkWorldMap}
         alt="Network world map showing global connectivity"
-        className="absolute inset-0 w-full h-full object-contain"
+        className="absolute inset-0 w-full h-full object-fill"
       />
       
       {/* Overlay gradient for depth */}
