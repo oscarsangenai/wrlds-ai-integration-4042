@@ -9,7 +9,7 @@ const CommunityMap: React.FC<CommunityMapProps> = ({
   className
 }) => {
   return (
-    <div className={`relative w-full h-96 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 rounded-xl overflow-hidden shadow-2xl border border-primary/20 backdrop-blur-sm ${className}`}>
+    <div className={`relative w-full h-[600px] bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 rounded-xl overflow-hidden shadow-2xl border border-primary/20 backdrop-blur-sm ${className}`}>
       {/* Network World Map Background Image */}
       <img 
         src="/lovable-uploads/b47eba27-c63a-47d2-912a-d6a26458caf2.png"
