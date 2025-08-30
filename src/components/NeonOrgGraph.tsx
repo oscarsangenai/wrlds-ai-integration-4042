@@ -148,6 +148,18 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
     
     return units;
   }, [activeTab, expandedDepartments]);
+
+  // Handle tab change
+  const handleTabChange = useCallback((newTab: string) => {
+    setActiveTab(newTab);
+    setInternalSearchQuery(""); // Clear search on tab change
+    onSearchChange?.("");
+    
+    // Fit view after tab change
+    setTimeout(() => {
+      fitView({ padding: 0.2, includeHiddenNodes: false });
+    }, 300);
+  }, [fitView, onSearchChange]);
   // Toggle expansion handler (defined before use in nodes memo)
   const handleToggleExpansion = useCallback((departmentId: string) => {
     console.log('handleToggleExpansion called with:', departmentId);
@@ -263,8 +275,8 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
   const { nodes: layoutNodes, edges: layoutEdges } = useMemo(() => {
     return getLayoutedElements(initialNodes, initialEdges, {
       rankdir: 'TB',
-      nodesep: 80,
-      ranksep: 120,
+      nodesep: 40,
+      ranksep: 160,
     });
   }, [initialNodes, initialEdges]);
 
@@ -388,12 +400,15 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
 
   return (
     <div className="h-full w-full bg-gradient-to-br from-white/5 to-white/0" 
-         style={{ fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif' }}>
+         style={{ 
+           fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif',
+           paddingTop: 'var(--nav-h, 72px)'
+         }}>
       {/* Header Controls */}
-      <div className="absolute top-4 left-4 right-4 z-10 flex flex-col gap-4">
-        {/* Search and Export */}
-        <div className="flex gap-4 items-center">
-          <div className="relative flex-1 max-w-md">
+      <div className="absolute top-4 left-4 right-4 z-10 flex flex-col gap-4 lg:flex-row lg:flex-wrap">
+        {/* Search and Export - Line 1 */}
+        <div className="flex gap-4 items-center w-full lg:w-auto">
+          <div className="relative flex-1 lg:w-80 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               placeholder="Search members, teams, or roles..."
@@ -442,13 +457,15 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
           </Button>
         </div>
 
-        {/* Tabs */}
-        <OrgTabs
-          pillars={departments}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          onSearchClear={clearSearchHandler}
-        />
+        {/* Tabs - Line 2 */}
+        <div className="w-full">
+          <OrgTabs
+            pillars={departments}
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+            onSearchClear={clearSearchHandler}
+          />
+        </div>
       </div>
 
       {/* React Flow */}
@@ -470,7 +487,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
         }}
       >
         {/* Zoom Controls Panel */}
-        <Panel position="top-right" className="flex flex-col gap-2 bg-white/80 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-2">
+        <Panel position="top-right" className="flex flex-col gap-2 bg-white/80 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-2 z-20" style={{ top: 'calc(var(--tabs-bottom) + 8px)' }}>
           <Button
             onClick={handleZoomIn}
             variant="outline"
@@ -511,13 +528,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
           >
             <RotateCcw className="h-4 w-4" />
           </Button>
-        </Panel>
-        {/* Help Tooltip */}
-        <Panel position="bottom-left" className="bg-white/90 backdrop-blur-sm rounded-xl border border-white/20 shadow-lg p-3 max-w-xs">
-          <p className="text-xs text-muted-foreground">
-            Use +/− or trackpad to zoom. Click <strong>Fit</strong> to see everything. 
-            Keyboard: Ctrl/Cmd +/−, F for fit, Ctrl/Cmd 0 to reset.
-          </p>
+          {/* Help icon/popover can be added here if needed */}
         </Panel>
         <MiniMap 
           nodeStrokeColor="#64748b"

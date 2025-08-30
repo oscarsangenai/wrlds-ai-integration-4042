@@ -10,6 +10,10 @@
     --background: 0 0% 100%;
     --foreground: 0 0% 10%;
 
+    /* Layout spacing variables */
+    --nav-h: 72px;
+    --tabs-bottom: 120px;
+
     --card: 0 0% 100%;
     --card-foreground: 0 0% 10%;
 

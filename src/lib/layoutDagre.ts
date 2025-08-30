@@ -12,8 +12,8 @@ export interface LayoutOptions {
 
 const defaultOptions: LayoutOptions = {
   rankdir: 'TB',
-  nodesep: 80,
-  ranksep: 140,
+  nodesep: 40,
+  ranksep: 160,
   marginx: 20,
   marginy: 20,
 };
@@ -73,6 +73,15 @@ export const getLayoutedElements = (
     });
   });
 
+  // Add a dummy invisible node to help center founders above executive
+  if (nodes.some(n => n.id.startsWith('founder-')) && nodes.some(n => n.id === 'executive-director')) {
+    g.setNode('founder-center-dummy', { 
+      width: 1, 
+      height: 1,
+      rank: 0 // Same rank as founders
+    });
+  }
+
   // Add edges to dagre graph
   edges.forEach((edge) => {
     g.setEdge(edge.source, edge.target);
@@ -86,17 +95,32 @@ export const getLayoutedElements = (
     const nodeWithPosition = g.node(node.id);
     const depth = calculateNodeDepth(node.id);
     
+    // Center founders above executive if dummy node exists
+    let adjustedX = nodeWithPosition.x - (node.measured?.width || 220) / 2;
+    if (node.id.startsWith('founder-') && g.hasNode('founder-center-dummy')) {
+      const dummyPosition = g.node('founder-center-dummy');
+      const executivePosition = g.node('executive-director');
+      if (dummyPosition && executivePosition) {
+        // Center founders around the executive's X position
+        const foundersCount = nodes.filter(n => n.id.startsWith('founder-')).length;
+        const founderIndex = parseInt(node.id.split('-')[1]) - 1;
+        const spacing = 280; // Space between founders
+        const totalWidth = (foundersCount - 1) * spacing;
+        adjustedX = executivePosition.x - totalWidth / 2 + founderIndex * spacing - (node.measured?.width || 220) / 2;
+      }
+    }
+    
     return {
       ...node,
       targetPosition: Position.Top,
       sourcePosition: Position.Bottom,
       position: {
-        x: nodeWithPosition.x - (node.measured?.width || 220) / 2,
+        x: adjustedX,
         // Use depth-based Y positioning to enforce hierarchy
-        y: depth * (opts.ranksep || 140) + (nodeWithPosition.y - (node.measured?.height || 80) / 2) * 0.3,
+        y: depth * (opts.ranksep || 160) + (nodeWithPosition.y - (node.measured?.height || 80) / 2) * 0.3,
       },
     };
-  });
+  }).filter(node => node.id !== 'founder-center-dummy'); // Remove the dummy node
 
   return { nodes: layoutedNodes, edges };
 };

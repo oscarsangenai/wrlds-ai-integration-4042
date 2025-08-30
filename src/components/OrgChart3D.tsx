@@ -329,10 +329,13 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
   const hasResults = filteredDepartmentTeams.length > 0;
 
   return (
-    <div className="space-y-6" style={{ fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif' }}>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex w-full max-w-md items-center gap-2">
-          <div className="relative w-full">
+    <div className="space-y-6" style={{ 
+      fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif',
+      paddingTop: 'var(--nav-h, 72px)'
+    }}>
+      <div className="flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between bg-white/60 backdrop-blur-sm p-4 rounded-2xl border border-white/20 shadow-lg">
+        <div className="flex w-full lg:w-auto lg:max-w-md items-center gap-2">
+          <div className="relative w-full lg:w-80">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search by name or role"
@@ -354,7 +357,7 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
             )}
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <Button
             variant="outline"
             size="sm"
@@ -374,8 +377,6 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
               </>
             )}
           </Button>
-        </div>
-        <div className="flex gap-2">
           <Button variant="outline" onClick={handleExportPng} 
                   className="rounded-2xl border-white/20 bg-white/80 backdrop-blur-sm hover:bg-white/90"
                   aria-label="Export PNG">
@@ -422,48 +423,59 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
               <div className="relative h-[80vh] w-full overflow-hidden rounded-2xl border border-white/20">
                 <TransformComponent>
                   <div ref={containerRef} className="org-surface min-h-[80vh] w-full p-8 bg-gradient-to-br from-white/5 to-white/0">
-                    <div className="mx-auto max-w-7xl space-y-8">
-                      {/* Founders */}
-                      <div className="text-center space-y-4">
-                        <h2 className="text-2xl font-bold text-slate-800 mb-6">Founders</h2>
-                        <div className="flex justify-center gap-8">
-                          {founders.map((founder) => {
-                            const Icon = CATEGORY_ICON[founder.icon];
-                            return (
-                              <Card key={founder.id} className="rounded-2xl border-amber-300 bg-gradient-to-br from-amber-50/80 to-amber-100/60 shadow-xl shadow-amber-400/20 backdrop-blur-sm">
-                                <CardContent className="p-6 text-center">
-                                  <div className="mx-auto mb-4 p-3 rounded-2xl bg-amber-100/80 text-amber-600 w-fit">
-                                    <Icon className="h-8 w-8" />
-                                  </div>
-                                  <h3 className="text-xl font-bold text-amber-800">{founder.name}</h3>
-                                  <p className="text-amber-700 font-medium">Founder</p>
-                                </CardContent>
-                              </Card>
-                            );
-                          })}
-                        </div>
-                      </div>
+                     <div className="mx-auto max-w-7xl space-y-8">
+                       {/* Founders */}
+                       <div className="text-center space-y-4">
+                         <h2 className="text-2xl font-bold text-purple-800 mb-6">Founders</h2>
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+                           {founders.map((founder) => {
+                             const Icon = CATEGORY_ICON[founder.icon];
+                             return (
+                               <Card key={founder.id} className="rounded-2xl border border-purple-200 bg-gradient-to-br from-purple-50/80 to-blue-50/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all">
+                                 <CardContent className="p-6 text-center">
+                                   <div className="mx-auto mb-4 p-3 rounded-2xl bg-purple-100/80 text-purple-600 w-fit">
+                                     <Icon className="h-6 w-6" />
+                                   </div>
+                                   <h3 className="font-bold text-lg text-purple-800">{founder.name}</h3>
+                                   <p className="text-purple-600 text-sm">Founder</p>
+                                 </CardContent>
+                               </Card>
+                             );
+                           })}
+                         </div>
+                         
+                         {/* Divider Arrow */}
+                         <div className="flex justify-center mt-8 mb-4">
+                           <ChevronDown className="h-8 w-8 text-purple-400" />
+                         </div>
+                       </div>
 
-                      {/* Executive Director */}
-                      {executiveDirector && (
-                        <div className="text-center space-y-4">
-                          <div className="flex justify-center">
-                            <Card className="rounded-2xl border-blue-400 bg-gradient-to-br from-blue-50/80 to-blue-100/60 shadow-xl shadow-blue-500/20 backdrop-blur-sm">
-                              <CardContent className="p-6 text-center">
-                                <div className="mx-auto mb-4 p-3 rounded-2xl bg-blue-100/80 text-blue-600 w-fit">
-                                  {React.createElement(CATEGORY_ICON[executiveDirector.icon], { className: "h-8 w-8" })}
-                                </div>
-                                <h3 className="text-xl font-bold text-blue-800">{executiveDirector.members?.[0]?.name}</h3>
-                                <p className="text-blue-700 font-medium">{executiveDirector.members?.[0]?.role}</p>
-                              </CardContent>
-                            </Card>
-                          </div>
-                        </div>
-                      )}
+                       {/* Executive Director */}
+                       {executiveDirector && (
+                         <div className="text-center space-y-4 mt-8 md:mt-10">
+                           <h2 className="text-2xl font-bold text-purple-800 mb-6">Executive Director</h2>
+                           <div className="flex justify-center">
+                             <Card className="rounded-2xl border-2 border-blue-300 bg-gradient-to-br from-blue-50/90 to-purple-50/90 backdrop-blur-sm shadow-xl transform scale-105 ring-1 ring-blue-400/30 max-w-md">
+                               <CardContent className="p-8 text-center">
+                                 <div className="mx-auto mb-4 p-3 rounded-2xl bg-blue-100/80 text-blue-600 w-fit">
+                                   {React.createElement(CATEGORY_ICON[executiveDirector.icon], { className: "h-6 w-6" })}
+                                 </div>
+                                 <h3 className="font-bold text-xl text-blue-800">{executiveDirector.members?.[0]?.name}</h3>
+                                 <p className="text-blue-600">{executiveDirector.members?.[0]?.role}</p>
+                               </CardContent>
+                             </Card>
+                           </div>
+                           
+                           {/* Divider Arrow */}
+                           <div className="flex justify-center mt-8 mb-4">
+                             <ChevronDown className="h-8 w-8 text-purple-400" />
+                           </div>
+                         </div>
+                       )}
 
-                      {/* Departments */}
-                      <div className="space-y-6">
-                        <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">Departments</h2>
+                       {/* Departments */}
+                       <div className="space-y-6 mt-8 md:mt-10">
+                         <h2 className="text-2xl font-bold text-purple-800 text-center mb-8">Departments</h2>
                         {!hasResults && query ? (
                           <div className="text-center py-12">
                             <div className="rounded-2xl border border-white/20 bg-white/40 backdrop-blur-sm p-8 max-w-md mx-auto">
@@ -482,7 +494,7 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
                             </div>
                           </div>
                         ) : (
-                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {filteredDepartmentTeams
                               .sort((a, b) => a.department.name.localeCompare(b.department.name))
                               .map(({ department, teams }) => (
