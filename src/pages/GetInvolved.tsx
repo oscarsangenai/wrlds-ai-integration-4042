@@ -20,42 +20,98 @@ import ConstellationParticles from '@/components/visuals/ConstellationParticles'
 const volunteerRoles = [
   {
     id: 1,
-    title: "Agile Leader",
-    department: "Enterprise Agility & Operational Excellence",
-    description: "Help lead agile-driven infrastructure, community engagement, workshop facilitation, and cross-team collaboration. Includes training roles like Enterprise Design Thinking Coach & Agile Scrum Master.",
-    skills: ["Agile", "Coaching", "Collaboration", "Design Thinking"],
+    title: "Marketing Event Coordinator & Campaign Manager",
+    department: "Marketing",
+    description: "Drive events, outreach campaigns, and brand activation using templates, guidelines, and LinkedIn content; coordinate alliances and campaign execution.",
+    skills: ["Events", "Campaigns", "Brand", "Content", "Strategy"],
     status: "open"
   },
   {
     id: 2,
-    title: "Deputy / Instructors",
-    department: "Agent Development",
-    description: "Scaling agent development programs with 25+ individuals onboarded. Focus on structured onboarding, module deployment, and leadership expansion.",
-    skills: ["Training", "Automation", "Leadership", "Agent Ops"],
+    title: "General Member Onboarding Facilitator",
+    department: "Onboarding Department",
+    description: "Guide new members through interviews, buddy groups, and workflows; support analytics-driven retention and agent-assisted placement at scale.",
+    skills: ["Onboarding", "Interviews", "Automation", "Retention", "Data"],
     status: "open"
   },
   {
     id: 3,
-    title: "DevOps Engineer",
-    department: "Cloud Infrastructure",
-    description: "Building the GenAIGlobal community tech infrastructure. Requires AWS and DevOps expertise to launch scalable systems.",
-    skills: ["DevOps", "AWS", "Infrastructure", "Cloud"],
+    title: "Fundraising Lead",
+    department: "Fundraising Team",
+    description: "Launch campaigns, cultivate sponsors, and expand partnerships to sustain community growth; organize weekly planning and execution rhythms.",
+    skills: ["Fundraising", "Partnerships", "Sponsorships", "Networking", "Campaigns"],
     status: "open"
   },
   {
     id: 4,
-    title: "UI Developer, Backend Developer",
-    department: "Website Development",
-    description: "Creating V2 of the community website with backend integration, login, onboarding, and hackathon support.",
-    skills: ["Web Development", "Backend", "Frontend", "Hackathons"],
+    title: "Writers",
+    department: "Documentation Team",
+    description: "Author white papers and technical content; collaborate with editors/researchers and help migrate docs to GitHub.",
+    skills: ["Technical Writing", "Research", "Documentation", "GitHub"],
     status: "open"
   },
   {
     id: 5,
+    title: "Governance & Assurance Lead",
+    department: "Cyber Security Department",
+    description: "Establish core security policies (Acceptable Use, RBAC, Bot/Agent), training, and compliance foundations.",
+    skills: ["Security Policy", "RBAC", "Compliance", "Training"],
+    status: "open"
+  },
+  {
+    id: 6,
+    title: "Operations & Response Lead",
+    department: "Cyber Security Department",
+    description: "Build incident response playbooks, escalation channels, and monitoring; harden access and identity controls.",
+    skills: ["Incident Response", "IR Playbooks", "Monitoring", "Access Control"],
+    status: "open"
+  },
+  {
+    id: 7,
+    title: "Cloud Infrastructure DevOps Engineer",
+    department: "Technology Strategy & Digital Architecture",
+    description: "Stand up community tech infrastructure with AWS-first pipelines and scalable DevOps tooling to support operations.",
+    skills: ["DevOps", "AWS", "Infrastructure", "Automation"],
+    status: "open"
+  },
+  {
+    id: 8,
+    title: "Website Development Backend Developer",
+    department: "Technology Strategy & Digital Architecture",
+    description: "Implement Website V2 backend with integrations for member login, onboarding, and hackathon support.",
+    skills: ["Backend", "APIs", "Authentication", "Integrations"],
+    status: "open"
+  },
+  {
+    id: 9,
+    title: "Agent Development Deputy",
+    department: "Agent Development",
+    description: "Support org structure, onboarding automation, module deployment, and leadership scaling across cohorts.",
+    skills: ["Leadership", "Automation", "Enablement", "Operations"],
+    status: "open"
+  },
+  {
+    id: 10,
+    title: "Agent Development Instructors",
+    department: "Agent Development",
+    description: "Teach and mentor cohorts; deliver custom content and help scale programs into Agent Ops.",
+    skills: ["Instruction", "Curriculum", "Mentorship", "Agent Ops"],
+    status: "open"
+  },
+  {
+    id: 11,
+    title: "Agile Leader",
+    department: "Enterprise Agility & Operational Excellence",
+    description: "Lead agile frameworks, workshops, and cross-team collaboration; coach design thinking and scrum practices.",
+    skills: ["Agile", "Coaching", "Collaboration", "Design Thinking"],
+    status: "open"
+  },
+  {
+    id: 12,
     title: "Programs Lead, Volunteer Coordinator, Engagement Specialist, Data Analyst, Communications Specialist",
     department: "Community Experience & Volunteer Strategy",
-    description: "Launching programs for onboarding, events, newsletters, volunteer coordination, and community recognition. Includes feedback loops and growth routes for volunteers.",
-    skills: ["Community Building", "Events", "Volunteering", "Engagement"],
+    description: "Kickstart member/volunteer experience: events, newsletters, feedback loops, recognition, and analytics.",
+    skills: ["Community", "Events", "Volunteering", "Communications", "Analytics"],
     status: "open"
   }
 ];
