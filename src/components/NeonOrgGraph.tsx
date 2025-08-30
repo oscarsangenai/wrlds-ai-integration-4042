@@ -12,12 +12,13 @@ import {
   MarkerType,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import React from 'react';
 
 import { ORG_UNITS, type OrgUnit } from '@/data/orgChart';
 import { getLayoutedElements } from '@/lib/layoutDagre';
 import { GroupNode } from './nodes/GroupNode';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import { Search, Download } from 'lucide-react';
+import { Search, Download, Eye, EyeOff, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import OrgTabs from './OrgTabs';
@@ -27,12 +28,54 @@ const nodeTypes = {
   group: GroupNode,
 };
 
-function GraphContent() {
-  const [searchQuery, setSearchQuery] = useState('');
+// Helper functions for localStorage
+const getStoredGraphExpandState = (): Set<string> => {
+  if (typeof window === 'undefined') return new Set();
+  const stored = localStorage.getItem('org-graph-expanded-departments');
+  if (stored === null) {
+    // First time - expand all departments
+    const allDepartmentIds = ORG_UNITS
+      .filter(unit => unit.type === 'department')
+      .map(unit => unit.id);
+    return new Set(allDepartmentIds);
+  }
+  try {
+    return new Set(JSON.parse(stored));
+  } catch {
+    return new Set();
+  }
+};
+
+const setStoredGraphExpandState = (expanded: Set<string>): void => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('org-graph-expanded-departments', JSON.stringify([...expanded]));
+  }
+};
+
+interface GraphContentProps {
+  searchQuery?: string;
+  onSearchChange?: (query: string) => void;
+  clearSearchTrigger?: boolean;
+}
+
+function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = false }: GraphContentProps) {
+  const [internalSearchQuery, setInternalSearchQuery] = useState(searchQuery);
   const [selectedNode, setSelectedNode] = useState<OrgUnit | null>(null);
   const [activeTab, setActiveTab] = useState('all');
-  const [expandedDepartments, setExpandedDepartments] = useState<Set<string>>(new Set());
+  const [expandedDepartments, setExpandedDepartments] = useState<Set<string>>(getStoredGraphExpandState);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  // Handle external search clearing
+  React.useEffect(() => {
+    if (clearSearchTrigger) {
+      setInternalSearchQuery("");
+    }
+  }, [clearSearchTrigger]);
+
+  // Sync with external search
+  React.useEffect(() => {
+    setInternalSearchQuery(searchQuery);
+  }, [searchQuery]);
 
   // Get all departments for tabs
   const departments = useMemo(() => 
@@ -83,6 +126,19 @@ function GraphContent() {
     });
   }, []);
 
+  const toggleExpandAll = useCallback(() => {
+    const allDepartmentIds = ORG_UNITS
+      .filter(unit => unit.type === 'department')
+      .map(unit => unit.id);
+    
+    setExpandedDepartments(prev => {
+      const isAllExpanded = allDepartmentIds.every(id => prev.has(id));
+      const newSet = isAllExpanded ? new Set<string>() : new Set(allDepartmentIds);
+      setStoredGraphExpandState(newSet);
+      return newSet;
+    });
+  }, []);
+
   // Create nodes and edges
   const { initialNodes, initialEdges } = useMemo(() => {
     console.log('Creating nodes and edges, handleToggleExpansion:', typeof handleToggleExpansion);
@@ -103,7 +159,7 @@ function GraphContent() {
           teamCount,
           onToggleExpansion: handleToggleExpansion,
           isExpanded: expandedDepartments.has(unit.id),
-          searchQuery
+          searchQuery: internalSearchQuery
         }
       });
 
@@ -131,7 +187,7 @@ function GraphContent() {
     });
 
     return { initialNodes: nodes, initialEdges: edges };
-  }, [visibleUnits, expandedDepartments, searchQuery, handleToggleExpansion]);
+  }, [visibleUnits, expandedDepartments, internalSearchQuery, handleToggleExpansion]);
 
   // Apply layout
   const { nodes: layoutNodes, edges: layoutEdges } = useMemo(() => {
@@ -155,7 +211,8 @@ function GraphContent() {
   }, []);
 
   const handleSearch = useCallback((query: string) => {
-    setSearchQuery(query);
+    setInternalSearchQuery(query);
+    onSearchChange?.(query);
     
     if (query.trim()) {
       // Find units or members that match the search
@@ -176,8 +233,14 @@ function GraphContent() {
       });
       
       setExpandedDepartments(departmentsToExpand);
+      setStoredGraphExpandState(departmentsToExpand);
     }
-  }, []);
+  }, [onSearchChange]);
+
+  const clearSearchHandler = useCallback(() => {
+    setInternalSearchQuery("");
+    onSearchChange?.("");
+  }, [onSearchChange]);
 
   const handleExportPNG = useCallback(async () => {
     const element = document.querySelector('.react-flow') as HTMLElement;
@@ -211,11 +274,40 @@ function GraphContent() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               placeholder="Search members, teams, or roles..."
-              value={searchQuery}
+              value={internalSearchQuery}
               onChange={(e) => handleSearch(e.target.value)}
-              className="pl-10 bg-white/80 backdrop-blur-sm border-white/20 rounded-2xl"
+              className="pl-10 pr-10 bg-white/80 backdrop-blur-sm border-white/20 rounded-2xl"
             />
+            {internalSearchQuery && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="absolute right-1 top-1/2 h-6 w-6 -translate-y-1/2 rounded-xl p-0 hover:bg-white/60"
+                onClick={clearSearchHandler}
+                aria-label="Clear search"
+              >
+                <X className="h-3 w-3" />
+              </Button>
+            )}
           </div>
+          <Button
+            onClick={toggleExpandAll}
+            variant="outline"
+            size="sm"
+            className="bg-white/80 backdrop-blur-sm border-white/20 rounded-2xl hover:bg-white/90"
+          >
+            {ORG_UNITS.filter(unit => unit.type === 'department').every(unit => expandedDepartments.has(unit.id)) ? (
+              <>
+                <EyeOff className="h-4 w-4 mr-2" />
+                Collapse All
+              </>
+            ) : (
+              <>
+                <Eye className="h-4 w-4 mr-2" />
+                Expand All
+              </>
+            )}
+          </Button>
           <Button
             onClick={handleExportPNG}
             variant="outline"
@@ -332,10 +424,16 @@ function GraphContent() {
   );
 }
 
-const NeonOrgGraph = () => {
+interface NeonOrgGraphProps {
+  searchQuery?: string;
+  onSearchChange?: (query: string) => void;
+  clearSearchTrigger?: boolean;
+}
+
+const NeonOrgGraph: React.FC<NeonOrgGraphProps> = (props) => {
   return (
     <ReactFlowProvider>
-      <GraphContent />
+      <GraphContent {...props} />
     </ReactFlowProvider>
   );
 };

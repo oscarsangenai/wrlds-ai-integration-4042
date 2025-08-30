@@ -5,12 +5,18 @@ interface OrgTabsProps {
   pillars: Array<{ id: string; name: string }>;
   activeTab: string;
   onTabChange: (value: string) => void;
+  onTabChanging?: () => void;
 }
 
-const OrgTabs = memo(({ pillars, activeTab, onTabChange }: OrgTabsProps) => {
+const OrgTabs = memo(({ pillars, activeTab, onTabChange, onTabChanging }: OrgTabsProps) => {
+  const handleTabChange = (value: string) => {
+    onTabChanging?.(); // Clear search before changing tabs
+    onTabChange(value);
+  };
+
   return (
     <div className="w-full overflow-x-auto pb-2">
-      <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="h-9 bg-white/50 backdrop-blur-sm border-white/20 p-1 w-fit min-w-full rounded-2xl">
           <TabsTrigger 
             value="all" 

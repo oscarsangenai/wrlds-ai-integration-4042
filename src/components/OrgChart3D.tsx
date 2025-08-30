@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,9 @@ import {
   FileDown,
   ChevronDown,
   ChevronRight,
+  Eye,
+  EyeOff,
+  X,
 } from "lucide-react";
 import { ORG_UNITS, OrgUnit, OrgMember, CATEGORY_ICON } from "@/data/orgChart";
 
@@ -63,7 +66,8 @@ const DepartmentSection: React.FC<{
   teams: OrgUnit[];
   query: string;
   defaultOpen?: boolean;
-}> = ({ department, teams, query, defaultOpen = false }) => {
+  globalExpandAll?: boolean;
+}> = ({ department, teams, query, defaultOpen = false, globalExpandAll = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const Icon = CATEGORY_ICON[department.icon];
   
@@ -77,8 +81,8 @@ const DepartmentSection: React.FC<{
     ) || team.name.toLowerCase().includes(query.toLowerCase())
   );
 
-  // Auto-open when searching and matches exist
-  const shouldOpen = query ? (departmentMembers.length > 0 || relevantTeams.length > 0) : isOpen;
+  // Auto-open when searching and matches exist, or when globalExpandAll is true
+  const shouldOpen = globalExpandAll || query ? (departmentMembers.length > 0 || relevantTeams.length > 0) : isOpen;
 
   return (
     <Card className="rounded-2xl border border-white/10 bg-white/40 backdrop-blur-sm shadow-lg">
@@ -197,9 +201,45 @@ const DepartmentSection: React.FC<{
   );
 };
 
-const OrgChart3D: React.FC = () => {
-  const [query, setQuery] = useState("");
+// Helper functions for localStorage
+const getStoredExpandState = (): boolean => {
+  if (typeof window === 'undefined') return true;
+  const stored = localStorage.getItem('org-chart-expand-all');
+  return stored === null ? true : stored === 'true';
+};
+
+const setStoredExpandState = (expanded: boolean): void => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('org-chart-expand-all', expanded.toString());
+  }
+};
+
+interface OrgChart3DProps {
+  searchQuery?: string;
+  onSearchChange?: (query: string) => void;
+  clearSearchTrigger?: boolean;
+}
+
+const OrgChart3D: React.FC<OrgChart3DProps> = ({ 
+  searchQuery = "", 
+  onSearchChange,
+  clearSearchTrigger = false 
+}) => {
+  const [query, setQuery] = useState(searchQuery);
+  const [globalExpandAll, setGlobalExpandAll] = useState<boolean>(getStoredExpandState);
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  // Handle external search clearing
+  useEffect(() => {
+    if (clearSearchTrigger) {
+      setQuery("");
+    }
+  }, [clearSearchTrigger]);
+
+  // Sync with external search
+  useEffect(() => {
+    setQuery(searchQuery);
+  }, [searchQuery]);
 
   // Get organizational structure
   const { founders, executiveDirector, departments, departmentTeams } = useMemo(() => {
@@ -250,6 +290,44 @@ const OrgChart3D: React.FC = () => {
     }
   };
 
+  const handleSearchChange = (value: string) => {
+    setQuery(value);
+    onSearchChange?.(value);
+  };
+
+  const clearSearchQuery = () => {
+    setQuery("");
+    onSearchChange?.("");
+  };
+
+  const toggleGlobalExpand = () => {
+    const newState = !globalExpandAll;
+    setGlobalExpandAll(newState);
+    setStoredExpandState(newState);
+  };
+
+  // Filter departments and teams based on search
+  const filteredDepartmentTeams = useMemo(() => {
+    if (!query) return departmentTeams;
+    
+    return departmentTeams.filter(({ department, teams }) => {
+      const departmentMembers = (department.members ?? []).filter((m) =>
+        [m.name, m.role ?? ""].some((f) => f.toLowerCase().includes(query.toLowerCase()))
+      );
+      
+      const relevantTeams = teams.filter(team => 
+        team.members?.some(m => 
+          [m.name, m.role ?? ""].some(f => f.toLowerCase().includes(query.toLowerCase()))
+        ) || team.name.toLowerCase().includes(query.toLowerCase())
+      );
+
+      return departmentMembers.length > 0 || relevantTeams.length > 0 || 
+             department.name.toLowerCase().includes(query.toLowerCase());
+    });
+  }, [departmentTeams, query]);
+
+  const hasResults = filteredDepartmentTeams.length > 0;
+
   return (
     <div className="space-y-6" style={{ fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif' }}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -258,12 +336,44 @@ const OrgChart3D: React.FC = () => {
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search by name or role"
-              className="pl-10 rounded-2xl border-white/20 bg-white/80 backdrop-blur-sm"
+              className="pl-10 pr-10 rounded-2xl border-white/20 bg-white/80 backdrop-blur-sm"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               aria-label="Search org members"
             />
+            {query && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="absolute right-1 top-1/2 size-8 -translate-y-1/2 rounded-xl p-0 hover:bg-white/60"
+                onClick={clearSearchQuery}
+                aria-label="Clear search"
+              >
+                <X className="size-3" />
+              </Button>
+            )}
           </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={toggleGlobalExpand}
+            className="rounded-2xl border-white/20 bg-white/80 backdrop-blur-sm hover:bg-white/90"
+            aria-label={globalExpandAll ? "Collapse all departments" : "Expand all departments"}
+          >
+            {globalExpandAll ? (
+              <>
+                <EyeOff className="size-4 mr-2" />
+                Collapse All
+              </>
+            ) : (
+              <>
+                <Eye className="size-4 mr-2" />
+                Expand All
+              </>
+            )}
+          </Button>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={handleExportPng} 
@@ -354,19 +464,39 @@ const OrgChart3D: React.FC = () => {
                       {/* Departments */}
                       <div className="space-y-6">
                         <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">Departments</h2>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                          {departmentTeams
-                            .sort((a, b) => a.department.name.localeCompare(b.department.name))
-                            .map(({ department, teams }) => (
-                            <DepartmentSection
-                              key={department.id}
-                              department={department}
-                              teams={teams}
-                              query={query}
-                              defaultOpen={false}
-                            />
-                          ))}
-                        </div>
+                        {!hasResults && query ? (
+                          <div className="text-center py-12">
+                            <div className="rounded-2xl border border-white/20 bg-white/40 backdrop-blur-sm p-8 max-w-md mx-auto">
+                              <Search className="size-12 text-muted-foreground mx-auto mb-4" />
+                              <h3 className="text-lg font-semibold text-slate-700 mb-2">No results found</h3>
+                              <p className="text-muted-foreground">
+                                No members or departments match "{query}". Try a different search term.
+                              </p>
+                              <Button 
+                                variant="outline" 
+                                onClick={clearSearchQuery}
+                                className="mt-4 rounded-xl"
+                              >
+                                Clear search
+                              </Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {filteredDepartmentTeams
+                              .sort((a, b) => a.department.name.localeCompare(b.department.name))
+                              .map(({ department, teams }) => (
+                              <DepartmentSection
+                                key={department.id}
+                                department={department}
+                                teams={teams}
+                                query={query}
+                                defaultOpen={globalExpandAll}
+                                globalExpandAll={globalExpandAll}
+                              />
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
