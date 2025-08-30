@@ -334,3 +334,16 @@
   scroll-margin-top: var(--nav-h); 
 }
 
+/* Global navbar safe-area utility */
+.nav-safe {
+  padding-top: var(--nav-h);
+  scroll-margin-top: var(--nav-h);
+}
+
+/* Sticky tabs row utility */
+.sticky-tabs {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 50;
+}
+

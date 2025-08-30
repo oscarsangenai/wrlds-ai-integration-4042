@@ -17,7 +17,7 @@ const OrgTabs = memo(({ pillars, activeTab, onTabChange, onTabChanging, onSearch
   };
 
   return (
-    <div className="w-full overflow-x-auto pb-2">
+    <div className="w-full overflow-x-auto pb-2 sticky-tabs z-50">
       <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="h-9 bg-white/50 backdrop-blur-sm border-white/20 p-1 w-fit min-w-full rounded-2xl z-30">
           <TabsTrigger 

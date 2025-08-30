@@ -329,7 +329,7 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
   const hasResults = filteredDepartmentTeams.length > 0;
 
   return (
-    <div className="space-y-6 with-nav-safe-area" style={{ 
+    <div className="space-y-6 with-nav-safe-area nav-safe" style={{ 
       fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif'
     }}>
       <div className="flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between bg-white/60 backdrop-blur-sm p-4 rounded-2xl border border-white/20 shadow-lg">
@@ -405,7 +405,7 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
         >
           {({ zoomIn, zoomOut, resetTransform, centerView }) => (
             <>
-              <div className="mb-4 flex gap-2">
+              <div className="mb-4 flex gap-2 hidden">
                 <Button size="sm" variant="secondary" onClick={() => zoomIn()} 
                         className="rounded-xl" aria-label="Zoom in">
                   +
@@ -420,6 +420,11 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
                 </Button>
               </div>
               <div className="relative h-[80vh] w-full overflow-hidden rounded-2xl border border-white/20">
+                <div className="absolute right-3 top-3 z-30 flex gap-2 pointer-events-auto">
+                  <Button size="sm" variant="secondary" onClick={() => zoomIn()} className="rounded-xl" aria-label="Zoom in">+</Button>
+                  <Button size="sm" variant="secondary" onClick={() => zoomOut()} className="rounded-xl" aria-label="Zoom out">−</Button>
+                  <Button size="sm" variant="secondary" onClick={() => centerView?.(1)} className="rounded-xl" aria-label="Reset view">Reset</Button>
+                </div>
                 <TransformComponent>
                   <div ref={containerRef} className="org-surface min-h-[80vh] w-full p-8 bg-gradient-to-br from-white/5 to-white/0">
                      <div className="mx-auto max-w-7xl space-y-8">

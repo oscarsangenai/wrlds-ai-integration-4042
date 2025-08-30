@@ -400,7 +400,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
   }, [zoomIn, zoomOut, handleReset, handleFitView]);
 
   return (
-    <div className="h-full w-full bg-gradient-to-br from-white/5 to-white/0 with-nav-safe-area" 
+    <div className="h-full w-full bg-gradient-to-br from-white/5 to-white/0 with-nav-safe-area nav-safe" 
          style={{ 
            fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif'
          }}>
@@ -458,7 +458,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
         </div>
 
         {/* Tabs - Line 2 */}
-        <div className="w-full sticky top-[var(--nav-h)] z-50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="w-full sticky-tabs bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <OrgTabs
             pillars={departments}
             activeTab={activeTab}
@@ -571,7 +571,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
 
       {/* Details Sheet */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-        <SheetContent className="w-[400px] sm:w-[540px] bg-white/95 backdrop-blur-sm border-white/10 rounded-2xl shadow-lg">
+        <SheetContent className="w-[400px] sm:w-[540px] bg-white/95 backdrop-blur-sm border-white/10 rounded-2xl shadow-lg top-[var(--nav-h)] h-[calc(100vh-var(--nav-h))] z-[60] overflow-y-auto">
           <SheetHeader>
             <SheetTitle className="flex items-center gap-2" 
                         style={{ fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif' }}>
