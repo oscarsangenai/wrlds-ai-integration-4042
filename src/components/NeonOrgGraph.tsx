@@ -5,13 +5,11 @@ import {
   Edge,
   useNodesState,
   useEdgesState,
-  onNodesChange as onNodesChangeType,
-  onEdgesChange as onEdgesChangeType,
   ReactFlowProvider,
   MiniMap,
   Controls,
   Background,
-  Position,
+  MarkerType,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -67,6 +65,20 @@ function GraphContent() {
     
     return units;
   }, [activeTab, expandedDepartments]);
+  // Toggle expansion handler (defined before use in nodes memo)
+  const handleToggleExpansion = useCallback((departmentId: string) => {
+    setExpandedDepartments((prev) => {
+      const newSet: Set<string> = new Set<string>();
+      if (prev.has(departmentId)) {
+        // Close all if clicking the currently open department
+        return newSet;
+      } else {
+        // Accordion behavior: open only this department
+        newSet.add(departmentId);
+        return newSet;
+      }
+    });
+  }, []);
 
   // Create nodes and edges
   const { initialNodes, initialEdges } = useMemo(() => {
@@ -106,7 +118,7 @@ function GraphContent() {
               strokeDasharray: unit.type === 'team' ? '5,5' : undefined
             },
             markerEnd: {
-              type: 'arrowclosed' as const,
+              type: MarkerType.ArrowClosed,
               color: 'hsl(var(--border))',
             },
           });
@@ -118,7 +130,7 @@ function GraphContent() {
   }, [visibleUnits, expandedDepartments, searchQuery]);
 
   // Apply layout
-  const { layoutedNodes, layoutedEdges } = useMemo(() => {
+  const { nodes: layoutNodes, edges: layoutEdges } = useMemo(() => {
     return getLayoutedElements(initialNodes, initialEdges, {
       rankdir: 'TB',
       nodesep: 80,
@@ -126,22 +138,9 @@ function GraphContent() {
     });
   }, [initialNodes, initialEdges]);
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState(layoutNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(layoutEdges);
 
-  const handleToggleExpansion = useCallback((departmentId: string) => {
-    setExpandedDepartments(prev => {
-      const newSet = new Set();
-      if (prev.has(departmentId)) {
-        // If clicking the same department that's open, close it
-        return newSet;
-      } else {
-        // Close all others and open this one (accordion behavior)
-        newSet.add(departmentId);
-        return newSet;
-      }
-    });
-  }, []);
 
   const onNodeClick = useCallback((_: any, node: Node) => {
     const unit = ORG_UNITS.find(u => u.id === node.id);
