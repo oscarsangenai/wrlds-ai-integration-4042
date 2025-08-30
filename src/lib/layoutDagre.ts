@@ -13,7 +13,7 @@ export interface LayoutOptions {
 const defaultOptions: LayoutOptions = {
   rankdir: 'TB',
   nodesep: 80,
-  ranksep: 120,
+  ranksep: 140,
   marginx: 20,
   marginy: 20,
 };
@@ -93,7 +93,7 @@ export const getLayoutedElements = (
       position: {
         x: nodeWithPosition.x - (node.measured?.width || 220) / 2,
         // Use depth-based Y positioning to enforce hierarchy
-        y: depth * (opts.ranksep || 120) + (nodeWithPosition.y - (node.measured?.height || 80) / 2) * 0.3,
+        y: depth * (opts.ranksep || 140) + (nodeWithPosition.y - (node.measured?.height || 80) / 2) * 0.3,
       },
     };
   });

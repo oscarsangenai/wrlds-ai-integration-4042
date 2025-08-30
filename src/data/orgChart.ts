@@ -114,7 +114,7 @@ export const ORG_UNITS: OrgUnit[] = [
   },
   {
     id: "cloud-department",
-    name: "Cloud Infrastucture",
+    name: "Cloud Infrastructure",
     type: "department",
     icon: "Cloud",
     description: "Cloud infrastructure and DevOps",
@@ -202,7 +202,6 @@ export const ORG_UNITS: OrgUnit[] = [
     parentId: "executive-director",
     members: [
       { name: "Katherine Valqui", role: "Director of Marketing & Communications" },
-      { name: "Xiaoke Pu", role: "Director of Influencer Strategy & Content Innovation" },
     ],
   },
   {

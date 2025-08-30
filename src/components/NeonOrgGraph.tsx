@@ -357,6 +357,35 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
     setStoredZoomState(viewport);
   }, []);
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey)) {
+        switch (event.key) {
+          case '+':
+          case '=':
+            event.preventDefault();
+            zoomIn();
+            break;
+          case '-':
+            event.preventDefault();
+            zoomOut();
+            break;
+          case '0':
+            event.preventDefault();
+            handleReset();
+            break;
+        }
+      } else if (event.key === 'f') {
+        event.preventDefault();
+        handleFitView();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [zoomIn, zoomOut, handleReset, handleFitView]);
+
   return (
     <div className="h-full w-full bg-gradient-to-br from-white/5 to-white/0" 
          style={{ fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif' }}>
@@ -431,7 +460,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
         nodeTypes={nodeTypes}
         onNodeClick={onNodeClick}
         onMoveEnd={handleMoveEnd}
-        minZoom={0.25}
+        minZoom={0.2}
         maxZoom={2.0}
         zoomOnScroll={true}
         panOnDrag={true}
@@ -448,6 +477,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
             size="sm"
             className="w-10 h-10 p-0 bg-white/80 hover:bg-white/90"
             title="Zoom In (Ctrl/Cmd +)"
+            aria-label="Zoom In"
           >
             <ZoomIn className="h-4 w-4" />
           </Button>
@@ -457,6 +487,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
             size="sm"
             className="w-10 h-10 p-0 bg-white/80 hover:bg-white/90"
             title="Zoom Out (Ctrl/Cmd -)"
+            aria-label="Zoom Out"
           >
             <ZoomOut className="h-4 w-4" />
           </Button>
@@ -466,6 +497,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
             size="sm"
             className="w-10 h-10 p-0 bg-white/80 hover:bg-white/90"
             title="Fit to Screen (F)"
+            aria-label="Fit to Screen"
           >
             <Maximize2 className="h-4 w-4" />
           </Button>
@@ -475,9 +507,17 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
             size="sm"
             className="w-10 h-10 p-0 bg-white/80 hover:bg-white/90"
             title="Reset View (Ctrl/Cmd 0)"
+            aria-label="Reset View"
           >
             <RotateCcw className="h-4 w-4" />
           </Button>
+        </Panel>
+        {/* Help Tooltip */}
+        <Panel position="bottom-left" className="bg-white/90 backdrop-blur-sm rounded-xl border border-white/20 shadow-lg p-3 max-w-xs">
+          <p className="text-xs text-muted-foreground">
+            Use +/− or trackpad to zoom. Click <strong>Fit</strong> to see everything. 
+            Keyboard: Ctrl/Cmd +/−, F for fit, Ctrl/Cmd 0 to reset.
+          </p>
         </Panel>
         <MiniMap 
           nodeStrokeColor="#64748b"
