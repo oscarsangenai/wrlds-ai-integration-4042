@@ -220,39 +220,35 @@ const InteractiveImage = ({ src, alt, className }: InteractiveImageProps) => {
       
       {/* Controls overlay */}
       <div className="absolute bottom-3 right-3 flex gap-2">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="secondary" 
-                size="sm" 
-                className="bg-white/80 backdrop-blur-sm shadow-md h-8 w-8 p-0"
-                onClick={zoomIn}
-                disabled={scale >= 3}
-              >
-                <ZoomIn className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Zoom In</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="secondary" 
+              size="sm" 
+              className="bg-white/80 backdrop-blur-sm shadow-md h-8 w-8 p-0"
+              onClick={zoomIn}
+              disabled={scale >= 3}
+            >
+              <ZoomIn className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Zoom In</TooltipContent>
+        </Tooltip>
         
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="secondary" 
-                size="sm" 
-                className="bg-white/80 backdrop-blur-sm shadow-md h-8 w-8 p-0"
-                onClick={zoomOut}
-                disabled={scale <= 1}
-              >
-                <ZoomOut className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Zoom Out</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="secondary" 
+              size="sm" 
+              className="bg-white/80 backdrop-blur-sm shadow-md h-8 w-8 p-0"
+              onClick={zoomOut}
+              disabled={scale <= 1}
+            >
+              <ZoomOut className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Zoom Out</TooltipContent>
+        </Tooltip>
       </div>
       
       {/* Help tooltip */}

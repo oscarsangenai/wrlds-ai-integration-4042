@@ -67,13 +67,16 @@ function GraphContent() {
   }, [activeTab, expandedDepartments]);
   // Toggle expansion handler (defined before use in nodes memo)
   const handleToggleExpansion = useCallback((departmentId: string) => {
+    console.log('handleToggleExpansion called with:', departmentId);
     setExpandedDepartments((prev) => {
       const newSet: Set<string> = new Set<string>();
       if (prev.has(departmentId)) {
         // Close all if clicking the currently open department
+        console.log('Closing department:', departmentId);
         return newSet;
       } else {
         // Accordion behavior: open only this department
+        console.log('Opening department:', departmentId);
         newSet.add(departmentId);
         return newSet;
       }
@@ -82,6 +85,7 @@ function GraphContent() {
 
   // Create nodes and edges
   const { initialNodes, initialEdges } = useMemo(() => {
+    console.log('Creating nodes and edges, handleToggleExpansion:', typeof handleToggleExpansion);
     const nodes: Node[] = [];
     const edges: Edge[] = [];
 
@@ -127,7 +131,7 @@ function GraphContent() {
     });
 
     return { initialNodes: nodes, initialEdges: edges };
-  }, [visibleUnits, expandedDepartments, searchQuery]);
+  }, [visibleUnits, expandedDepartments, searchQuery, handleToggleExpansion]);
 
   // Apply layout
   const { nodes: layoutNodes, edges: layoutEdges } = useMemo(() => {
