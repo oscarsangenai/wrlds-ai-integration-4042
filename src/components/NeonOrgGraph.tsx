@@ -20,11 +20,12 @@ import { ORG_UNITS, type OrgUnit } from '@/data/orgChart';
 import { getLayoutedElements } from '@/lib/layoutDagre';
 import { GroupNode } from './nodes/GroupNode';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import { Search, Download, Eye, EyeOff, X, ZoomIn, ZoomOut, RotateCcw, Maximize2 } from 'lucide-react';
+import { Search, Download, Eye, EyeOff, X, ZoomIn, ZoomOut, RotateCcw, Maximize2, HelpCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import OrgTabs from './OrgTabs';
 import { toPng } from 'html-to-image';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 const nodeTypes = {
   group: GroupNode,
@@ -155,10 +156,10 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
     setInternalSearchQuery(""); // Clear search on tab change
     onSearchChange?.("");
     
-    // Fit view after tab change
+    // Fit view after tab change with longer delay for better UX
     setTimeout(() => {
       fitView({ padding: 0.2, includeHiddenNodes: false });
-    }, 300);
+    }, 500);
   }, [fitView, onSearchChange]);
   // Toggle expansion handler (defined before use in nodes memo)
   const handleToggleExpansion = useCallback((departmentId: string) => {
@@ -399,10 +400,9 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
   }, [zoomIn, zoomOut, handleReset, handleFitView]);
 
   return (
-    <div className="h-full w-full bg-gradient-to-br from-white/5 to-white/0" 
+    <div className="h-full w-full bg-gradient-to-br from-white/5 to-white/0 with-nav-safe-area" 
          style={{ 
-           fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif',
-           paddingTop: 'var(--nav-h, 72px)'
+           fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif'
          }}>
       {/* Header Controls */}
       <div className="absolute top-4 left-4 right-4 z-10 flex flex-col gap-4 lg:flex-row lg:flex-wrap">
@@ -458,7 +458,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
         </div>
 
         {/* Tabs - Line 2 */}
-        <div className="w-full">
+        <div className="w-full sticky top-[var(--nav-h)] z-50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <OrgTabs
             pillars={departments}
             activeTab={activeTab}
@@ -487,7 +487,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
         }}
       >
         {/* Zoom Controls Panel */}
-        <Panel position="top-right" className="flex flex-col gap-2 bg-white/80 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-2 z-20" style={{ top: 'calc(var(--tabs-bottom) + 8px)' }}>
+        <Panel position="top-right" className="flex flex-col gap-2 bg-white/80 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-2 z-30" style={{ top: 'calc(var(--tabs-bottom) + 8px)' }}>
           <Button
             onClick={handleZoomIn}
             variant="outline"
@@ -528,7 +528,28 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
           >
             <RotateCcw className="h-4 w-4" />
           </Button>
-          {/* Help icon/popover can be added here if needed */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-10 h-10 p-0 bg-white/80 hover:bg-white/90"
+                title="Help"
+                aria-label="Help"
+              >
+                <HelpCircle className="h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-64 text-sm">
+              <div className="space-y-2">
+                <p><strong>Navigation:</strong></p>
+                <p>• Use +/− or trackpad to zoom</p>
+                <p>• Press <kbd className="bg-gray-100 px-1 rounded">F</kbd> to fit view</p>
+                <p>• <kbd className="bg-gray-100 px-1 rounded">Ctrl/Cmd 0</kbd> to reset</p>
+                <p>• Click nodes to view details</p>
+              </div>
+            </PopoverContent>
+          </Popover>
         </Panel>
         <MiniMap 
           nodeStrokeColor="#64748b"

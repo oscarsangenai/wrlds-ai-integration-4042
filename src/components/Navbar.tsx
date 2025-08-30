@@ -19,6 +19,13 @@ const Navbar = () => {
       }
     };
     window.addEventListener('scroll', handleScroll);
+    
+    // Set navbar height CSS variable
+    const nav = document.querySelector('nav');
+    if (nav) {
+      document.documentElement.style.setProperty('--nav-h', `${nav.getBoundingClientRect().height}px`);
+    }
+    
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

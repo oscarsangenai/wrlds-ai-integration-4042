@@ -329,9 +329,8 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
   const hasResults = filteredDepartmentTeams.length > 0;
 
   return (
-    <div className="space-y-6" style={{ 
-      fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif',
-      paddingTop: 'var(--nav-h, 72px)'
+    <div className="space-y-6 with-nav-safe-area" style={{ 
+      fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif'
     }}>
       <div className="flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between bg-white/60 backdrop-blur-sm p-4 rounded-2xl border border-white/20 shadow-lg">
         <div className="flex w-full lg:w-auto lg:max-w-md items-center gap-2">
@@ -393,7 +392,7 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
       <div className="rounded-2xl border border-white/10 bg-white/20 backdrop-blur-sm p-2 sm:p-4 shadow-xl">
         <TransformWrapper
           initialScale={1}
-          minScale={0.6}
+          minScale={0.25}
           maxScale={2.5}
           wheel={{ step: 0.06 }}
           doubleClick={{ disabled: true }}
@@ -424,10 +423,10 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
                 <TransformComponent>
                   <div ref={containerRef} className="org-surface min-h-[80vh] w-full p-8 bg-gradient-to-br from-white/5 to-white/0">
                      <div className="mx-auto max-w-7xl space-y-8">
-                       {/* Founders */}
-                       <div className="text-center space-y-4">
-                         <h2 className="text-2xl font-bold text-purple-800 mb-6">Founders</h2>
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+                         {/* Founders */}
+                        <div className="text-center space-y-4">
+                          <h2 className="text-2xl font-bold text-purple-800 mb-6">Founders</h2>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
                            {founders.map((founder) => {
                              const Icon = CATEGORY_ICON[founder.icon];
                              return (

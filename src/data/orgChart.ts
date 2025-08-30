@@ -114,7 +114,7 @@ export const ORG_UNITS: OrgUnit[] = [
   },
   {
     id: "cloud-department",
-    name: "Cloud Infrastructure",
+    name: "Cloud",
     type: "department",
     icon: "Cloud",
     description: "Cloud infrastructure and DevOps",
