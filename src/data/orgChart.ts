@@ -224,7 +224,7 @@ export const ORG_UNITS: OrgUnit[] = [
     description: "Website development and digital architecture",
     parentId: "executive-director",
     members: [
-      { name: "Sangame Krishnamani", role: "Web Dev Lead" },
+      { name: "Sangame Krishnamani", role: "Volunteer Advisor, Technology Strategy & Digital Architecture" },
     ],
   },
 
