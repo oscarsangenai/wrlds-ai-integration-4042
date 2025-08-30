@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   ReactFlow,
   Node,
@@ -10,6 +10,8 @@ import {
   Controls,
   Background,
   MarkerType,
+  useReactFlow,
+  Panel,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import React from 'react';
@@ -18,7 +20,7 @@ import { ORG_UNITS, type OrgUnit } from '@/data/orgChart';
 import { getLayoutedElements } from '@/lib/layoutDagre';
 import { GroupNode } from './nodes/GroupNode';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import { Search, Download, Eye, EyeOff, X } from 'lucide-react';
+import { Search, Download, Eye, EyeOff, X, ZoomIn, ZoomOut, RotateCcw, Maximize2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import OrgTabs from './OrgTabs';
@@ -52,6 +54,22 @@ const setStoredGraphExpandState = (expanded: Set<string>): void => {
   }
 };
 
+const getStoredZoomState = (): any => {
+  if (typeof window === 'undefined') return null;
+  try {
+    const stored = localStorage.getItem('org.zoom.v1');
+    return stored ? JSON.parse(stored) : null;
+  } catch {
+    return null;
+  }
+};
+
+const setStoredZoomState = (viewport: any): void => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('org.zoom.v1', JSON.stringify(viewport));
+  }
+};
+
 interface GraphContentProps {
   searchQuery?: string;
   onSearchChange?: (query: string) => void;
@@ -64,6 +82,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
   const [activeTab, setActiveTab] = useState('all');
   const [expandedDepartments, setExpandedDepartments] = useState<Set<string>>(getStoredGraphExpandState);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const { fitView, zoomIn, zoomOut, setViewport, getViewport } = useReactFlow();
 
   // Handle external search clearing
   React.useEffect(() => {
@@ -76,6 +95,27 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
   React.useEffect(() => {
     setInternalSearchQuery(searchQuery);
   }, [searchQuery]);
+
+  // Restore zoom state and fit view on mount
+  useEffect(() => {
+    const storedViewport = getStoredZoomState();
+    if (storedViewport) {
+      setViewport(storedViewport);
+    } else {
+      // First visit - fit to view with padding
+      setTimeout(() => {
+        fitView({ padding: 0.2, includeHiddenNodes: false });
+      }, 100);
+    }
+  }, [fitView, setViewport]);
+
+  // Auto-fit when departments expand/collapse
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      fitView({ padding: 0.2, includeHiddenNodes: false });
+    }, 300);
+    return () => clearTimeout(timeoutId);
+  }, [expandedDepartments, fitView]);
 
   // Get all departments for tabs
   const departments = useMemo(() => 
@@ -163,8 +203,38 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
         }
       });
 
-      // Add edges for parent-child relationships
-      if (unit.parentId) {
+      // Add edges for parent-child relationships including founder->rodrigo
+      if (unit.id === 'executive-director') {
+        // Connect both founders to Rodrigo
+        edges.push({
+          id: 'edge-founder-1-executive-director',
+          source: 'founder-1',
+          target: 'executive-director',
+          type: 'smoothstep',
+          style: { 
+            stroke: 'hsl(var(--border))', 
+            strokeWidth: 2
+          },
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            color: 'hsl(var(--border))',
+          },
+        });
+        edges.push({
+          id: 'edge-founder-2-executive-director',
+          source: 'founder-2',
+          target: 'executive-director',
+          type: 'smoothstep',
+          style: { 
+            stroke: 'hsl(var(--border))', 
+            strokeWidth: 2
+          },
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            color: 'hsl(var(--border))',
+          },
+        });
+      } else if (unit.parentId) {
         const parentExists = visibleUnits.some(u => u.id === unit.parentId);
         if (parentExists) {
           edges.push({
@@ -263,6 +333,30 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
     }
   }, []);
 
+  const handleZoomIn = useCallback(() => {
+    zoomIn();
+  }, [zoomIn]);
+
+  const handleZoomOut = useCallback(() => {
+    zoomOut();
+  }, [zoomOut]);
+
+  const handleFitView = useCallback(() => {
+    fitView({ padding: 0.2, includeHiddenNodes: false });
+  }, [fitView]);
+
+  const handleReset = useCallback(() => {
+    setViewport({ x: 0, y: 0, zoom: 1 });
+    localStorage.removeItem('org.zoom.v1');
+    setTimeout(() => {
+      fitView({ padding: 0.2, includeHiddenNodes: false });
+    }, 100);
+  }, [setViewport, fitView]);
+
+  const handleMoveEnd = useCallback((event: any, viewport: any) => {
+    setStoredZoomState(viewport);
+  }, []);
+
   return (
     <div className="h-full w-full bg-gradient-to-br from-white/5 to-white/0" 
          style={{ fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif' }}>
@@ -324,6 +418,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
           pillars={departments}
           activeTab={activeTab}
           onTabChange={setActiveTab}
+          onSearchClear={clearSearchHandler}
         />
       </div>
 
@@ -335,16 +430,55 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
         onNodeClick={onNodeClick}
-        fitView
-        fitViewOptions={{
-          padding: 0.1,
-          maxZoom: 1.2,
-        }}
+        onMoveEnd={handleMoveEnd}
+        minZoom={0.25}
+        maxZoom={2.0}
+        zoomOnScroll={true}
+        panOnDrag={true}
         className="bg-transparent"
         style={{
           backgroundColor: 'transparent',
         }}
       >
+        {/* Zoom Controls Panel */}
+        <Panel position="top-right" className="flex flex-col gap-2 bg-white/80 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-2">
+          <Button
+            onClick={handleZoomIn}
+            variant="outline"
+            size="sm"
+            className="w-10 h-10 p-0 bg-white/80 hover:bg-white/90"
+            title="Zoom In (Ctrl/Cmd +)"
+          >
+            <ZoomIn className="h-4 w-4" />
+          </Button>
+          <Button
+            onClick={handleZoomOut}
+            variant="outline"
+            size="sm"
+            className="w-10 h-10 p-0 bg-white/80 hover:bg-white/90"
+            title="Zoom Out (Ctrl/Cmd -)"
+          >
+            <ZoomOut className="h-4 w-4" />
+          </Button>
+          <Button
+            onClick={handleFitView}
+            variant="outline"
+            size="sm"
+            className="w-10 h-10 p-0 bg-white/80 hover:bg-white/90"
+            title="Fit to Screen (F)"
+          >
+            <Maximize2 className="h-4 w-4" />
+          </Button>
+          <Button
+            onClick={handleReset}
+            variant="outline"
+            size="sm"
+            className="w-10 h-10 p-0 bg-white/80 hover:bg-white/90"
+            title="Reset View (Ctrl/Cmd 0)"
+          >
+            <RotateCcw className="h-4 w-4" />
+          </Button>
+        </Panel>
         <MiniMap 
           nodeStrokeColor="#64748b"
           nodeColor="#e2e8f0"

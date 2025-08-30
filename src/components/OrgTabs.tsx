@@ -6,11 +6,13 @@ interface OrgTabsProps {
   activeTab: string;
   onTabChange: (value: string) => void;
   onTabChanging?: () => void;
+  onSearchClear?: () => void;
 }
 
-const OrgTabs = memo(({ pillars, activeTab, onTabChange, onTabChanging }: OrgTabsProps) => {
+const OrgTabs = memo(({ pillars, activeTab, onTabChange, onTabChanging, onSearchClear }: OrgTabsProps) => {
   const handleTabChange = (value: string) => {
     onTabChanging?.(); // Clear search before changing tabs
+    onSearchClear?.(); // Clear search when switching tabs
     onTabChange(value);
   };
 
