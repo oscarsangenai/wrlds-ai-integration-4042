@@ -261,13 +261,14 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
     if (!containerRef.current) return;
     try {
       const dataUrl = await htmlToImage.toPng(containerRef.current, { 
-        backgroundColor: "white",
+        backgroundColor: undefined, // Let the gradient show through
         style: {
           fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif',
         }
       });
       const link = document.createElement("a");
-      link.download = `genai-org-chart-v1.2-${new Date().toISOString().split('T')[0]}.png`;
+      const currentDate = new Date().toISOString().split('T')[0];
+      link.download = `org-detailed-${currentDate}.png`;
       link.href = dataUrl;
       link.click();
     } catch (error) {
@@ -279,7 +280,7 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
     if (!containerRef.current) return;
     try {
       const dataUrl = await htmlToImage.toPng(containerRef.current, { 
-        backgroundColor: "white",
+        backgroundColor: undefined, // Let the gradient show through
         style: {
           fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif',
         }
@@ -287,7 +288,8 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
       const pdf = new jsPDF({ orientation: "landscape", unit: "px", format: "a4" });
       const { width, height } = pdf.internal.pageSize;
       pdf.addImage(dataUrl, "PNG", 0, 0, width, height);
-      pdf.save(`genai-org-chart-v1.2-${new Date().toISOString().split('T')[0]}.pdf`);
+      const currentDate = new Date().toISOString().split('T')[0];
+      pdf.save(`org-detailed-${currentDate}.pdf`);
     } catch (error) {
       console.error('Error exporting PDF:', error);
     }
@@ -348,7 +350,7 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
               value={query}
               onChange={(e) => handleSearchChange(e.target.value)}
               aria-label="Search org members"
-              data-testid="search-input-cards"
+              data-testid="search-input"
             />
             {query && (
               <Button
@@ -364,13 +366,14 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
           </div>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={toggleGlobalExpand}
-            className="rounded-2xl border-white/20 bg-white/80 backdrop-blur-sm hover:bg-white/90"
-            aria-label={globalExpandAll ? "Collapse all departments" : "Expand all departments"}
-          >
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={toggleGlobalExpand}
+              className="rounded-2xl border-white/20 bg-white/80 backdrop-blur-sm hover:bg-white/90"
+              aria-label={globalExpandAll ? "Collapse all departments" : "Expand all departments"}
+              data-testid="collapse-toggle"
+            >
             {globalExpandAll ? (
               <>
                 <EyeOff className="size-4 mr-2" />
@@ -385,12 +388,14 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
           </Button>
           <Button variant="outline" onClick={handleExportPng} 
                   className="rounded-2xl border-white/20 bg-white/80 backdrop-blur-sm hover:bg-white/90"
-                  aria-label="Export PNG">
+                  aria-label="Export detailed view as PNG"
+                  data-testid="export-png">
             <Download className="size-4 mr-2" /> PNG
           </Button>
           <Button variant="outline" onClick={handleExportPdf} 
                   className="rounded-2xl border-white/20 bg-white/80 backdrop-blur-sm hover:bg-white/90"
-                  aria-label="Export PDF">
+                  aria-label="Export detailed view as PDF"
+                  data-testid="export-pdf">
             <FileDown className="size-4 mr-2" /> PDF
           </Button>
         </div>
@@ -434,7 +439,7 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
                     onClick={() => zoomIn()} 
                     className="rounded-xl bg-white/80 backdrop-blur-sm border-white/20 hover:bg-white/90" 
                     aria-label="Zoom in"
-                    data-testid="zoom-in-cards"
+                    data-testid="zoom-in"
                   >
                     <ZoomIn className="h-4 w-4" />
                   </Button>
@@ -444,7 +449,7 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
                     onClick={() => zoomOut()} 
                     className="rounded-xl bg-white/80 backdrop-blur-sm border-white/20 hover:bg-white/90" 
                     aria-label="Zoom out"
-                    data-testid="zoom-out-cards"
+                    data-testid="zoom-out"
                   >
                     <ZoomOut className="h-4 w-4" />
                   </Button>
