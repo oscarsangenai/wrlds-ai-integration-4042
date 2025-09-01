@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   ReactFlow,
   Node,
@@ -6,12 +6,8 @@ import {
   useNodesState,
   useEdgesState,
   ReactFlowProvider,
-  MiniMap,
-  Controls,
-  Background,
   MarkerType,
   useReactFlow,
-  Panel,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import React from 'react';
@@ -19,186 +15,29 @@ import React from 'react';
 import { ORG_UNITS, type OrgUnit } from '@/data/orgChart';
 import { getLayoutedElements } from '@/lib/layoutDagre';
 import { GroupNode } from './nodes/GroupNode';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import { Search, Download, Eye, EyeOff, X, ZoomIn, ZoomOut, RotateCcw, Maximize2, HelpCircle } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import OrgTabs from './OrgTabs';
 import { toPng } from 'html-to-image';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 const nodeTypes = {
   group: GroupNode,
 };
 
-// Helper functions for localStorage
-const getStoredGraphExpandState = (): Set<string> => {
-  if (typeof window === 'undefined') return new Set();
-  const stored = localStorage.getItem('org-graph-expanded-departments');
-  if (stored === null) {
-    // First time - expand all departments
-    const allDepartmentIds = ORG_UNITS
-      .filter(unit => unit.type === 'department')
-      .map(unit => unit.id);
-    return new Set(allDepartmentIds);
-  }
-  try {
-    return new Set(JSON.parse(stored));
-  } catch {
-    return new Set();
-  }
-};
+function GraphContent() {
+  const { getNodes } = useReactFlow();
 
-const setStoredGraphExpandState = (expanded: Set<string>): void => {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('org-graph-expanded-departments', JSON.stringify([...expanded]));
-  }
-};
-
-const getStoredZoomState = (): any => {
-  if (typeof window === 'undefined') return null;
-  try {
-    const stored = localStorage.getItem('org.zoom.v1');
-    return stored ? JSON.parse(stored) : null;
-  } catch {
-    return null;
-  }
-};
-
-const setStoredZoomState = (viewport: any): void => {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('org.zoom.v1', JSON.stringify(viewport));
-  }
-};
-
-interface GraphContentProps {
-  searchQuery?: string;
-  onSearchChange?: (query: string) => void;
-  clearSearchTrigger?: boolean;
-}
-
-function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = false }: GraphContentProps) {
-  const [internalSearchQuery, setInternalSearchQuery] = useState(searchQuery);
-  const [selectedNode, setSelectedNode] = useState<OrgUnit | null>(null);
-  const [activeTab, setActiveTab] = useState('all');
-  const [expandedDepartments, setExpandedDepartments] = useState<Set<string>>(getStoredGraphExpandState);
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const { fitView, zoomIn, zoomOut, setViewport, getViewport } = useReactFlow();
-
-  // Handle external search clearing
-  React.useEffect(() => {
-    if (clearSearchTrigger) {
-      setInternalSearchQuery("");
-    }
-  }, [clearSearchTrigger]);
-
-  // Sync with external search
-  React.useEffect(() => {
-    setInternalSearchQuery(searchQuery);
-  }, [searchQuery]);
-
-  // Restore zoom state and fit view on mount
-  useEffect(() => {
-    const storedViewport = getStoredZoomState();
-    if (storedViewport) {
-      setViewport(storedViewport);
-    } else {
-      // First visit - fit to view with padding
-      setTimeout(() => {
-        fitView({ padding: 0.2, includeHiddenNodes: false });
-      }, 100);
-    }
-  }, [fitView, setViewport]);
-
-  // Auto-fit when departments expand/collapse
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      fitView({ padding: 0.2, includeHiddenNodes: false });
-    }, 300);
-    return () => clearTimeout(timeoutId);
-  }, [expandedDepartments, fitView]);
-
-  // Get all departments for tabs
-  const departments = useMemo(() => 
-    ORG_UNITS.filter(unit => unit.type === 'department'), 
-    []
-  );
-
-  // Get visible units based on active tab and expansion state
+  // Show entire organization - no filtering
   const visibleUnits = useMemo(() => {
-    let units = ORG_UNITS;
-    
-    if (activeTab !== 'all') {
-      // Show only the selected department and its teams
-      const selectedDepartment = ORG_UNITS.find(unit => unit.id === activeTab);
-      if (selectedDepartment) {
-        units = [
-          ...ORG_UNITS.filter(unit => unit.type === 'founder' || unit.type === 'executive-director'),
-          selectedDepartment,
-          ...ORG_UNITS.filter(unit => unit.parentId === activeTab)
-        ];
-      }
-    } else {
-      // Show founders, executive director, departments, and expanded teams
-      units = ORG_UNITS.filter(unit => {
-        if (unit.type === 'founder' || unit.type === 'executive-director' || unit.type === 'department') return true;
-        if (unit.type === 'team' && unit.parentId && expandedDepartments.has(unit.parentId)) return true;
-        return false;
-      });
-    }
-    
-    return units;
-  }, [activeTab, expandedDepartments]);
-
-  // Handle tab change
-  const handleTabChange = useCallback((newTab: string) => {
-    setActiveTab(newTab);
-    setInternalSearchQuery(""); // Clear search on tab change
-    onSearchChange?.("");
-    
-    // Fit view after tab change with longer delay for better UX
-    setTimeout(() => {
-      fitView({ padding: 0.2, includeHiddenNodes: false });
-    }, 500);
-  }, [fitView, onSearchChange]);
-  // Toggle expansion handler (defined before use in nodes memo)
-  const handleToggleExpansion = useCallback((departmentId: string) => {
-    console.log('handleToggleExpansion called with:', departmentId);
-    setExpandedDepartments((prev) => {
-      const newSet: Set<string> = new Set<string>();
-      if (prev.has(departmentId)) {
-        // Close all if clicking the currently open department
-        console.log('Closing department:', departmentId);
-        return newSet;
-      } else {
-        // Accordion behavior: open only this department
-        console.log('Opening department:', departmentId);
-        newSet.add(departmentId);
-        return newSet;
-      }
-    });
+    // Show all units - founders, executive director, departments, and all teams
+    return ORG_UNITS;
   }, []);
 
-  const toggleExpandAll = useCallback(() => {
-    const allDepartmentIds = ORG_UNITS
-      .filter(unit => unit.type === 'department')
-      .map(unit => unit.id);
-    
-    setExpandedDepartments(prev => {
-      const isAllExpanded = allDepartmentIds.every(id => prev.has(id));
-      const newSet = isAllExpanded ? new Set<string>() : new Set(allDepartmentIds);
-      setStoredGraphExpandState(newSet);
-      return newSet;
-    });
-  }, []);
-
-  // Create nodes and edges
+  // Create nodes and edges for full organization
   const { initialNodes, initialEdges } = useMemo(() => {
-    console.log('Creating nodes and edges, handleToggleExpansion:', typeof handleToggleExpansion);
     const nodes: Node[] = [];
     const edges: Edge[] = [];
 
-    visibleUnits.forEach((unit, index) => {
+    visibleUnits.forEach((unit) => {
       const memberCount = unit.members?.length || 0;
       const teamCount = ORG_UNITS.filter(u => u.parentId === unit.id).length;
       
@@ -210,9 +49,8 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
           ...unit,
           memberCount,
           teamCount,
-          onToggleExpansion: handleToggleExpansion,
-          isExpanded: expandedDepartments.has(unit.id),
-          searchQuery: internalSearchQuery
+          isExpanded: true, // Always expanded
+          searchQuery: ""
         }
       });
 
@@ -270,7 +108,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
     });
 
     return { initialNodes: nodes, initialEdges: edges };
-  }, [visibleUnits, expandedDepartments, internalSearchQuery, handleToggleExpansion]);
+  }, [visibleUnits]);
 
   // Apply layout
   const { nodes: layoutNodes, edges: layoutEdges } = useMemo(() => {
@@ -284,120 +122,58 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
   const [nodes, setNodes, onNodesChange] = useNodesState(layoutNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutEdges);
 
-
-  const onNodeClick = useCallback((_: any, node: Node) => {
-    const unit = ORG_UNITS.find(u => u.id === node.id);
-    if (unit && unit.members && unit.members.length > 0) {
-      setSelectedNode(unit);
-      setIsSheetOpen(true);
+  const handleExportPNG = useCallback(async () => {
+    const nodes = getNodes();
+    if (nodes.length === 0) {
+      console.warn('Nothing to export');
+      return;
     }
-  }, []);
 
-  const handleSearch = useCallback((query: string) => {
-    setInternalSearchQuery(query);
-    onSearchChange?.(query);
+    const xs = nodes.map(n => n.position.x);
+    const ys = nodes.map(n => n.position.y);
+    const ws = nodes.map(n => n.width ?? 0);
+    const hs = nodes.map(n => n.height ?? 0);
+    const minX = Math.min(...xs);
+    const minY = Math.min(...ys);
+    const maxX = Math.max(...xs.map((x, i) => x + ws[i]));
+    const maxY = Math.max(...ys.map((y, i) => y + hs[i]));
+    const width = Math.ceil(maxX - minX + 64);
+    const height = Math.ceil(maxY - minY + 64);
     
-    if (query.trim()) {
-      // Find units or members that match the search
-      const matchingUnits = ORG_UNITS.filter(unit => 
-        unit.name.toLowerCase().includes(query.toLowerCase()) ||
-        unit.members?.some(member => 
-          member.name.toLowerCase().includes(query.toLowerCase()) ||
-          member.role?.toLowerCase().includes(query.toLowerCase())
-        )
-      );
+    const element = document.querySelector('.react-flow__viewport') as HTMLElement;
+    if (!element) {
+      console.error('React Flow viewport not found');
+      return;
+    }
 
-      // Expand departments that contain matching teams
-      const departmentsToExpand = new Set<string>();
-      matchingUnits.forEach(unit => {
-        if (unit.parentId && unit.type === 'team') {
-          departmentsToExpand.add(unit.parentId);
+    const previousTransform = element.style.transform;
+    element.style.transform = `translate(${-minX + 32}px, ${-minY + 32}px) scale(1)`;
+    
+    try {
+      const dataUrl = await toPng(element, {
+        pixelRatio: 2,
+        backgroundColor: undefined,
+        style: {
+          width: `${width}px`,
+          height: `${height}px`,
+          fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif',
         }
       });
       
-      setExpandedDepartments(departmentsToExpand);
-      setStoredGraphExpandState(departmentsToExpand);
+      const ts = new Date();
+      const filename = `org-chart-${ts.getFullYear()}${String(ts.getMonth() + 1).padStart(2, '0')}${String(ts.getDate()).padStart(2, '0')}-${String(ts.getHours()).padStart(2, '0')}${String(ts.getMinutes()).padStart(2, '0')}.png`;
+      
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = dataUrl;
+      link.click();
+    } catch (error) {
+      console.error('Error exporting PNG:', error);
+    } finally {
+      element.style.transform = previousTransform;
     }
-  }, [onSearchChange]);
+  }, [getNodes]);
 
-  const clearSearchHandler = useCallback(() => {
-    setInternalSearchQuery("");
-    onSearchChange?.("");
-  }, [onSearchChange]);
-
-  const handleExportPNG = useCallback(async () => {
-    const element = document.querySelector('.react-flow') as HTMLElement;
-    if (element) {
-      try {
-        const dataUrl = await toPng(element, {
-          backgroundColor: undefined, // Let the gradient show through
-          style: {
-            fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif',
-          }
-        });
-        
-        const link = document.createElement('a');
-        link.download = `org-chart-${new Date().toISOString().split('T')[0]}.png`;
-        link.href = dataUrl;
-        link.click();
-      } catch (error) {
-        console.error('Error exporting PNG:', error);
-      }
-    }
-  }, []);
-
-  const handleZoomIn = useCallback(() => {
-    zoomIn();
-  }, [zoomIn]);
-
-  const handleZoomOut = useCallback(() => {
-    zoomOut();
-  }, [zoomOut]);
-
-  const handleFitView = useCallback(() => {
-    fitView({ padding: 0.2, includeHiddenNodes: false });
-  }, [fitView]);
-
-  const handleReset = useCallback(() => {
-    setViewport({ x: 0, y: 0, zoom: 1 });
-    localStorage.removeItem('org.zoom.v1');
-    setTimeout(() => {
-      fitView({ padding: 0.2, includeHiddenNodes: false });
-    }, 100);
-  }, [setViewport, fitView]);
-
-  const handleMoveEnd = useCallback((event: any, viewport: any) => {
-    setStoredZoomState(viewport);
-  }, []);
-
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if ((event.ctrlKey || event.metaKey)) {
-        switch (event.key) {
-          case '+':
-          case '=':
-            event.preventDefault();
-            zoomIn();
-            break;
-          case '-':
-            event.preventDefault();
-            zoomOut();
-            break;
-          case '0':
-            event.preventDefault();
-            handleReset();
-            break;
-        }
-      } else if (event.key === 'f') {
-        event.preventDefault();
-        handleFitView();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [zoomIn, zoomOut, handleReset, handleFitView]);
 
   return (
     <div 
@@ -406,70 +182,18 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
         fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif',
         backgroundImage: 'linear-gradient(135deg, #000000 0%, #120017 40%, #2a0054 68%, #6b21a8 100%)'
       }}>
-      {/* Header Controls */}
-      <div className="absolute top-4 left-4 right-4 z-overlay flex flex-col gap-4 lg:flex-row lg:flex-wrap pointer-events-auto">
-        {/* Search and Export - Line 1 */}
-        <div className="flex gap-4 items-center w-full lg:w-auto">
-          <div className="relative flex-1 lg:w-80 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-            <Input
-              placeholder="Search members, teams, or roles..."
-              value={internalSearchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
-              data-testid="search-input"
-              className="pl-10 pr-10 bg-white/80 backdrop-blur-sm border-white/20 rounded-2xl"
-            />
-            {internalSearchQuery && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="absolute right-1 top-1/2 h-6 w-6 -translate-y-1/2 rounded-xl p-0 hover:bg-white/60"
-                onClick={clearSearchHandler}
-                aria-label="Clear search"
-              >
-                <X className="h-3 w-3" />
-              </Button>
-            )}
-          </div>
-          <Button
-            onClick={toggleExpandAll}
-            variant="outline"
-            size="sm"
-            className="bg-white/80 backdrop-blur-sm border-white/20 rounded-2xl hover:bg-white/90 whitespace-nowrap"
-            data-testid="collapse-toggle"
-          >
-            {ORG_UNITS.filter(unit => unit.type === 'department').every(unit => expandedDepartments.has(unit.id)) ? (
-              <>
-                <EyeOff className="h-4 w-4 mr-2" />
-                Collapse All
-              </>
-            ) : (
-              <>
-                <Eye className="h-4 w-4 mr-2" />
-                Expand All
-              </>
-            )}
-          </Button>
-          <Button
-            onClick={handleExportPNG}
-            variant="outline"
-            size="sm"
-            className="bg-white/80 backdrop-blur-sm border-white/20 rounded-2xl hover:bg-white/90"
-          >
-            <Download className="h-4 w-4 mr-2" />
-            Export PNG
-          </Button>
-        </div>
-
-        {/* Tabs - Line 2 */}
-        <div className="w-full sticky-tabs bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-overlay">
-          <OrgTabs
-            pillars={departments}
-            activeTab={activeTab}
-            onTabChange={handleTabChange}
-            onSearchClear={clearSearchHandler}
-          />
-        </div>
+      {/* Export Button */}
+      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-overlay pointer-events-auto">
+        <Button
+          onClick={handleExportPNG}
+          variant="outline"
+          size="sm"
+          className="bg-gradient-to-r from-purple-500/20 to-blue-500/20 backdrop-blur-sm border-white/30 rounded-2xl hover:from-purple-500/30 hover:to-blue-500/30 shadow-lg"
+          aria-label="Export org chart as PNG"
+        >
+          <Download className="h-4 w-4 mr-2" />
+          Export PNG
+        </Button>
       </div>
 
       {/* React Flow */}
@@ -479,8 +203,6 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
-        onNodeClick={onNodeClick}
-        onMoveEnd={handleMoveEnd}
         minZoom={0.2}
         maxZoom={2.0}
         zoomOnScroll={true}
@@ -489,159 +211,15 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
         style={{
           backgroundColor: 'transparent',
         }}
-      >
-        <Panel position="top-right" className="z-overlay flex gap-2 pointer-events-auto">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="bg-white/80 backdrop-blur-sm border-white/20 rounded-xl hover:bg-white/90"
-                data-testid="help-button"
-              >
-                <HelpCircle className="h-4 w-4" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent 
-              className="w-80 bg-white/95 backdrop-blur-sm border-white/20 rounded-2xl shadow-lg"
-              data-testid="popover-content"
-            >
-              <div className="space-y-2">
-                <h4 className="font-medium">Navigation Help</h4>
-                <div className="text-sm text-muted-foreground space-y-1">
-                  <div>• Use mouse wheel or trackpad to zoom</div>
-                  <div>• Drag to pan around the chart</div>
-                  <div>• Press <kbd className="bg-muted px-1 rounded">F</kbd> to fit all content</div>
-                  <div>• Press <kbd className="bg-muted px-1 rounded">Ctrl</kbd>+<kbd className="bg-muted px-1 rounded">0</kbd> to reset zoom</div>
-                  <div>• Click nodes to see details</div>
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleFitView}
-            className="bg-white/80 backdrop-blur-sm border-white/20 rounded-xl hover:bg-white/90"
-            data-testid="fit-view-button"
-          >
-            <Maximize2 className="h-4 w-4 mr-2" />
-            Fit View
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleReset}
-            className="bg-white/80 backdrop-blur-sm border-white/20 rounded-xl hover:bg-white/90"
-            data-testid="reset-button"
-          >
-            <RotateCcw className="h-4 w-4 mr-2" />
-            Reset
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleZoomIn}
-            className="bg-white/80 backdrop-blur-sm border-white/20 rounded-xl hover:bg-white/90"
-            data-testid="zoom-in-button"
-          >
-            <ZoomIn className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleZoomOut}
-            className="bg-white/80 backdrop-blur-sm border-white/20 rounded-xl hover:bg-white/90"
-            data-testid="zoom-out-button"
-          >
-            <ZoomOut className="h-4 w-4" />
-          </Button>
-        </Panel>
-        <MiniMap 
-          nodeStrokeColor="#64748b"
-          nodeColor="#e2e8f0"
-          nodeBorderRadius={16}
-          maskColor="rgba(0, 0, 0, 0.1)"
-          className="bg-white/80 backdrop-blur-sm rounded-2xl border border-white/10 shadow-lg"
-        />
-        <Controls 
-          className="bg-white/80 backdrop-blur-sm rounded-2xl border border-white/10 shadow-lg"
-          showInteractive={false}
-        />
-        <Background color="#94a3b8" size={2} className="opacity-20" />
-      </ReactFlow>
-
-      {/* Details Sheet */}
-      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-        <SheetContent className="w-[400px] sm:w-[540px] bg-white/95 backdrop-blur-sm border-white/10 rounded-2xl shadow-lg top-[var(--nav-h)] h-[calc(100vh-var(--nav-h))] z-modal overflow-y-auto">
-          <SheetHeader>
-            <SheetTitle className="flex items-center gap-2" 
-                        style={{ fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif' }}>
-              {selectedNode && (
-                <>
-                  <div className="w-8 h-8 rounded-2xl bg-gradient-to-br from-blue-500/80 to-purple-600/80 flex items-center justify-center shadow-lg">
-                    <Search className="w-4 h-4 text-white" />
-                  </div>
-                  {selectedNode.name}
-                </>
-              )}
-            </SheetTitle>
-            <SheetDescription>
-              {selectedNode?.description}
-            </SheetDescription>
-          </SheetHeader>
-          
-          {selectedNode?.members && (
-            <div className="mt-6 space-y-4">
-              <h3 className="text-lg font-semibold" 
-                  style={{ fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif' }}>
-                Team Members
-              </h3>
-              <div className="grid gap-3">
-                {selectedNode.members
-                  .sort((a, b) => {
-                    // Leaders first, then alphabetical
-                    const aIsLead = a.role?.toLowerCase().includes('lead') || 
-                                   a.role?.toLowerCase().includes('director') || 
-                                   a.role?.toLowerCase().includes('head');
-                    const bIsLead = b.role?.toLowerCase().includes('lead') || 
-                                   b.role?.toLowerCase().includes('director') || 
-                                   b.role?.toLowerCase().includes('head');
-                    
-                    if (aIsLead && !bIsLead) return -1;
-                    if (!aIsLead && bIsLead) return 1;
-                    return a.name.localeCompare(b.name);
-                  })
-                  .map((member, index) => (
-                  <div 
-                    key={index}
-                    className="p-3 rounded-2xl bg-white/60 border border-white/10 backdrop-blur-sm shadow-sm"
-                  >
-                    <div className="font-medium text-foreground">{member.name}</div>
-                    {member.role && (
-                      <div className="text-sm text-muted-foreground mt-1">{member.role}</div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </SheetContent>
-      </Sheet>
+      />
     </div>
   );
 }
 
-interface NeonOrgGraphProps {
-  searchQuery?: string;
-  onSearchChange?: (query: string) => void;
-  clearSearchTrigger?: boolean;
-}
-
-const NeonOrgGraph: React.FC<NeonOrgGraphProps> = (props) => {
+const NeonOrgGraph: React.FC = () => {
   return (
     <ReactFlowProvider>
-      <GraphContent {...props} />
+      <GraphContent />
     </ReactFlowProvider>
   );
 };

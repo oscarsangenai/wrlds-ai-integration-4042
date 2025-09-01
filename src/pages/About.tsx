@@ -31,7 +31,7 @@ const About = () => {
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >
             <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent text-balance text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl mb-2 font-sans">About Gen AI Global</h1>
-            <p className="text-muted-foreground">Interactive organizational chart with search, zoom/pan, collapsible groups, and export options.</p>
+            <p className="text-muted-foreground">Organizational chart with full export capabilities.</p>
           </motion.header>
           <section aria-label="Organizational chart" className="relative h-[70vh] sm:h-[75vh] lg:h-[80vh] overflow-hidden rounded-lg border bg-card">
             {isClient ? (
