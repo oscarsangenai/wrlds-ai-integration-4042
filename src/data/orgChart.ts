@@ -202,6 +202,7 @@ export const ORG_UNITS: OrgUnit[] = [
     parentId: "executive-director",
     members: [
       { name: "Katherine Valqui", role: "Director of Marketing & Communications" },
+      { name: "Xiaoke Pu", role: "Director of Influencer Strategy & Content Innovation" },
     ],
   },
   {
