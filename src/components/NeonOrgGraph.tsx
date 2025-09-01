@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import {
   ReactFlow,
   Node,
@@ -8,6 +8,7 @@ import {
   ReactFlowProvider,
   MarkerType,
   useReactFlow,
+  NodeMouseHandler,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import React from 'react';
@@ -17,6 +18,7 @@ import { getLayoutedElements } from '@/lib/layoutDagre';
 import { GroupNode } from './nodes/GroupNode';
 import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { toPng } from 'html-to-image';
 
 const nodeTypes = {
@@ -25,12 +27,22 @@ const nodeTypes = {
 
 function GraphContent() {
   const { getNodes } = useReactFlow();
+  const [selectedUnitId, setSelectedUnitId] = useState<string | null>(null);
 
   // Show entire organization - no filtering
   const visibleUnits = useMemo(() => {
     // Show all units - founders, executive director, departments, and all teams
     return ORG_UNITS;
   }, []);
+
+  // Create unit lookup map for O(1) access
+  const unitById = useMemo(() => {
+    const map = new Map<string, OrgUnit>();
+    ORG_UNITS.forEach(unit => map.set(unit.id, unit));
+    return map;
+  }, []);
+
+  const selectedUnit = selectedUnitId ? unitById.get(selectedUnitId) : null;
 
   // Create nodes and edges for full organization
   const { initialNodes, initialEdges } = useMemo(() => {
@@ -48,9 +60,7 @@ function GraphContent() {
         data: {
           ...unit,
           memberCount,
-          teamCount,
-          isExpanded: true, // Always expanded
-          searchQuery: ""
+          teamCount
         }
       });
 
@@ -129,6 +139,11 @@ function GraphContent() {
       return;
     }
 
+    // Hide sheet during export
+    const elSheet = document.querySelector('[data-state="open"][role="dialog"]') as HTMLElement | null;
+    const prevSheetDisplay = elSheet?.style.display;
+    if (elSheet) elSheet.style.display = 'none';
+
     const xs = nodes.map(n => n.position.x);
     const ys = nodes.map(n => n.position.y);
     const ws = nodes.map(n => n.width ?? 0);
@@ -171,8 +186,13 @@ function GraphContent() {
       console.error('Error exporting PNG:', error);
     } finally {
       element.style.transform = previousTransform;
+      if (elSheet) elSheet.style.display = prevSheetDisplay || '';
     }
   }, [getNodes]);
+
+  const handleNodeClick: NodeMouseHandler = useCallback((event, node) => {
+    setSelectedUnitId(node.id);
+  }, []);
 
 
   return (
@@ -202,6 +222,7 @@ function GraphContent() {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        onNodeClick={handleNodeClick}
         nodeTypes={nodeTypes}
         minZoom={0.2}
         maxZoom={2.0}
@@ -212,6 +233,37 @@ function GraphContent() {
           backgroundColor: 'transparent',
         }}
       />
+
+      {/* Member Popup Sheet */}
+      <Sheet open={!!selectedUnitId} onOpenChange={(open) => !open && setSelectedUnitId(null)}>
+        <SheetContent side="right" className="w-full sm:w-[420px] max-w-[90vw]">
+          <SheetHeader>
+            <SheetTitle>{selectedUnit?.name}</SheetTitle>
+            <SheetDescription className="capitalize">{selectedUnit?.type?.replace('-', ' ')}</SheetDescription>
+          </SheetHeader>
+          <div className="mt-4 grid gap-3 max-h-[70vh] overflow-auto">
+            {selectedUnit?.members && selectedUnit.members.length > 0 ? (
+              selectedUnit.members.map((member, idx) => (
+                <div key={idx} className="flex items-start gap-3 p-3 rounded-lg border bg-card">
+                  <div className="flex-1">
+                    <p className="font-medium leading-tight">{member.name}</p>
+                    {member.role && (
+                      <p className="text-sm text-muted-foreground mt-1">{member.role}</p>
+                    )}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-muted-foreground">No members listed.</p>
+            )}
+          </div>
+          <div className="mt-4">
+            <Button onClick={() => setSelectedUnitId(null)} className="w-full">
+              Close
+            </Button>
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }

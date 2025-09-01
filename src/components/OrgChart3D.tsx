@@ -1,6 +1,7 @@
-import React, { useMemo, useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import * as htmlToImage from "html-to-image";
 import { Download } from "lucide-react";
@@ -36,7 +37,8 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
 const DepartmentSection: React.FC<{
   department: OrgUnit;
   teams: OrgUnit[];
-}> = ({ department, teams }) => {
+  onUnitClick: (unitId: string) => void;
+}> = ({ department, teams, onUnitClick }) => {
   const Icon = CATEGORY_ICON[department.icon];
   
   const departmentMembers = department.members ?? [];
@@ -44,7 +46,8 @@ const DepartmentSection: React.FC<{
   return (
     <Card className="rounded-2xl border border-white/10 bg-white/40 backdrop-blur-sm shadow-lg">
       <CardHeader 
-        className="rounded-t-2xl bg-gradient-to-r from-purple-50/80 to-blue-50/80 border-b border-white/20"
+        className="rounded-t-2xl bg-gradient-to-r from-purple-50/80 to-blue-50/80 border-b border-white/20 cursor-pointer hover:bg-gradient-to-r hover:from-purple-100/80 hover:to-blue-100/80 transition-colors"
+        onClick={() => onUnitClick(department.id)}
       >
         <CardTitle className="flex items-center justify-between" 
                    style={{ fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif' }}>
@@ -98,7 +101,7 @@ const DepartmentSection: React.FC<{
               const TeamIcon = CATEGORY_ICON[team.icon];
 
               return (
-                <div key={team.id} className="rounded-2xl border border-white/20 bg-white/30 p-4">
+                <div key={team.id} className="rounded-2xl border border-white/20 bg-white/30 p-4 cursor-pointer hover:bg-white/40 transition-colors" onClick={() => onUnitClick(team.id)}>
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-2 rounded-lg bg-white/60 text-slate-600">
                       <TeamIcon className="h-4 w-4" />
@@ -146,9 +149,10 @@ const DepartmentSection: React.FC<{
 
 const OrgChart3D: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [selectedUnitId, setSelectedUnitId] = useState<string | null>(null);
 
   // Get organizational structure
-  const { founders, executiveDirector, departments, departmentTeams } = useMemo(() => {
+  const { founders, executiveDirector, departments, departmentTeams, unitById } = useMemo(() => {
     const founders = ORG_UNITS.filter(unit => unit.type === 'founder');
     const executiveDirector = ORG_UNITS.find(unit => unit.type === 'executive-director');
     const departments = ORG_UNITS.filter(unit => unit.type === 'department');
@@ -156,12 +160,24 @@ const OrgChart3D: React.FC = () => {
       department: dept,
       teams: ORG_UNITS.filter(team => team.parentId === dept.id)
     }));
+    
+    // Create unit lookup map
+    const unitById = new Map<string, OrgUnit>();
+    ORG_UNITS.forEach(unit => unitById.set(unit.id, unit));
 
-    return { founders, executiveDirector, departments, departmentTeams };
+    return { founders, executiveDirector, departments, departmentTeams, unitById };
   }, []);
+
+  const selectedUnit = selectedUnitId ? unitById.get(selectedUnitId) : null;
 
   const handleExportPng = async () => {
     if (!containerRef.current) return;
+    
+    // Hide sheet during export
+    const elSheet = document.querySelector('[data-state="open"][role="dialog"]') as HTMLElement | null;
+    const prevSheetDisplay = elSheet?.style.display;
+    if (elSheet) elSheet.style.display = 'none';
+    
     try {
       const dataUrl = await htmlToImage.toPng(containerRef.current, { 
         pixelRatio: 2,
@@ -180,6 +196,8 @@ const OrgChart3D: React.FC = () => {
       link.click();
     } catch (error) {
       console.error('Error exporting PNG:', error);
+    } finally {
+      if (elSheet) elSheet.style.display = prevSheetDisplay || '';
     }
   };
 
@@ -220,7 +238,7 @@ const OrgChart3D: React.FC = () => {
                 {founders.map((founder) => {
                   const Icon = CATEGORY_ICON[founder.icon];
                   return (
-                    <Card key={founder.id} className="rounded-2xl border border-purple-200 bg-gradient-to-br from-purple-50 to-blue-50 shadow-lg">
+                    <Card key={founder.id} className="rounded-2xl border border-purple-200 bg-gradient-to-br from-purple-50 to-blue-50 shadow-lg cursor-pointer hover:shadow-xl transition-shadow" onClick={() => setSelectedUnitId(founder.id)}>
                       <CardHeader className="pb-3">
                         <CardTitle className="flex items-center gap-3" 
                                    style={{ fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif' }}>
@@ -252,7 +270,7 @@ const OrgChart3D: React.FC = () => {
           {/* Executive Director */}
           {executiveDirector && (
             <div className="max-w-lg mx-auto">
-              <Card className="rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 shadow-lg">
+              <Card className="rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 shadow-lg cursor-pointer hover:shadow-xl transition-shadow" onClick={() => setSelectedUnitId(executiveDirector.id)}>
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center gap-3" 
                              style={{ fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif' }}>
@@ -289,11 +307,43 @@ const OrgChart3D: React.FC = () => {
                 key={department.id}
                 department={department}
                 teams={teams}
+                onUnitClick={setSelectedUnitId}
               />
             ))}
           </div>
         </div>
       </div>
+
+      {/* Member Popup Sheet */}
+      <Sheet open={!!selectedUnitId} onOpenChange={(open) => !open && setSelectedUnitId(null)}>
+        <SheetContent side="right" className="w-full sm:w-[420px] max-w-[90vw]">
+          <SheetHeader>
+            <SheetTitle>{selectedUnit?.name}</SheetTitle>
+            <SheetDescription className="capitalize">{selectedUnit?.type?.replace('-', ' ')}</SheetDescription>
+          </SheetHeader>
+          <div className="mt-4 grid gap-3 max-h-[70vh] overflow-auto">
+            {selectedUnit?.members && selectedUnit.members.length > 0 ? (
+              selectedUnit.members.map((member, idx) => (
+                <div key={idx} className="flex items-start gap-3 p-3 rounded-lg border bg-card">
+                  <div className="flex-1">
+                    <p className="font-medium leading-tight">{member.name}</p>
+                    {member.role && (
+                      <p className="text-sm text-muted-foreground mt-1">{member.role}</p>
+                    )}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-muted-foreground">No members listed.</p>
+            )}
+          </div>
+          <div className="mt-4">
+            <Button onClick={() => setSelectedUnitId(null)} className="w-full">
+              Close
+            </Button>
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

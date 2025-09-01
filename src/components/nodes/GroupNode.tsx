@@ -1,6 +1,5 @@
 import { memo } from 'react';
 import { Handle, Position } from '@xyflow/react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
 import { CATEGORY_ICON } from '@/data/orgChart';
 import { cn } from '@/lib/utils';
 
@@ -12,8 +11,6 @@ interface GroupNodeProps {
     icon: keyof typeof CATEGORY_ICON;
     memberCount: number;
     teamCount?: number;
-    isExpanded?: boolean;
-    onToggleExpansion?: (id: string) => void;
     description?: string;
   };
   selected?: boolean;
@@ -21,14 +18,6 @@ interface GroupNodeProps {
 
 export const GroupNode = memo(({ data, selected }: GroupNodeProps) => {
   const IconComponent = CATEGORY_ICON[data.icon];
-  const isExpandable = data.type === 'department' && (data.teamCount || 0) > 0;
-  
-  const handleToggle = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (data.onToggleExpansion && isExpandable) {
-      data.onToggleExpansion(data.id);
-    }
-  };
 
   const getNodeStyles = () => {
     switch (data.type) {
@@ -100,28 +89,12 @@ export const GroupNode = memo(({ data, selected }: GroupNodeProps) => {
         </div>
         
         <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className={cn(
-              'leading-tight',
-              getTextStyles()
-            )}>
-              {data.name.length > 32 ? `${data.name.substring(0, 29)}...` : data.name}
-            </h3>
-            
-            {isExpandable && (
-              <button
-                onClick={handleToggle}
-                className="flex-shrink-0 p-1 hover:bg-white/60 rounded-lg transition-colors ml-2"
-                aria-label={data.isExpanded ? 'Collapse' : 'Expand'}
-              >
-                {data.isExpanded ? (
-                  <ChevronDown size={16} className="text-slate-600" />
-                ) : (
-                  <ChevronRight size={16} className="text-slate-600" />
-                )}
-              </button>
-            )}
-          </div>
+          <h3 className={cn(
+            'leading-tight mb-2',
+            getTextStyles()
+          )}>
+            {data.name.length > 32 ? `${data.name.substring(0, 29)}...` : data.name}
+          </h3>
           
           <div className="flex items-center gap-3 text-sm text-slate-600 mb-2">
             {data.teamCount && data.teamCount > 0 && (
