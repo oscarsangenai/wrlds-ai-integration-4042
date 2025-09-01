@@ -199,7 +199,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
     const edges: Edge[] = [];
 
     visibleUnits.forEach((unit, index) => {
-      const memberCount = unit.members?.length ?? 0;
+      const memberCount = unit.members?.length || 0;
       const teamCount = ORG_UNITS.filter(u => u.parentId === unit.id).length;
       
       nodes.push({
@@ -337,8 +337,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
         });
         
         const link = document.createElement('a');
-        const currentDate = new Date().toISOString().split('T')[0];
-        link.download = `org-summary-${currentDate}.png`;
+        link.download = `org-chart-${new Date().toISOString().split('T')[0]}.png`;
         link.href = dataUrl;
         link.click();
       } catch (error) {
@@ -360,18 +359,8 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
   }, [fitView]);
 
   const handleReset = useCallback(() => {
-    // Clear only this component's localStorage
-    localStorage.removeItem('org-graph-expanded-departments');
-    localStorage.removeItem('org.zoom.v1');
-    
-    // Reset states to defaults
-    const allDepartmentIds = ORG_UNITS
-      .filter(unit => unit.type === 'department')
-      .map(unit => unit.id);
-    setExpandedDepartments(new Set(allDepartmentIds));
-    setStoredGraphExpandState(new Set(allDepartmentIds));
-    
     setViewport({ x: 0, y: 0, zoom: 1 });
+    localStorage.removeItem('org.zoom.v1');
     setTimeout(() => {
       fitView({ padding: 0.2, includeHiddenNodes: false });
     }, 100);
@@ -466,8 +455,6 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
             variant="outline"
             size="sm"
             className="bg-white/80 backdrop-blur-sm border-white/20 rounded-2xl hover:bg-white/90"
-            aria-label="Export summary view as PNG"
-            data-testid="export-png"
           >
             <Download className="h-4 w-4 mr-2" />
             Export PNG
@@ -511,7 +498,6 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
                 variant="outline" 
                 className="bg-white/80 backdrop-blur-sm border-white/20 rounded-xl hover:bg-white/90"
                 data-testid="help-button"
-                aria-label="View keyboard shortcuts and navigation help"
               >
                 <HelpCircle className="h-4 w-4" />
               </Button>

@@ -129,9 +129,9 @@ export const GroupNode = memo(({ data, selected }: GroupNodeProps) => {
                 {data.teamCount} teams
               </span>
             )}
-            {(
-              <span className="px-2 py-1 bg-white/60 rounded-lg text-xs font-medium" title="Counts reflect orgChart.ts">
-                {data.memberCount} member{data.memberCount !== 1 ? 's' : ''}
+            {data.memberCount > 0 && (
+              <span className="px-2 py-1 bg-white/60 rounded-lg text-xs font-medium">
+                {data.memberCount} members
               </span>
             )}
           </div>

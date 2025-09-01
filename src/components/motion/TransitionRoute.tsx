@@ -1,5 +1,5 @@
-import { memo, PropsWithChildren } from 'react';
-import { motion } from 'framer-motion';
+import { memo, PropsWithChildren, useMemo } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 interface TransitionRouteProps extends PropsWithChildren {
@@ -7,10 +7,16 @@ interface TransitionRouteProps extends PropsWithChildren {
 }
 
 const TransitionRoute = memo(({ children, className }: TransitionRouteProps) => {
-  const reduce = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const variants = reduce
-    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } }
-    : { initial: { opacity: 0, y: 8 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -8 } };
+  const reduceMotion = useReducedMotion();
+
+  const variants = useMemo(
+    () => ({
+      initial: reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 },
+      animate: { opacity: 1, y: 0 },
+      exit: reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 },
+    }),
+    [reduceMotion]
+  );
 
   return (
     <motion.div
@@ -18,14 +24,12 @@ const TransitionRoute = memo(({ children, className }: TransitionRouteProps) => 
       initial="initial"
       animate="animate"
       exit="exit"
-      transition={{ duration: reduce ? 0.01 : 0.24, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
       className={cn(className)}
     >
       {children}
     </motion.div>
   );
 });
-
-TransitionRoute.displayName = 'TransitionRoute';
 
 export default TransitionRoute;
