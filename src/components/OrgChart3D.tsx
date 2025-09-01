@@ -516,43 +516,44 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
                          </div>
                        )}
 
-                       {/* Departments */}
-                       <div className="space-y-6 mt-8 md:mt-10">
-                         <h2 className="text-2xl font-bold text-purple-800 text-center mb-8">Departments</h2>
-                        {!hasResults && query ? (
-                          <div className="text-center py-12">
-                            <div className="rounded-2xl border border-white/20 bg-white/40 backdrop-blur-sm p-8 max-w-md mx-auto">
-                              <Search className="size-12 text-muted-foreground mx-auto mb-4" />
-                              <h3 className="text-lg font-semibold text-slate-700 mb-2">No results found</h3>
-                              <p className="text-muted-foreground">
-                                No members or departments match "{query}". Try a different search term.
-                              </p>
-                              <Button 
-                                variant="outline" 
-                                onClick={clearSearchQuery}
-                                className="mt-4 rounded-xl"
-                              >
-                                Clear search
-                              </Button>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {filteredDepartmentTeams
-                              .sort((a, b) => a.department.name.localeCompare(b.department.name))
-                              .map(({ department, teams }) => (
-                              <DepartmentSection
-                                key={department.id}
-                                department={department}
-                                teams={teams}
-                                query={query}
-                                defaultOpen={globalExpandAll}
-                                globalExpandAll={globalExpandAll}
-                              />
-                            ))}
-                          </div>
-                        )}
-                      </div>
+                        {/* Departments */}
+                        <div className="space-y-6 mt-8 md:mt-10">
+                          <h2 className="text-2xl font-bold text-purple-800 text-center mb-8">Departments</h2>
+                         {!hasResults && query ? (
+                           <div className="text-center py-12">
+                             <div className="rounded-2xl border border-white/20 bg-white/40 backdrop-blur-sm p-8 max-w-md mx-auto">
+                               <Search className="size-12 text-muted-foreground mx-auto mb-4" />
+                               <h3 className="text-lg font-semibold text-slate-700 mb-2">No results found</h3>
+                               <p className="text-muted-foreground">
+                                 No members or departments match "{query}". Try a different search term.
+                               </p>
+                               <Button 
+                                 variant="outline" 
+                                 onClick={clearSearchQuery}
+                                 className="mt-4 rounded-xl"
+                               >
+                                 Clear search
+                               </Button>
+                             </div>
+                           </div>
+                         ) : (
+                           <div className="flex flex-wrap justify-center gap-4 max-w-full">
+                             {filteredDepartmentTeams
+                               .sort((a, b) => a.department.name.localeCompare(b.department.name))
+                               .map(({ department, teams }) => (
+                               <div key={department.id} className="flex-shrink-0 w-64 max-w-sm">
+                                 <DepartmentSection
+                                   department={department}
+                                   teams={teams}
+                                   query={query}
+                                   defaultOpen={globalExpandAll}
+                                   globalExpandAll={globalExpandAll}
+                                 />
+                               </div>
+                             ))}
+                           </div>
+                         )}
+                       </div>
                     </div>
                   </div>
                 </TransformComponent>
