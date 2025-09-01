@@ -217,32 +217,11 @@ const setStoredExpandState = (expanded: boolean): void => {
   }
 };
 
-interface OrgChart3DProps {
-  searchQuery?: string;
-  onSearchChange?: (query: string) => void;
-  clearSearchTrigger?: boolean;
-}
+interface OrgChart3DProps {}
 
-const OrgChart3D: React.FC<OrgChart3DProps> = ({ 
-  searchQuery = "", 
-  onSearchChange,
-  clearSearchTrigger = false 
-}) => {
-  const [query, setQuery] = useState(searchQuery);
+const OrgChart3D: React.FC<OrgChart3DProps> = () => {
   const [globalExpandAll, setGlobalExpandAll] = useState<boolean>(getStoredExpandState);
   const containerRef = useRef<HTMLDivElement | null>(null);
-
-  // Handle external search clearing
-  useEffect(() => {
-    if (clearSearchTrigger) {
-      setQuery("");
-    }
-  }, [clearSearchTrigger]);
-
-  // Sync with external search
-  useEffect(() => {
-    setQuery(searchQuery);
-  }, [searchQuery]);
 
   // Get organizational structure
   const { founders, executiveDirector, departments, departmentTeams } = useMemo(() => {
@@ -295,43 +274,12 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
     }
   };
 
-  const handleSearchChange = (value: string) => {
-    setQuery(value);
-    onSearchChange?.(value);
-  };
-
-  const clearSearchQuery = () => {
-    setQuery("");
-    onSearchChange?.("");
-  };
-
   const toggleGlobalExpand = () => {
     const newState = !globalExpandAll;
     setGlobalExpandAll(newState);
     setStoredExpandState(newState);
   };
 
-  // Filter departments and teams based on search
-  const filteredDepartmentTeams = useMemo(() => {
-    if (!query) return departmentTeams;
-    
-    return departmentTeams.filter(({ department, teams }) => {
-      const departmentMembers = (department.members ?? []).filter((m) =>
-        [m.name, m.role ?? ""].some((f) => f.toLowerCase().includes(query.toLowerCase()))
-      );
-      
-      const relevantTeams = teams.filter(team => 
-        team.members?.some(m => 
-          [m.name, m.role ?? ""].some(f => f.toLowerCase().includes(query.toLowerCase()))
-        ) || team.name.toLowerCase().includes(query.toLowerCase())
-      );
-
-      return departmentMembers.length > 0 || relevantTeams.length > 0 || 
-             department.name.toLowerCase().includes(query.toLowerCase());
-    });
-  }, [departmentTeams, query]);
-
-  const hasResults = filteredDepartmentTeams.length > 0;
 
   return (
     <div 
@@ -340,65 +288,19 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
         fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif',
         backgroundImage: 'linear-gradient(135deg, #000000 0%, #120017 40%, #2a0054 68%, #6b21a8 100%)'
       }}>
-      <div className="flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between bg-white/60 backdrop-blur-sm p-4 rounded-2xl border border-white/20 shadow-lg">
-        <div className="flex w-full lg:w-auto lg:max-w-md items-center gap-2">
-          <div className="relative w-full lg:w-80">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Search by name or role"
-              className="pl-10 pr-10 rounded-2xl border-white/20 bg-white/80 backdrop-blur-sm"
-              value={query}
-              onChange={(e) => handleSearchChange(e.target.value)}
-              aria-label="Search org members"
-              data-testid="search-input"
-            />
-            {query && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="absolute right-1 top-1/2 size-8 -translate-y-1/2 rounded-xl p-0 hover:bg-white/60"
-                onClick={clearSearchQuery}
-                aria-label="Clear search"
-              >
-                <X className="size-3" />
-              </Button>
-            )}
-          </div>
-        </div>
-        <div className="flex items-center gap-2 flex-wrap">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={toggleGlobalExpand}
-              className="rounded-2xl border-white/20 bg-white/80 backdrop-blur-sm hover:bg-white/90"
-              aria-label={globalExpandAll ? "Collapse all departments" : "Expand all departments"}
-              data-testid="collapse-toggle"
-            >
-            {globalExpandAll ? (
-              <>
-                <EyeOff className="size-4 mr-2" />
-                Collapse All
-              </>
-            ) : (
-              <>
-                <Eye className="size-4 mr-2" />
-                Expand All
-              </>
-            )}
-          </Button>
-          <Button variant="outline" onClick={handleExportPng} 
-                  className="rounded-2xl border-white/20 bg-white/80 backdrop-blur-sm hover:bg-white/90"
-                  aria-label="Export detailed view as PNG"
-                  data-testid="export-png">
-            <Download className="size-4 mr-2" /> PNG
-          </Button>
-          <Button variant="outline" onClick={handleExportPdf} 
-                  className="rounded-2xl border-white/20 bg-white/80 backdrop-blur-sm hover:bg-white/90"
-                  aria-label="Export detailed view as PDF"
-                  data-testid="export-pdf">
-            <FileDown className="size-4 mr-2" /> PDF
-          </Button>
-        </div>
+      {/* Stylized Export Button */}
+      <div className="flex justify-center">
+        <Button
+          variant="outline"
+          size="lg"
+          onClick={handleExportPng}
+          className="bg-gradient-to-r from-purple-500/20 to-blue-500/20 backdrop-blur-sm border-2 border-purple-300/40 rounded-2xl hover:from-purple-500/30 hover:to-blue-500/30 hover:border-purple-300/60 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-purple-500/20 text-white font-semibold px-8 py-3"
+          data-testid="export-png"
+          aria-label="Export organization chart as PNG"
+        >
+          <Download className="w-5 h-5 mr-3" />
+          Export as PNG
+        </Button>
       </div>
 
       <div className="rounded-2xl border border-white/10 bg-white/20 backdrop-blur-sm p-2 sm:p-4 shadow-xl">
@@ -519,40 +421,21 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
                         {/* Departments */}
                         <div className="space-y-6 mt-8 md:mt-10">
                           <h2 className="text-2xl font-bold text-purple-800 text-center mb-8">Departments</h2>
-                         {!hasResults && query ? (
-                           <div className="text-center py-12">
-                             <div className="rounded-2xl border border-white/20 bg-white/40 backdrop-blur-sm p-8 max-w-md mx-auto">
-                               <Search className="size-12 text-muted-foreground mx-auto mb-4" />
-                               <h3 className="text-lg font-semibold text-slate-700 mb-2">No results found</h3>
-                               <p className="text-muted-foreground">
-                                 No members or departments match "{query}". Try a different search term.
-                               </p>
-                               <Button 
-                                 variant="outline" 
-                                 onClick={clearSearchQuery}
-                                 className="mt-4 rounded-xl"
-                               >
-                                 Clear search
-                               </Button>
-                             </div>
-                           </div>
-                         ) : (
                            <div className="flex flex-wrap justify-center gap-4 max-w-full">
-                             {filteredDepartmentTeams
+                             {departmentTeams
                                .sort((a, b) => a.department.name.localeCompare(b.department.name))
                                .map(({ department, teams }) => (
                                <div key={department.id} className="flex-shrink-0 w-64 max-w-sm">
                                  <DepartmentSection
                                    department={department}
                                    teams={teams}
-                                   query={query}
+                                   query=""
                                    defaultOpen={globalExpandAll}
                                    globalExpandAll={globalExpandAll}
                                  />
                                </div>
                              ))}
                            </div>
-                         )}
                        </div>
                     </div>
                   </div>

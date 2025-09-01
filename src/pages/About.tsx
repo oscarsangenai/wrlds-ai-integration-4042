@@ -115,11 +115,7 @@ const About = () => {
           <section aria-label="Organizational chart" className="relative h-[70vh] sm:h-[75vh] lg:h-[80vh] overflow-hidden rounded-lg border bg-card">
             {isClient ? (
               currentView === 'detailed' ? (
-                <OrgChart3D 
-                  searchQuery={searchQuery}
-                  onSearchChange={setSearchQuery}
-                  clearSearchTrigger={clearSearchTrigger}
-                />
+                <OrgChart3D />
               ) : (
                 <Suspense fallback={<div className="flex h-full items-center justify-center text-muted-foreground">Loading org chart...</div>}>
                   <NeonOrgGraph 
