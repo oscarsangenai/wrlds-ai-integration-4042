@@ -19,6 +19,15 @@ export default {
 			}
 		},
 		extend: {
+			zIndex: {
+				nav: '40',
+				overlay: '50', 
+				modal: '100',
+				toast: '110'
+			},
+			backgroundImage: {
+				'org-gradient': 'linear-gradient(135deg, #000000 0%, #120017 40%, #2a0054 68%, #6b21a8 100%)'
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',

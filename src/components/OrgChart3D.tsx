@@ -16,6 +16,9 @@ import {
   Eye,
   EyeOff,
   X,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
 } from "lucide-react";
 import { ORG_UNITS, OrgUnit, OrgMember, CATEGORY_ICON } from "@/data/orgChart";
 
@@ -329,9 +332,12 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
   const hasResults = filteredDepartmentTeams.length > 0;
 
   return (
-    <div className="space-y-6 with-nav-safe-area nav-safe" style={{ 
-      fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif'
-    }}>
+    <div 
+      className="space-y-6 with-nav-safe-area nav-safe bg-org-gradient" 
+      style={{ 
+        fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif',
+        backgroundImage: 'linear-gradient(135deg, #000000 0%, #120017 40%, #2a0054 68%, #6b21a8 100%)'
+      }}>
       <div className="flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between bg-white/60 backdrop-blur-sm p-4 rounded-2xl border border-white/20 shadow-lg">
         <div className="flex w-full lg:w-auto lg:max-w-md items-center gap-2">
           <div className="relative w-full lg:w-80">
@@ -342,6 +348,7 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
               value={query}
               onChange={(e) => handleSearchChange(e.target.value)}
               aria-label="Search org members"
+              data-testid="search-input-cards"
             />
             {query && (
               <Button
@@ -420,13 +427,40 @@ const OrgChart3D: React.FC<OrgChart3DProps> = ({
                 </Button>
               </div>
               <div className="relative h-[80vh] w-full overflow-hidden rounded-2xl border border-white/20">
-                <div className="absolute right-3 top-3 z-30 flex gap-2 pointer-events-auto">
-                  <Button size="sm" variant="secondary" onClick={() => zoomIn()} className="rounded-xl" aria-label="Zoom in">+</Button>
-                  <Button size="sm" variant="secondary" onClick={() => zoomOut()} className="rounded-xl" aria-label="Zoom out">−</Button>
-                  <Button size="sm" variant="secondary" onClick={() => centerView?.(1)} className="rounded-xl" aria-label="Reset view">Reset</Button>
+                <div className="absolute right-3 top-3 z-overlay flex gap-2 pointer-events-auto">
+                  <Button 
+                    size="sm" 
+                    variant="secondary" 
+                    onClick={() => zoomIn()} 
+                    className="rounded-xl bg-white/80 backdrop-blur-sm border-white/20 hover:bg-white/90" 
+                    aria-label="Zoom in"
+                    data-testid="zoom-in-cards"
+                  >
+                    <ZoomIn className="h-4 w-4" />
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="secondary" 
+                    onClick={() => zoomOut()} 
+                    className="rounded-xl bg-white/80 backdrop-blur-sm border-white/20 hover:bg-white/90" 
+                    aria-label="Zoom out"
+                    data-testid="zoom-out-cards"
+                  >
+                    <ZoomOut className="h-4 w-4" />
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="secondary" 
+                    onClick={() => centerView?.(1)} 
+                    className="rounded-xl bg-white/80 backdrop-blur-sm border-white/20 hover:bg-white/90" 
+                    aria-label="Reset view"
+                    data-testid="reset-cards"
+                  >
+                    <RotateCcw className="h-4 w-4" />
+                  </Button>
                 </div>
                 <TransformComponent>
-                  <div ref={containerRef} className="org-surface min-h-[80vh] w-full p-8 bg-gradient-to-br from-white/5 to-white/0">
+                  <div ref={containerRef} className="org-surface min-h-[80vh] w-full p-8">
                      <div className="mx-auto max-w-7xl space-y-8">
                          {/* Founders */}
                         <div className="text-center space-y-4">
