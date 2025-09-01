@@ -330,7 +330,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
     if (element) {
       try {
         const dataUrl = await toPng(element, {
-          backgroundColor: undefined, // Let the gradient show through
+          backgroundColor: '#ffffff',
           style: {
             fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif',
           }
@@ -400,14 +400,12 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
   }, [zoomIn, zoomOut, handleReset, handleFitView]);
 
   return (
-    <div 
-      className="h-full w-full with-nav-safe-area nav-safe bg-org-gradient" 
-      style={{ 
-        fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif',
-        backgroundImage: 'linear-gradient(135deg, #000000 0%, #120017 40%, #2a0054 68%, #6b21a8 100%)'
-      }}>
+    <div className="h-full w-full bg-gradient-to-br from-white/5 to-white/0 with-nav-safe-area nav-safe" 
+         style={{ 
+           fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif'
+         }}>
       {/* Header Controls */}
-      <div className="absolute top-4 left-4 right-4 z-overlay flex flex-col gap-4 lg:flex-row lg:flex-wrap pointer-events-auto">
+      <div className="absolute top-4 left-4 right-4 z-10 flex flex-col gap-4 lg:flex-row lg:flex-wrap">
         {/* Search and Export - Line 1 */}
         <div className="flex gap-4 items-center w-full lg:w-auto">
           <div className="relative flex-1 lg:w-80 max-w-md">
@@ -416,7 +414,6 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
               placeholder="Search members, teams, or roles..."
               value={internalSearchQuery}
               onChange={(e) => handleSearch(e.target.value)}
-              data-testid="search-input"
               className="pl-10 pr-10 bg-white/80 backdrop-blur-sm border-white/20 rounded-2xl"
             />
             {internalSearchQuery && (
@@ -435,8 +432,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
             onClick={toggleExpandAll}
             variant="outline"
             size="sm"
-            className="bg-white/80 backdrop-blur-sm border-white/20 rounded-2xl hover:bg-white/90 whitespace-nowrap"
-            data-testid="collapse-toggle"
+            className="bg-white/80 backdrop-blur-sm border-white/20 rounded-2xl hover:bg-white/90"
           >
             {ORG_UNITS.filter(unit => unit.type === 'department').every(unit => expandedDepartments.has(unit.id)) ? (
               <>
@@ -462,7 +458,7 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
         </div>
 
         {/* Tabs - Line 2 */}
-        <div className="w-full sticky-tabs bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-overlay">
+        <div className="w-full sticky-tabs bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <OrgTabs
             pillars={departments}
             activeTab={activeTab}
@@ -490,72 +486,70 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
           backgroundColor: 'transparent',
         }}
       >
-        <Panel position="top-right" className="z-overlay flex gap-2 pointer-events-auto">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="bg-white/80 backdrop-blur-sm border-white/20 rounded-xl hover:bg-white/90"
-                data-testid="help-button"
-              >
-                <HelpCircle className="h-4 w-4" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent 
-              className="w-80 bg-white/95 backdrop-blur-sm border-white/20 rounded-2xl shadow-lg"
-              data-testid="popover-content"
-            >
-              <div className="space-y-2">
-                <h4 className="font-medium">Navigation Help</h4>
-                <div className="text-sm text-muted-foreground space-y-1">
-                  <div>• Use mouse wheel or trackpad to zoom</div>
-                  <div>• Drag to pan around the chart</div>
-                  <div>• Press <kbd className="bg-muted px-1 rounded">F</kbd> to fit all content</div>
-                  <div>• Press <kbd className="bg-muted px-1 rounded">Ctrl</kbd>+<kbd className="bg-muted px-1 rounded">0</kbd> to reset zoom</div>
-                  <div>• Click nodes to see details</div>
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
+        {/* Zoom Controls Panel */}
+        <Panel position="top-right" className="flex flex-col gap-2 bg-white/80 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-2 z-30" style={{ top: 'calc(var(--tabs-bottom) + 8px)' }}>
           <Button
-            size="sm"
-            variant="outline"
-            onClick={handleFitView}
-            className="bg-white/80 backdrop-blur-sm border-white/20 rounded-xl hover:bg-white/90"
-            data-testid="fit-view-button"
-          >
-            <Maximize2 className="h-4 w-4 mr-2" />
-            Fit View
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleReset}
-            className="bg-white/80 backdrop-blur-sm border-white/20 rounded-xl hover:bg-white/90"
-            data-testid="reset-button"
-          >
-            <RotateCcw className="h-4 w-4 mr-2" />
-            Reset
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
             onClick={handleZoomIn}
-            className="bg-white/80 backdrop-blur-sm border-white/20 rounded-xl hover:bg-white/90"
-            data-testid="zoom-in-button"
+            variant="outline"
+            size="sm"
+            className="w-10 h-10 p-0 bg-white/80 hover:bg-white/90"
+            title="Zoom In (Ctrl/Cmd +)"
+            aria-label="Zoom In"
           >
             <ZoomIn className="h-4 w-4" />
           </Button>
           <Button
-            size="sm"
-            variant="outline"
             onClick={handleZoomOut}
-            className="bg-white/80 backdrop-blur-sm border-white/20 rounded-xl hover:bg-white/90"
-            data-testid="zoom-out-button"
+            variant="outline"
+            size="sm"
+            className="w-10 h-10 p-0 bg-white/80 hover:bg-white/90"
+            title="Zoom Out (Ctrl/Cmd -)"
+            aria-label="Zoom Out"
           >
             <ZoomOut className="h-4 w-4" />
           </Button>
+          <Button
+            onClick={handleFitView}
+            variant="outline"
+            size="sm"
+            className="w-10 h-10 p-0 bg-white/80 hover:bg-white/90"
+            title="Fit to Screen (F)"
+            aria-label="Fit to Screen"
+          >
+            <Maximize2 className="h-4 w-4" />
+          </Button>
+          <Button
+            onClick={handleReset}
+            variant="outline"
+            size="sm"
+            className="w-10 h-10 p-0 bg-white/80 hover:bg-white/90"
+            title="Reset View (Ctrl/Cmd 0)"
+            aria-label="Reset View"
+          >
+            <RotateCcw className="h-4 w-4" />
+          </Button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-10 h-10 p-0 bg-white/80 hover:bg-white/90"
+                title="Help"
+                aria-label="Help"
+              >
+                <HelpCircle className="h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-64 text-sm">
+              <div className="space-y-2">
+                <p><strong>Navigation:</strong></p>
+                <p>• Use +/− or trackpad to zoom</p>
+                <p>• Press <kbd className="bg-gray-100 px-1 rounded">F</kbd> to fit view</p>
+                <p>• <kbd className="bg-gray-100 px-1 rounded">Ctrl/Cmd 0</kbd> to reset</p>
+                <p>• Click nodes to view details</p>
+              </div>
+            </PopoverContent>
+          </Popover>
         </Panel>
         <MiniMap 
           nodeStrokeColor="#64748b"
@@ -568,12 +562,16 @@ function GraphContent({ searchQuery = "", onSearchChange, clearSearchTrigger = f
           className="bg-white/80 backdrop-blur-sm rounded-2xl border border-white/10 shadow-lg"
           showInteractive={false}
         />
-        <Background color="#94a3b8" size={2} className="opacity-20" />
+        <Background 
+          color="#e2e8f0" 
+          size={2} 
+          className="opacity-30"
+        />
       </ReactFlow>
 
       {/* Details Sheet */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-        <SheetContent className="w-[400px] sm:w-[540px] bg-white/95 backdrop-blur-sm border-white/10 rounded-2xl shadow-lg top-[var(--nav-h)] h-[calc(100vh-var(--nav-h))] z-modal overflow-y-auto">
+        <SheetContent className="w-[400px] sm:w-[540px] bg-white/95 backdrop-blur-sm border-white/10 rounded-2xl shadow-lg top-[var(--nav-h)] h-[calc(100vh-var(--nav-h))] z-[60] overflow-y-auto">
           <SheetHeader>
             <SheetTitle className="flex items-center gap-2" 
                         style={{ fontFamily: '"Product Sans", "Google Sans", "Inter", system-ui, sans-serif' }}>
