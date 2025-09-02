@@ -63,7 +63,7 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({ classNa
 
       // Links
       const linkDist = Math.min(140, Math.max(80, Math.hypot(width, height) / 16));
-      ctx.strokeStyle = `hsl(var(--accent) / 0.35)`;
+      ctx.strokeStyle = `rgba(139, 92, 246, 0.25)`;
       ctx.lineWidth = 1;
       for (let i = 0; i < points.length; i++) {
         for (let j = i + 1; j < points.length; j++) {
@@ -82,7 +82,7 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({ classNa
       ctx.globalAlpha = 1;
 
       // Draw points
-      ctx.fillStyle = `hsl(var(--accent))`;
+      ctx.fillStyle = `rgba(167, 139, 250, 0.8)`;
       for (const p of points) {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
@@ -99,7 +99,7 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({ classNa
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(m.x, m.y);
-            ctx.strokeStyle = `hsl(var(--accent) / 0.5)`;
+            ctx.strokeStyle = `rgba(192, 132, 252, 0.4)`;
             ctx.stroke();
           }
         }

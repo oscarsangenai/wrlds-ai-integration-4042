@@ -4,9 +4,11 @@ import { motion, useReducedMotion } from 'framer-motion';
 import PageLayout from '@/components/PageLayout';
 import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import AuroraNebula from '@/components/visuals/AuroraNebula';
 import ConstellationParticles from '@/components/visuals/ConstellationParticles';
-import { Clock, Users, Globe, BookOpen, Lightbulb, Share, Heart, Trophy } from 'lucide-react';
+import FireField from '@/components/FireField';
+import { Clock, Users, Globe, BookOpen, Lightbulb, Share, Heart, Trophy, ArrowRight } from 'lucide-react';
 
 const Index = () => {
   const shouldReduceMotion = useReducedMotion();
@@ -73,80 +75,79 @@ const Index = () => {
         keywords={['Gen AI Global', 'responsible AI', 'AI democratization', 'nonprofit', 'open standards', 'cross-sector']}
       />
       
-      <main className="relative pt-16 md:pt-20">
-        {/* Futuristic background */}
-        <div className="absolute inset-0 opacity-30">
-          <AuroraNebula />
-          <ConstellationParticles />
+      <main className="relative">
+        {/* Purple Fire Background */}
+        <div className="absolute inset-0 opacity-40">
+          <FireField />
         </div>
         
-        {/* Subtle grid overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
+        {/* Reduced opacity existing backgrounds */}
+        <div className="absolute inset-0 opacity-15">
+          <AuroraNebula />
+          <ConstellationParticles density={52} />
+        </div>
         
-        <header className="relative z-10 container mx-auto flex min-h-[calc(100vh-6rem)] max-w-7xl justify-start items-center px-4 pb-6">
-          {/* Glass wrap hero content */}
+        {/* Hero Section */}
+        <section className="relative z-10 min-h-[calc(100vh-var(--header-h,4rem))] flex flex-col justify-start pt-8 md:grid md:place-items-center px-4 py-8">
           <motion.div 
-            className="relative backdrop-blur-sm bg-white/60 border border-white/20 rounded-2xl p-8 md:p-12 max-w-[65ch] shadow-2xl"
+            className="relative backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-8 md:p-12 max-w-[65ch] shadow-2xl text-center"
             initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
-            {/* Accent line */}
-            <div className="accent-topline"></div>
-            
             <div className="space-y-6">
               {/* Trust badges */}
-              <div className="flex flex-wrap gap-2 text-sm">
-                <div className="inline-flex items-center rounded-full border border-border/50 bg-background/80 px-3 py-1 text-xs font-medium backdrop-blur-sm">
-                  <Heart className="mr-1.5 h-3 w-3 text-destructive" />
+              <div className="flex flex-wrap justify-center gap-2 mb-6">
+                <Badge variant="secondary" className="bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200">
+                  <Heart className="mr-1.5 h-3 w-3" />
                   Nonprofit
-                </div>
-                <div className="inline-flex items-center rounded-full border border-border/50 bg-background/80 px-3 py-1 text-xs font-medium backdrop-blur-sm">
-                  <BookOpen className="mr-1.5 h-3 w-3 text-primary" />
+                </Badge>
+                <Badge variant="secondary" className="bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200">
+                  <BookOpen className="mr-1.5 h-3 w-3" />
                   Open standards
-                </div>
-                <div className="inline-flex items-center rounded-full border border-border/50 bg-background/80 px-3 py-1 text-xs font-medium backdrop-blur-sm">
-                  <Globe className="mr-1.5 h-3 w-3 text-accent" />
+                </Badge>
+                <Badge variant="secondary" className="bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200">
+                  <Globe className="mr-1.5 h-3 w-3" />
                   Global
-                </div>
-                <div className="inline-flex items-center rounded-full border border-border/50 bg-background/80 px-3 py-1 text-xs font-medium backdrop-blur-sm">
-                  <Users className="mr-1.5 h-3 w-3 text-secondary" />
+                </Badge>
+                <Badge variant="secondary" className="bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200">
+                  <Users className="mr-1.5 h-3 w-3" />
                   Cross-sector
-                </div>
+                </Badge>
               </div>
               
-              {/* Headlines with gradient */}
-              <h1 className="text-left text-4xl md:text-6xl font-bold leading-[1.12] tracking-tight bg-gradient-to-r from-primary via-foreground to-muted-foreground bg-clip-text text-transparent animate-fade-in">
+              {/* Headlines with purple gradient */}
+              <h1 className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight bg-gradient-to-br from-violet-600 via-violet-500 to-fuchsia-400 bg-clip-text text-transparent">
                 Make AI clear, ethical, usable—for everyone.
               </h1>
               
               {/* Body copy with proper line height */}
-              <div className="text-left space-y-4 leading-relaxed text-foreground/90">
+              <div className="space-y-4 leading-relaxed text-slate-600/90">
                 <p className="text-lg">
                   We're a nonprofit community advancing cross-sector AI democratization via open education, global collaboration, and shared standards.
                 </p>
-                <p className="text-base text-muted-foreground">
+                <p className="text-base">
                   Learn • Build • Network • Impact—co-create skills, publish open playbooks, and shape trustworthy practices with peers worldwide.
                 </p>
               </div>
               
-              {/* Single CTA with enhanced styling */}
-              <div className="pt-4">
-                <Button asChild size="lg" className="group relative px-8 py-4 bg-primary hover:bg-primary/90 text-primary-foreground font-medium ripple-pulse transition-all duration-300 hover:shadow-[0_0_32px_hsl(var(--primary)/0.4)] focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2" aria-label="Get involved with the community">
+              {/* Single CTA with purple styling */}
+              <div className="pt-6">
+                <Button 
+                  asChild 
+                  size="lg" 
+                  className="group relative px-8 py-4 bg-violet-600 hover:bg-violet-700 text-white font-medium transition-all duration-300 hover:shadow-lg hover:shadow-violet-300/20 focus-visible:ring-2 focus-visible:ring-violet-300 focus-visible:ring-offset-2 hover:ring-4 hover:ring-violet-300/60" 
+                  aria-label="Get involved with the community"
+                >
                   <Link to="/get-involved" className="flex items-center gap-2">
                     Get involved
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-white/20 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300" />
-                      <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
-                    </div>
+                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </Link>
                 </Button>
               </div>
             </div>
           </motion.div>
-        </header>
+        </section>
       </main>
 
 
