@@ -476,6 +476,7 @@ export const ORG_UNITS: OrgUnit[] = [
       { name: "Sangame Krishnamani", role: "Director" },
       { name: "Deidré Luzmore", role: "Cloud Team Member" },
       { name: "Desiree Lemons", role: "Cloud Team Member" },
+      { name: "Diellza Ahmetaj", role: "Cloud Team Member" },
       { name: "Enrique Camarena", role: "Cloud Team Member" },
       { name: "Jefferson Kiocia", role: "Cloud Team Member" },
       { name: "Ryan Dear", role: "Cloud Team Member" },
