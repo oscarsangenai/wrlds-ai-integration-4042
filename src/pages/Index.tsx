@@ -75,20 +75,26 @@ const Index = () => {
         keywords={['Gen AI Global', 'responsible AI', 'AI democratization', 'nonprofit', 'open standards', 'cross-sector']}
       />
       
-      <main className="relative">
-        {/* Purple Fire Background */}
-        <div className="absolute inset-0 opacity-40">
-          <FireField />
-        </div>
-        
-        {/* Reduced opacity existing backgrounds */}
-        <div className="absolute inset-0 opacity-15">
-          <AuroraNebula />
-          <ConstellationParticles density={52} />
-        </div>
-        
-        {/* Hero Section */}
-        <section className="relative z-10 min-h-[calc(100vh-var(--header-h))] grid place-items-center px-4 py-8">
+      {/* FIX: Remove nested main - PageLayout already provides motion.main */}
+      {/* Purple Fire Background */}
+      <div 
+        aria-hidden="true" 
+        className="pointer-events-none absolute inset-0 -z-10 overflow-visible opacity-40"
+      >
+        <FireField />
+      </div>
+      
+      {/* Reduced opacity existing backgrounds */}
+      <div 
+        aria-hidden="true" 
+        className="pointer-events-none absolute inset-0 -z-20 overflow-visible opacity-15"
+      >
+        <AuroraNebula />
+        <ConstellationParticles density={52} />
+      </div>
+      
+      {/* Hero Section */}
+      <section className="relative z-0 min-h-[calc(100vh-var(--header-h))] grid place-items-center px-4 py-8">
           {/* FIX: Use grid place-items-center for perfect centering on all breakpoints */}
           <motion.div 
             className="relative backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-8 md:p-12 max-w-[65ch] shadow-2xl text-center"
@@ -149,7 +155,6 @@ const Index = () => {
             </div>
           </motion.div>
         </section>
-      </main>
 
 
       {/* Impact Metrics */}

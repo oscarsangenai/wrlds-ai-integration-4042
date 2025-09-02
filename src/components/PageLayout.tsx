@@ -30,7 +30,7 @@ const PageLayout = ({ children, showContact = true }: PageLayoutProps) => {
         animate={{ opacity: 1, y: 0 }}
         exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
         transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-        className="pt-16 md:pt-20 flex-1"
+        className="relative isolate flex-1 pt-[var(--header-h)] overflow-visible"
         role="main"
         aria-live="polite"
       >
