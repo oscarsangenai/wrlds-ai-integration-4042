@@ -88,10 +88,21 @@ const Index = () => {
       {/* Executive network constellation - enhanced for business professionals */}
       <div 
         aria-hidden="true" 
-        className="pointer-events-none absolute inset-0 -z-20 overflow-visible opacity-25"
+        className="pointer-events-none absolute inset-0 -z-20 overflow-visible opacity-100"
       >
         <AuroraNebula />
-        <ConstellationParticles density={72} autoMobileDensity={true} />
+        <ConstellationParticles 
+          density={36} 
+          autoMobileDensity={true}
+          executiveMode={true}
+          strokeWidth={1.6}
+          strokeOpacity={0.65}
+          haloRadius={8}
+          haloOpacity={0.35}
+          parallaxAmplitude={10}
+          animationPeriod={14}
+          className="will-change-transform"
+        />
       </div>
       
       {/* Hero Section */}

@@ -6,6 +6,13 @@ interface ConstellationParticlesProps {
   density?: number; // number of particles base
   paused?: boolean; // external pause control
   autoMobileDensity?: boolean; // auto-adjust for mobile
+  executiveMode?: boolean; // enhanced neon styling for home page
+  strokeWidth?: number;
+  strokeOpacity?: number;
+  haloRadius?: number;
+  haloOpacity?: number;
+  parallaxAmplitude?: number;
+  animationPeriod?: number;
 }
 
 // Lightweight canvas constellation with mouse linking + business-grade autopause
@@ -13,7 +20,14 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({
   className, 
   density = 70, 
   paused = false,
-  autoMobileDensity = true 
+  autoMobileDensity = true,
+  executiveMode = false,
+  strokeWidth = 1.4,
+  strokeOpacity = 0.6,
+  haloRadius = 8,
+  haloOpacity = 0.8,
+  parallaxAmplitude = 0,
+  animationPeriod = 14
 }) => {
   const ref = useRef<HTMLCanvasElement | null>(null);
   const mouse = useRef<{ x: number; y: number } | null>(null);
@@ -54,7 +68,12 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({
       let effectiveDensity = density;
       if (autoMobileDensity) {
         const isMobile = width < 768;
-        effectiveDensity = isMobile ? Math.floor(density * 0.55) : density;
+        if (executiveMode) {
+          // Executive mode: desktop 36/56, mobile 22/34  
+          effectiveDensity = isMobile ? 22 : 36;
+        } else {
+          effectiveDensity = isMobile ? Math.floor(density * 0.55) : density;
+        }
       }
       
       const count = Math.floor(effectiveDensity * (width * height) / (1280 * 720));
@@ -98,9 +117,9 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({
       const linkDist = Math.min(140, Math.max(80, Math.hypot(width, height) / 16));
       const scaledLinkDist = width < 768 ? linkDist * 0.8 : linkDist;
       
-      // Executive neon stroke - more visible for business professionals
-      ctx.strokeStyle = `rgba(139, 92, 246, 0.6)`;
-      ctx.lineWidth = 1.4;
+      // Executive neon stroke - configurable for executive mode
+      ctx.strokeStyle = `rgba(139, 92, 246, ${strokeOpacity})`;
+      ctx.lineWidth = strokeWidth;
       for (let i = 0; i < points.length; i++) {
         for (let j = i + 1; j < points.length; j++) {
           const a = points[i], b = points[j];
@@ -119,8 +138,8 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({
 
       // Draw points with neon glow effect
       ctx.fillStyle = `rgba(167, 139, 250, 0.9)`;
-      ctx.shadowColor = `rgba(139, 92, 246, 0.8)`;
-      ctx.shadowBlur = 8;
+      ctx.shadowColor = `rgba(139, 92, 246, ${haloOpacity})`;
+      ctx.shadowBlur = haloRadius;
       for (const p of points) {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r * 1.2, 0, Math.PI * 2);
