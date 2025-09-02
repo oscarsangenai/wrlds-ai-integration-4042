@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback, useState, useEffect } from 'react';
 import {
   ReactFlow,
   Node,
@@ -26,7 +26,7 @@ const nodeTypes = {
 };
 
 function GraphContent() {
-  const { getNodes } = useReactFlow();
+  const { getNodes, fitView } = useReactFlow();
   const [selectedUnitId, setSelectedUnitId] = useState<string | null>(null);
 
   // Show entire organization - no filtering
@@ -132,6 +132,20 @@ function GraphContent() {
   const [nodes, setNodes, onNodesChange] = useNodesState(layoutNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutEdges);
 
+  // Fit view when nodes change
+  useEffect(() => {
+    fitView({ padding: 0.2 });
+  }, [nodes.length, fitView]);
+
+  // Fit view on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      fitView({ padding: 0.2 });
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [fitView]);
+
   const handleExportPNG = useCallback(async () => {
     const nodes = getNodes();
     if (nodes.length === 0) {
@@ -216,23 +230,28 @@ function GraphContent() {
         </Button>
       </div>
 
-      {/* React Flow */}
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onNodeClick={handleNodeClick}
-        nodeTypes={nodeTypes}
-        minZoom={0.2}
-        maxZoom={2.0}
-        zoomOnScroll={true}
-        panOnDrag={true}
-        className="bg-transparent"
-        style={{
-          backgroundColor: 'transparent',
-        }}
-      />
+      {/* React Flow Container */}
+      <div className="h-[80vh] w-full">
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onNodeClick={handleNodeClick}
+          nodeTypes={nodeTypes}
+          minZoom={0.25}
+          maxZoom={1.5}
+          zoomOnScroll={true}
+          panOnDrag={true}
+          fitView
+          fitViewOptions={{ padding: 0.2 }}
+          onInit={(instance) => instance.fitView({ padding: 0.2, duration: 300 })}
+          className="bg-transparent"
+          style={{
+            backgroundColor: 'transparent',
+          }}
+        />
+      </div>
 
       {/* Member Popup Sheet */}
       <Sheet open={!!selectedUnitId} onOpenChange={(open) => !open && setSelectedUnitId(null)}>
