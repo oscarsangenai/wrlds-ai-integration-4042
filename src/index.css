@@ -86,6 +86,17 @@
   scroll-behavior: smooth;
 }
 
+/* FIX: Premium light sweep keyframes for business-grade animations */
+@keyframes lightSweepHero {
+  0% { transform: translateX(-100%) skewX(25deg); }
+  100% { transform: translateX(200%) skewX(25deg); }
+}
+
+@keyframes lightSweepCta {
+  0% { transform: translateX(-100%) skewX(25deg); }
+  100% { transform: translateX(200%) skewX(25deg); }
+}
+
 /* Banner styles */
 .banner-container {
   position: relative;

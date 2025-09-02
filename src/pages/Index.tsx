@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import AuroraNebula from '@/components/visuals/AuroraNebula';
 import ConstellationParticles from '@/components/visuals/ConstellationParticles';
 import FireField from '@/components/FireField';
+import LightSweep from '@/components/visuals/LightSweep';
 import { Clock, Users, Globe, BookOpen, Lightbulb, Share, Heart, Trophy, ArrowRight } from 'lucide-react';
 
 const Index = () => {
@@ -90,18 +91,19 @@ const Index = () => {
         className="pointer-events-none absolute inset-0 -z-20 overflow-visible opacity-15"
       >
         <AuroraNebula />
-        <ConstellationParticles density={52} />
+        <ConstellationParticles density={60} autoMobileDensity={true} />
       </div>
       
       {/* Hero Section */}
       <section className="relative z-0 min-h-[calc(100vh-var(--header-h))] grid place-items-center px-4 py-8">
-          {/* FIX: Use grid place-items-center for perfect centering on all breakpoints */}
-          <motion.div 
-            className="relative backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-8 md:p-12 max-w-[65ch] shadow-2xl text-center"
-            initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          >
+          {/* FIX: Premium light sweep on hero card for executive "wow" factor */}
+          <LightSweep target="hero" triggerOnMount={true}>
+            <motion.div 
+              className="relative backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-8 md:p-12 max-w-[65ch] shadow-2xl text-center will-change-transform"
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            >
             <div className="space-y-6">
               {/* Trust badges */}
               <div className="flex flex-wrap justify-center gap-2 mb-6">
@@ -138,22 +140,25 @@ const Index = () => {
                 </p>
               </div>
               
-              {/* Single CTA with purple styling */}
+              {/* Single CTA with purple styling + premium light sweep */}
               <div className="pt-6">
-                <Button 
-                  asChild 
-                  size="lg" 
-                  className="group relative px-8 py-4 bg-violet-600 hover:bg-violet-700 text-white font-medium transition-all duration-300 hover:shadow-lg hover:shadow-violet-300/20 focus-visible:ring-2 focus-visible:ring-violet-300 focus-visible:ring-offset-2 hover:ring-4 hover:ring-violet-300/60" 
-                  aria-label="Get involved with the community"
-                >
-                  <Link to="/get-involved" className="flex items-center gap-2">
-                    Get involved
-                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Link>
-                </Button>
+                <LightSweep target="cta">
+                  <Button 
+                    asChild 
+                    size="lg" 
+                    className="group relative px-8 py-4 bg-violet-600 hover:bg-violet-700 text-white font-medium transition-all duration-300 hover:shadow-lg hover:shadow-violet-300/20 focus-visible:ring-2 focus-visible:ring-violet-300 focus-visible:ring-offset-2 hover:ring-4 hover:ring-violet-300/60 will-change-transform" 
+                    aria-label="Get involved with the community"
+                  >
+                    <Link to="/get-involved" className="flex items-center gap-2">
+                      Get involved
+                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </Link>
+                  </Button>
+                </LightSweep>
               </div>
             </div>
-          </motion.div>
+            </motion.div>
+          </LightSweep>
         </section>
 
 

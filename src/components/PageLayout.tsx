@@ -6,15 +6,18 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ContactInfo from '@/components/ContactInfo';
 import FloatingContactButton from '@/components/FloatingContactButton';
+import ConstellationParticles from '@/components/visuals/ConstellationParticles';
 
 type PageLayoutProps = {
   children: React.ReactNode;
   showContact?: boolean;
+  showGeometry?: boolean; // FIX: Sitewide geometric field control
 };
 
-const PageLayout = ({ children, showContact = true }: PageLayoutProps) => {
+const PageLayout = ({ children, showContact = true, showGeometry = true }: PageLayoutProps) => {
   const location = useLocation();
   const reduceMotion = useReducedMotion();
+  const isHomePage = location.pathname === '/';
 
   // Effect to scroll to top when route changes
   useEffect(() => {
@@ -34,6 +37,19 @@ const PageLayout = ({ children, showContact = true }: PageLayoutProps) => {
         role="main"
         aria-live="polite"
       >
+        {/* FIX: Sitewide GeometryField - low density executive network background */}
+        {showGeometry && !isHomePage && (
+          <div 
+            aria-hidden="true" 
+            className="pointer-events-none absolute inset-0 -z-10 overflow-visible opacity-15"
+          >
+            <ConstellationParticles 
+              density={28} 
+              autoMobileDensity={true}
+              className="will-change-transform"
+            />
+          </div>
+        )}
         {children}
       </motion.main>
       {showContact && <ContactInfo />}
