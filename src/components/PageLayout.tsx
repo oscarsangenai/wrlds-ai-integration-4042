@@ -37,14 +37,14 @@ const PageLayout = ({ children, showContact = true, showGeometry = true }: PageL
         role="main"
         aria-live="polite"
       >
-        {/* FIX: Sitewide GeometryField - low density executive network background */}
+        {/* FIX: Sitewide GeometryField - enhanced visibility for business professionals */}
         {showGeometry && !isHomePage && (
           <div 
             aria-hidden="true" 
-            className="pointer-events-none absolute inset-0 -z-10 overflow-visible opacity-15"
+            className="pointer-events-none absolute inset-0 -z-10 overflow-visible opacity-30"
           >
             <ConstellationParticles 
-              density={28} 
+              density={32} 
               autoMobileDensity={true}
               className="will-change-transform"
             />

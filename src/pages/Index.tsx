@@ -85,13 +85,13 @@ const Index = () => {
         <FireField />
       </div>
       
-      {/* Reduced opacity existing backgrounds */}
+      {/* Executive network constellation - enhanced for business professionals */}
       <div 
         aria-hidden="true" 
-        className="pointer-events-none absolute inset-0 -z-20 overflow-visible opacity-15"
+        className="pointer-events-none absolute inset-0 -z-20 overflow-visible opacity-25"
       >
         <AuroraNebula />
-        <ConstellationParticles density={60} autoMobileDensity={true} />
+        <ConstellationParticles density={72} autoMobileDensity={true} />
       </div>
       
       {/* Hero Section */}

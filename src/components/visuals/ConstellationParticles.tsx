@@ -94,12 +94,13 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({
         if (p.y < 0 || p.y > height) p.vy *= -1;
       }
 
-      // FIX: Viewport-throttled link distance for mobile performance
+      // FIX: Executive neon styling with enhanced visibility
       const linkDist = Math.min(140, Math.max(80, Math.hypot(width, height) / 16));
       const scaledLinkDist = width < 768 ? linkDist * 0.8 : linkDist;
       
-      ctx.strokeStyle = `rgba(139, 92, 246, 0.25)`;
-      ctx.lineWidth = 1;
+      // Executive neon stroke - more visible for business professionals
+      ctx.strokeStyle = `rgba(139, 92, 246, 0.6)`;
+      ctx.lineWidth = 1.4;
       for (let i = 0; i < points.length; i++) {
         for (let j = i + 1; j < points.length; j++) {
           const a = points[i], b = points[j];
@@ -116,13 +117,16 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({
       }
       ctx.globalAlpha = 1;
 
-      // Draw points
-      ctx.fillStyle = `rgba(167, 139, 250, 0.8)`;
+      // Draw points with neon glow effect
+      ctx.fillStyle = `rgba(167, 139, 250, 0.9)`;
+      ctx.shadowColor = `rgba(139, 92, 246, 0.8)`;
+      ctx.shadowBlur = 8;
       for (const p of points) {
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.r * 1.2, 0, Math.PI * 2);
         ctx.fill();
       }
+      ctx.shadowBlur = 0;
 
       // Mouse links (executive network feel)
       if (mouse.current) {
