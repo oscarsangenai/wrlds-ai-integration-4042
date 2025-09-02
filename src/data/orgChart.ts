@@ -433,6 +433,7 @@ export const ORG_UNITS: OrgUnit[] = [
     members: [
       { name: "Amber Bellou", role: "Fundraising Team Member" },
       { name: "Brandon Pendleton", role: "Fundraising Team Member" },
+      { name: "Diellza Ahmetaj", role: "Fundraising Team Member" },
       { name: "Egbert Wetherborne", role: "Fundraising Team Member" },
       { name: "Fabian Chahin", role: "Fundraising Team Member" },
       { name: "Himanshu Joshi", role: "Fundraising Team Member" },
