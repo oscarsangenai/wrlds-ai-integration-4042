@@ -386,6 +386,7 @@ export const ORG_UNITS: OrgUnit[] = [
     parentId: "dept-ai-forge",
     description: "Program design and innovation team",
     members: [
+      { name: "Diellza Ahmetaj", role: "Lead" },
       { name: "Juan Napoli", role: "AI Forge Team Member" },
       { name: "René Jost", role: "AI Forge Team Member" },
       { name: "Salvador Nunez", role: "AI Forge Team Member" },
