@@ -149,7 +149,6 @@ function GraphContent() {
   const handleExportPNG = useCallback(async () => {
     const nodes = getNodes();
     if (nodes.length === 0) {
-      console.warn('Nothing to export');
       return;
     }
 
@@ -171,7 +170,6 @@ function GraphContent() {
     
     const element = document.querySelector('.react-flow__viewport') as HTMLElement;
     if (!element) {
-      console.error('React Flow viewport not found');
       return;
     }
 
@@ -197,7 +195,7 @@ function GraphContent() {
       link.href = dataUrl;
       link.click();
     } catch (error) {
-      console.error('Error exporting PNG:', error);
+      // Export failed silently
     } finally {
       element.style.transform = previousTransform;
       if (elSheet) elSheet.style.display = prevSheetDisplay || '';

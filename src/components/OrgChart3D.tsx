@@ -195,7 +195,7 @@ const OrgChart3D: React.FC = () => {
       link.href = dataUrl;
       link.click();
     } catch (error) {
-      console.error('Error exporting PNG:', error);
+      // Export failed silently
     } finally {
       if (elSheet) elSheet.style.display = prevSheetDisplay || '';
     }

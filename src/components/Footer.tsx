@@ -53,8 +53,6 @@ const Footer = () => {
       
       setEmail("");
     } catch (error) {
-      console.error("Error sending subscription:", error);
-      
       toast({
         title: "Error",
         description: "There was a problem subscribing. Please try again later.",

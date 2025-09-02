@@ -29,8 +29,10 @@ const SEO: React.FC<SEOProps> = ({
   keywords = ['Gen AI Global', 'responsible AI', 'AI community', 'education', 'research', 'volunteer'],
   isBlogPost = false
 }) => {
-  const currentUrl = `https://genaiglobal.org${location.pathname}`;
-  const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `https://genaiglobal.org${imageUrl}`;
+  const location = useLocation();
+  const SITE_URL = 'https://genaiglobal.org';
+  const currentUrl = `${SITE_URL}${location.pathname}`;
+  const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `${SITE_URL}${imageUrl}`;
 
   // Enhanced keywords for specific posts
   const enhancedKeywords = location.pathname.includes('smart-ppe-revolution') 
@@ -71,8 +73,8 @@ const SEO: React.FC<SEOProps> = ({
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'Gen AI Global',
-    url: 'https://genaiglobal.org',
-    logo: 'https://genaiglobal.org/lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png',
+    url: SITE_URL,
+    logo: `${SITE_URL}/lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png`,
     description: 'An open, responsible AI community.',
     sameAs: [
       'https://www.linkedin.com/company/gen-ai-global/'
@@ -99,18 +101,18 @@ const SEO: React.FC<SEOProps> = ({
     author: {
       '@type': 'Organization',
       name: author || 'Gen AI Global',
-      url: 'https://genaiglobal.org'
+      url: SITE_URL
     },
     publisher: {
       '@type': 'Organization',
       name: 'Gen AI Global',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://genaiglobal.org/lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png',
+        url: `${SITE_URL}/lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png`,
         width: 512,
         height: 512
       },
-      url: 'https://genaiglobal.org'
+      url: SITE_URL
     },
     description: description,
     keywords: enhancedKeywords.join(', '),
@@ -209,7 +211,7 @@ const SEO: React.FC<SEOProps> = ({
       {isBlogPost && category && <meta property="article:section" content={category} />}
       {isBlogPost && publishDate && <meta property="article:published_time" content={publishDate} />}
       {isBlogPost && modifiedDate && <meta property="article:modified_time" content={modifiedDate} />}
-      {isBlogPost && <meta property="article:publisher" content="https://genaiglobal.org" />}
+      {isBlogPost && <meta property="article:publisher" content={SITE_URL} />}
       
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
