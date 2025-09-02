@@ -20,10 +20,12 @@ const Navbar = () => {
     };
     window.addEventListener('scroll', handleScroll);
     
-    // Set navbar height CSS variable
+    // FIX: Set both navbar height variables for consistency
     const nav = document.querySelector('nav');
     if (nav) {
-      document.documentElement.style.setProperty('--nav-h', `${nav.getBoundingClientRect().height}px`);
+      const height = nav.getBoundingClientRect().height;
+      document.documentElement.style.setProperty('--nav-h', `${height}px`);
+      document.documentElement.style.setProperty('--header-h', `${height}px`);
     }
     
     return () => window.removeEventListener('scroll', handleScroll);
@@ -65,7 +67,8 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center">
-              <img src="/lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png" alt="Gen AI Global Logo" className="h-8 w-auto md:h-10" />
+              {/* FIX: Use relative path for assets to support base paths */}
+              <img src="./lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png" alt="Gen AI Global Logo" className="h-8 w-auto md:h-10" />
             </Link>
           </div>
           

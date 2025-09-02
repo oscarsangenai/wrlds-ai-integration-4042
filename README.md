@@ -64,6 +64,60 @@ This project is built with .
 
 Simply open [Lovable](https://lovable.dev/projects/ec1d4f1e-2506-4da5-a91b-34afa90cceb6) and click on Share -> Publish.
 
+## Deployment & Base Path Configuration
+
+### Environment Variables
+Copy `.env.example` to `.env` and configure:
+- `BASE_URL`: Set to `/` for root deployment or `/subdirectory/` for subdirectory deployment
+
+### Build
+```bash
+npm run build
+npm run preview  # Test production build locally
+```
+
+### Hosting Platforms
+
+#### Netlify
+- Automatic deployment via `public/_redirects`
+- Security headers via `public/_headers`
+
+#### Vercel
+- Automatic deployment via `public/vercel.json`
+- SPA fallback and security headers included
+
+#### GitHub Pages
+- Enable Pages in repository settings
+- Use `public/404.html` for SPA routing
+- Set `BASE_URL` if deploying to subdirectory
+
+#### Cloudflare Pages
+- Automatic SPA fallback detection
+- Use `public/_headers` for security
+
+### Base Path Configuration
+For subdirectory deployment:
+1. Set `BASE_URL=/your-subdirectory/` in environment
+2. Update `vite.config.ts` base path
+3. Ensure all asset paths are relative
+
+## Troubleshooting
+
+### Common Issues
+- **404 on refresh**: Ensure SPA fallback is configured for your hosting platform
+- **Assets not loading**: Check base path configuration
+- **Layout issues**: Verify CSS custom properties are loaded
+
+### Performance
+- Fonts are preloaded for optimal LCP
+- Images should use responsive sizing
+- Tree-shaking enabled for optimal bundle size
+
+### Security
+- CSP headers configured in deployment files
+- XSS protection enabled
+- Frame options set to DENY
+
 ## I want to use a custom domain - is that possible?
 
 We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)

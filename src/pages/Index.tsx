@@ -88,7 +88,8 @@ const Index = () => {
         </div>
         
         {/* Hero Section */}
-        <section className="relative z-10 min-h-[calc(100vh-var(--header-h,4rem))] flex flex-col justify-start pt-8 md:grid md:place-items-center px-4 py-8">
+        <section className="relative z-10 min-h-[calc(100vh-var(--header-h))] grid place-items-center px-4 py-8">
+          {/* FIX: Use grid place-items-center for perfect centering on all breakpoints */}
           <motion.div 
             className="relative backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-8 md:p-12 max-w-[65ch] shadow-2xl text-center"
             initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
