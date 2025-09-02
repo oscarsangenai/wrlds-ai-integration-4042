@@ -102,13 +102,23 @@ export const ORG_UNITS: OrgUnit[] = [
   // Departments under Rodrigo
   {
     id: "agile-department",
-    name: "Agile (Operations + Design)",
+    name: "Agile & AI Ops",
     type: "department",
     icon: "Zap",
-    description: "Agile operations, design, and innovation",
+    description: "Agile operations and AI operations",
     parentId: "executive-director",
     members: [
       { name: "Deidré Luzmore", role: "Director of Enterprise Agility & Operational Excellence" },
+    ],
+  },
+  {
+    id: "dept-ai-forge",
+    name: "AI Forge",
+    type: "department",
+    icon: "FlaskConical",
+    description: "Program design and innovation",
+    parentId: "executive-director",
+    members: [
       { name: "Diellza Ahmetaj", role: "Director of Program Design & Innovation" },
     ],
   },
@@ -347,7 +357,7 @@ export const ORG_UNITS: OrgUnit[] = [
     ],
   },
 
-  // Agile (Operations + Design) Teams
+  // Agile & AI Ops Teams
   {
     id: "agile-ops-team",
     name: "Agile Ops Team (Delivery)",
@@ -366,15 +376,16 @@ export const ORG_UNITS: OrgUnit[] = [
       { name: "Sven-Christian Endres", role: "Agile Leader" },
     ],
   },
+
+  // AI Forge Teams
   {
-    id: "ai-forge-team",
-    name: "AI Forge Team (Agile Design & Innovation)",
+    id: "team-ai-forge",
+    name: "AI Forge Team",
     type: "team",
     icon: "FlaskConical",
-    parentId: "agile-department",
-    description: "Program design and innovation",
+    parentId: "dept-ai-forge",
+    description: "Program design and innovation team",
     members: [
-      { name: "Diellza Ahmetaj", role: "Lead" },
       { name: "Juan Napoli", role: "AI Forge Team Member" },
       { name: "René Jost", role: "AI Forge Team Member" },
       { name: "Salvador Nunez", role: "AI Forge Team Member" },
