@@ -7,7 +7,7 @@ const FireCatProject = () => {
     <ProjectPageLayout
       title="FireCat's 6th SENSE"
       subtitle="Advanced safety system for high-risk environments"
-      imageUrl="/lovable-uploads/93ab0638-8190-4ccf-897f-21fda7f4f5ad.png"
+      imageUrl={`${import.meta.env.BASE_URL || '/'}lovable-uploads/93ab0638-8190-4ccf-897f-21fda7f4f5ad.png`}
       brandName="FireCat Group"
       darkMode={true}
     >

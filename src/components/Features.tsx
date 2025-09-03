@@ -26,25 +26,25 @@ const Features = () => {
       icon: <Activity className="w-10 h-10 text-white transition-transform duration-300 transform" />,
       title: "Sports Performance",
       description: "Specialized fabrics that analyze form, provide instant feedback, and help prevent injuries in athletic equipment.",
-      image: "/lovable-uploads/48e540e5-6a25-44e4-b3f7-80f3bfc2777a.png"
+      image: `${import.meta.env.BASE_URL || '/'}lovable-uploads/48e540e5-6a25-44e4-b3f7-80f3bfc2777a.png`
     },
     {
       icon: <Shield className="w-10 h-10 text-white transition-transform duration-300 transform" />,
       title: "Military & Defense",
       description: "Tactical gear with embedded sensors for soldier health monitoring, environmental awareness, and enhanced safety.",
-      image: "/lovable-uploads/48ecf6e2-5a98-4a9d-af6f-ae2265cd4098.png"
+      image: `${import.meta.env.BASE_URL || '/'}lovable-uploads/48ecf6e2-5a98-4a9d-af6f-ae2265cd4098.png`
     },
     {
       icon: <HardHat className="w-10 h-10 text-white transition-transform duration-300 transform" />,
       title: "Industrial Safety",
       description: "Protective workwear that detects hazards, monitors fatigue, and prevents workplace injuries through early intervention.",
-      image: "/lovable-uploads/cf8966e3-de0d-445f-9fbd-ee6c48daa7ff.png"
+      image: `${import.meta.env.BASE_URL || '/'}lovable-uploads/cf8966e3-de0d-445f-9fbd-ee6c48daa7ff.png`
     },
     {
       icon: <Zap className="w-10 h-10 text-white transition-transform duration-300 transform" />,
       title: "Thermal Regulation",
       description: "Adaptive heating and cooling textiles that respond to body temperature and environmental conditions.",
-      image: "/lovable-uploads/6739bd63-bf19-4abd-bb23-0b613bbf7ac8.png"
+      image: `${import.meta.env.BASE_URL || '/'}lovable-uploads/6739bd63-bf19-4abd-bb23-0b613bbf7ac8.png`
     }
   ];
 
@@ -109,15 +109,15 @@ const Features = () => {
   }, []);
 
   const sensorCaseStudies = [{
-    image: "/lovable-uploads/843446fe-638e-4efb-b885-ed3cd505325a.png",
+    image: `${import.meta.env.BASE_URL || '/'}lovable-uploads/843446fe-638e-4efb-b885-ed3cd505325a.png`,
     title: "Firefighter Safety",
     description: "Advanced protective gear with gas, temperature, positioning, and motion sensors for safer emergency response."
   }, {
-    image: "/lovable-uploads/5463c9c5-0946-4280-a14b-17636ff69a98.png",
+    image: `${import.meta.env.BASE_URL || '/'}lovable-uploads/5463c9c5-0946-4280-a14b-17636ff69a98.png`,
     title: "Industrial Worker Protection",
     description: "Safety workwear with vibration, pressure, and heating sensors to prevent injuries and monitor environmental hazards."
   }, {
-    image: "/lovable-uploads/c5f8ee24-9815-4ebe-b65d-6f3d449feb8b.png",
+    image: `${import.meta.env.BASE_URL || '/'}lovable-uploads/c5f8ee24-9815-4ebe-b65d-6f3d449feb8b.png`,
     title: "Sports Performance",
     description: "Smart athletic wear with temperature and pressure sensors that track hydration, foot strike patterns, and performance metrics."
   }];

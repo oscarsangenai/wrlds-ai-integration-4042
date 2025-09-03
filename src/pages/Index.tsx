@@ -72,7 +72,7 @@ const Index = () => {
       <SEO 
         title="Make AI clear, ethical, usable—for everyone | Gen AI Global" 
         description="Nonprofit community advancing cross-sector AI democratization via open education, global collaboration, and shared standards. Learn, build, network, and create impact with peers worldwide." 
-        imageUrl="/lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png"
+        imageUrl={`${import.meta.env.BASE_URL || '/'}lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png`}
         keywords={['Gen AI Global', 'responsible AI', 'AI democratization', 'nonprofit', 'open standards', 'cross-sector']}
       />
       

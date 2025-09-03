@@ -1,67 +1,8 @@
 
 import { ArrowRight, Linkedin } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
-import emailjs from 'emailjs-com';
 
 const Footer = () => {
-  const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
-
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!email) {
-      toast({
-        title: "Error",
-        description: "Please enter your email address.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    setIsSubmitting(true);
-    
-    try {
-      // EmailJS configuration
-      const EMAILJS_SERVICE_ID = "service_i3h66xg";
-      const EMAILJS_TEMPLATE_ID = "template_fgq53nh";
-      const EMAILJS_PUBLIC_KEY = "wQmcZvoOqTAhGnRZ3";
-      
-      const templateParams = {
-        from_name: "Website Subscriber",
-        from_email: email,
-        message: `New subscription request from the website footer.`,
-        to_name: 'Gen AI Global',
-        reply_to: email
-      };
-      
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        templateParams,
-        EMAILJS_PUBLIC_KEY
-      );
-      
-      toast({
-        title: "Success!",
-        description: "Thank you for subscribing to our newsletter.",
-        variant: "default"
-      });
-      
-      setEmail("");
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "There was a problem subscribing. Please try again later.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <footer id="footer" className="bg-[hsl(var(--footer))] text-[hsl(var(--footer-foreground))] pt-16 pb-8 w-full">
@@ -69,7 +10,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 pb-10 border-b border-gray-700">
           <div className="lg:col-span-2">
             <img 
-              src="/lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png" 
+              src={`${import.meta.env.BASE_URL || '/'}lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png`} 
               alt="Gen AI Global Logo" 
               className="h-10 w-auto mb-6" 
             />

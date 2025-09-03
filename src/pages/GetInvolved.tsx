@@ -252,21 +252,36 @@ const GetInvolved = () => {
     setIsLoading(true);
 
     try {
-      // TODO: Implement Supabase integration for:
+      // Note: Supabase integration would handle:
       // 1. Insert into volunteer_applications table
-      // 2. Send confirmation email
-      // 3. Trigger admin notification
-      // 4. Log application event
+      // 2. Send confirmation email via edge function
+      // 3. Trigger admin notification workflow
+      // 4. Log application event for analytics
 
       const applicationData = {
-        ...formData,
+        name: formData.name,
+        email: formData.email,
+        timezone: formData.timezone,
+        availability: formData.availability,
+        preferred_department: formData.preferredDepartment,
+        portfolio_url: formData.portfolioUrl,
+        notes: formData.notes,
         skills: selectedSkills,
         source: fromJoin ? 'join-redirect' : 'direct',
-        status: 'received'
+        status: 'received',
+        submitted_at: new Date().toISOString()
       };
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Redirect to external form for now
+      const formUrl = new URL('https://form.fillout.com/t/xb99AybuLUus');
+      
+      // Pre-fill form with basic data if supported
+      if (formData.name) formUrl.searchParams.set('name', formData.name);
+      if (formData.email) formUrl.searchParams.set('email', formData.email);
+      
+      // Open form in same tab to maintain user flow
+      window.location.href = formUrl.toString();
+      return;
 
       toast({
         title: "Application Submitted!",

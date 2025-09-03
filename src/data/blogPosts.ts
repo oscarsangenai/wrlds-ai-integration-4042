@@ -40,7 +40,7 @@ export const blogPosts: BlogPost[] = [
     date: 'June 12, 2025',
     author: 'WRLDS Technologies',
     category: 'Business',
-    imageUrl: '/lovable-uploads/078a129e-0f98-4d91-af61-873687db1a04.png',
+    imageUrl: `${globalThis?.import?.meta?.env?.BASE_URL || '/'}lovable-uploads/078a129e-0f98-4d91-af61-873687db1a04.png`,
     keywords: [
       'wearable safety technology',
       'workplace injury prevention',
@@ -205,7 +205,7 @@ export const blogPosts: BlogPost[] = [
     date: 'June 5, 2025',
     author: 'WRLDS Technologies',
     category: 'Innovation',
-    imageUrl: '/lovable-uploads/927dae7e-6aaf-4b76-add2-1287a1dd9dc0.png',
+    imageUrl: `${globalThis?.import?.meta?.env?.BASE_URL || '/'}lovable-uploads/927dae7e-6aaf-4b76-add2-1287a1dd9dc0.png`,
     keywords: [
       'smart PPE',
       'safety technology',
@@ -300,7 +300,7 @@ export const blogPosts: BlogPost[] = [
     date: 'May 8, 2025',
     author: 'WRLDS Technologies',
     category: 'Technology',
-    imageUrl: '/lovable-uploads/6b0637e9-4a7b-40d0-b219-c8b7f879f93e.png',
+    imageUrl: `${globalThis?.import?.meta?.env?.BASE_URL || '/'}lovable-uploads/6b0637e9-4a7b-40d0-b219-c8b7f879f93e.png`,
     keywords: [
       'sensor technology',
       'product development',
@@ -389,7 +389,7 @@ export const blogPosts: BlogPost[] = [
     date: 'May 15, 2025',
     author: 'WRLDS Technologies',
     category: 'Process',
-    imageUrl: '/lovable-uploads/5262afdb-dd24-4d5e-be66-7c6717adbca9.png',
+    imageUrl: `${globalThis?.import?.meta?.env?.BASE_URL || '/'}lovable-uploads/5262afdb-dd24-4d5e-be66-7c6717adbca9.png`,
     keywords: [
       'product development',
       'smart product design',
@@ -498,7 +498,7 @@ export const blogPosts: BlogPost[] = [
     date: 'May 8, 2025',
     author: 'WRLDS Technologies',
     category: 'Innovation',
-    imageUrl: '/lovable-uploads/4187f423-ba69-4043-be76-c43098488348.png',
+    imageUrl: `${globalThis?.import?.meta?.env?.BASE_URL || '/'}lovable-uploads/4187f423-ba69-4043-be76-c43098488348.png`,
     keywords: [
       'AI uniforms',
       'emergency response',
@@ -566,7 +566,7 @@ export const blogPosts: BlogPost[] = [
     date: 'May 2, 2025',
     author: 'WRLDS Technologies',
     category: 'Technology',
-    imageUrl: '/lovable-uploads/48ecf6e2-5a98-4a9d-af6f-ae2265cd4098.png',
+    imageUrl: `${globalThis?.import?.meta?.env?.BASE_URL || '/'}lovable-uploads/48ecf6e2-5a98-4a9d-af6f-ae2265cd4098.png`,
     keywords: [
       'smart textiles',
       'sensor integration',

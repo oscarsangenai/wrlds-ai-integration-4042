@@ -7,7 +7,7 @@ const HockeyProject = () => {
     <ProjectPageLayout
       title="Ice Hockey Elite Skill Tracker"
       subtitle="Advanced motion analysis for optimal performance"
-      imageUrl="/lovable-uploads/c30e0487-2fa0-41d1-9a0b-699cb2855388.png"
+      imageUrl={`${import.meta.env.BASE_URL || '/'}lovable-uploads/c30e0487-2fa0-41d1-9a0b-699cb2855388.png`}
       brandName="Mars Blades"
     >
       <h2 className="text-3xl font-bold mb-6">Case Study: Hockey Performance Analysis System</h2>

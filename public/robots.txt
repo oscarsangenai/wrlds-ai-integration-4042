@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://wrlds.com/sitemap.xml
+Sitemap: https://genaiglobal.org/sitemap.xml
 
 # Optimize crawling
 Crawl-delay: 10

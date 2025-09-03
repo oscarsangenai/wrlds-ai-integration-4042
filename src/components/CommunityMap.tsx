@@ -12,7 +12,7 @@ const CommunityMap: React.FC<CommunityMapProps> = ({
     <div className={`relative w-full h-[600px] bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 rounded-xl overflow-hidden shadow-2xl border border-primary/20 backdrop-blur-sm ${className}`}>
       {/* Network World Map Background Image */}
       <img 
-        src="/lovable-uploads/b47eba27-c63a-47d2-912a-d6a26458caf2.png"
+        src={`${import.meta.env.BASE_URL || '/'}lovable-uploads/b47eba27-c63a-47d2-912a-d6a26458caf2.png`}
         alt="Global network connectivity map showing connected countries"
         className="absolute inset-0 w-full h-full object-cover"
       />

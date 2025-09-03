@@ -6,7 +6,7 @@ const WorkwearProject = () => {
     <ProjectPageLayout
       title="Workwear Climate Control"
       subtitle="Intelligent temperature regulation for extreme work environments"
-      imageUrl="/lovable-uploads/6b0637e9-4a7b-40d0-b219-c8b7f879f93e.png"
+      imageUrl={`${import.meta.env.BASE_URL || '/'}lovable-uploads/6b0637e9-4a7b-40d0-b219-c8b7f879f93e.png`}
       brandName="European Multinational Textile Producer"
     >
       <div className="bg-yellow-50 p-4 rounded-lg mb-6 flex items-center">
