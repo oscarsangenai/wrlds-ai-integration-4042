@@ -486,7 +486,7 @@ export const ORG_UNITS: OrgUnit[] = [
   // Education Tracks Teams
   {
     id: "a-dev-instructors",
-    name: "A Dev Instructors",
+    name: "Agent Dev Instructors",
     type: "team",
     icon: "Bot",
     parentId: "education-tracks-department",
