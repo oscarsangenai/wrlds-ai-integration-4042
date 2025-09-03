@@ -345,7 +345,7 @@ export const ORG_UNITS: OrgUnit[] = [
   // Community Engagement Department Team
   {
     id: "community-engagement-team",
-    name: "Community Engagement Team",
+    name: "Community Team",
     type: "team",
     icon: "Users",
     parentId: "community-engagement-department",
