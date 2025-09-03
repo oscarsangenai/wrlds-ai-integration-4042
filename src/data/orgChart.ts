@@ -242,7 +242,7 @@ export const ORG_UNITS: OrgUnit[] = [
   // Marketing Department Teams
   {
     id: "marketing-team",
-    name: "Marketing Team (Content & Exhibits)",
+    name: "Marketing Team",
     type: "team",
     icon: "Megaphone",
     parentId: "marketing-department",
@@ -425,7 +425,7 @@ export const ORG_UNITS: OrgUnit[] = [
   // Fundraising Department Team
   {
     id: "fundraising-team",
-    name: "Fundraising Team (Members)",
+    name: "Fundraising Team",
     type: "team",
     icon: "Target",
     parentId: "fundraising-department",
