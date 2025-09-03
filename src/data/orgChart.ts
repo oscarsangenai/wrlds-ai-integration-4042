@@ -124,7 +124,7 @@ export const ORG_UNITS: OrgUnit[] = [
   },
   {
     id: "cloud-department",
-    name: "Cloud",
+    name: "Cloud Infrastructure",
     type: "department",
     icon: "Cloud",
     description: "Cloud infrastructure and DevOps",
@@ -455,7 +455,7 @@ export const ORG_UNITS: OrgUnit[] = [
     parentId: "web-development-department",
     description: "Website development and digital architecture",
     members: [
-      { name: "Sangame Krishnamani", role: "Director" },
+      { name: "Sangame Krishnamani", role: "Lead Advisor" },
       { name: "Amber Bellou", role: "Web Dev Team Member" },
       { name: "Manal Moinuddin", role: "Web Dev Team Member" },
       { name: "Mary Ann Belarmino", role: "Web Dev Team Member" },
@@ -473,7 +473,7 @@ export const ORG_UNITS: OrgUnit[] = [
     parentId: "cloud-department",
     description: "Cloud infrastructure and DevOps operations",
     members: [
-      { name: "Sangame Krishnamani", role: "Director" },
+      { name: "Sangame Krishnamani", role: "Lead Advisor" },
       { name: "Deidré Luzmore", role: "Cloud Team Member" },
       { name: "Desiree Lemons", role: "Cloud Team Member" },
       { name: "Diellza Ahmetaj", role: "Cloud Team Member" },
