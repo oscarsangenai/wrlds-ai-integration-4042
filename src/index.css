@@ -26,13 +26,31 @@ video {
   display: block;
 }
 
+/* Mobile viewport fixes */
 :root {
   --safe-top: env(safe-area-inset-top);
   --safe-bottom: env(safe-area-inset-bottom);
+  --vh: 100vh;
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --vh: 100dvh;
+  }
 }
 
 body {
   overscroll-behavior-y: auto;
+}
+
+/* Mobile-safe viewport utilities */
+.h-screen-safe {
+  height: var(--vh);
+  min-height: var(--vh);
+}
+
+.min-h-screen-safe {
+  min-height: var(--vh);
 }
 
 @layer base {

@@ -9,10 +9,12 @@ import AuroraNebula from '@/components/visuals/AuroraNebula';
 import ConstellationParticles from '@/components/visuals/ConstellationParticles';
 import FireField from '@/components/FireField';
 import LightSweep from '@/components/visuals/LightSweep';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { Clock, Users, Globe, BookOpen, Lightbulb, Share, Heart, Trophy, ArrowRight } from 'lucide-react';
 
 const Index = () => {
   const shouldReduceMotion = useReducedMotion();
+  const isMobile = useIsMobile();
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [animatedCounts, setAnimatedCounts] = useState({
     learners: 0,
@@ -77,38 +79,42 @@ const Index = () => {
       />
       
       {/* FIX: Remove nested main - PageLayout already provides motion.main */}
-      {/* Purple Fire Background */}
-      <div 
-        aria-hidden="true" 
-        className="pointer-events-none absolute inset-0 -z-10 overflow-visible opacity-40"
-      >
-        <FireField />
-      </div>
-      
-      {/* Executive network constellation - enhanced for business professionals */}
+      {/* Background layers - optimized for mobile performance */}
       <div 
         aria-hidden="true" 
         className="pointer-events-none absolute inset-0 -z-20 overflow-visible opacity-100"
       >
         <AuroraNebula />
-        <ConstellationParticles 
-          density={36} 
-          autoMobileDensity={true}
-          executiveMode={true}
-          strokeWidth={1.6}
-          strokeOpacity={0.65}
-          haloRadius={8}
-          haloOpacity={0.35}
-          parallaxAmplitude={10}
-          animationPeriod={14}
-          className="will-change-transform"
-        />
+        {!isMobile && !shouldReduceMotion && (
+          <ConstellationParticles 
+            density={36} 
+            autoMobileDensity={true}
+            executiveMode={true}
+            strokeWidth={1.6}
+            strokeOpacity={0.65}
+            haloRadius={8}
+            haloOpacity={0.35}
+            parallaxAmplitude={10}
+            animationPeriod={14}
+            className="will-change-transform"
+          />
+        )}
       </div>
       
+      {/* Fire background - desktop only for performance */}
+      {!isMobile && !shouldReduceMotion && (
+        <div 
+          aria-hidden="true" 
+          className="pointer-events-none absolute inset-0 -z-10 overflow-visible opacity-40"
+        >
+          <FireField />
+        </div>
+      )}
+      
       {/* Hero Section */}
-      <section className="relative z-0 min-h-[calc(100vh-var(--header-h))] grid place-items-center px-4 py-8">
-          {/* FIX: Premium light sweep on hero card for executive "wow" factor */}
-          <LightSweep target="hero" triggerOnMount={true}>
+      <section className="relative z-0 min-h-[calc(100dvh-var(--header-h))] grid place-items-center px-4 py-8">
+          {/* Premium light sweep - mobile performance aware */}
+          <LightSweep target="hero" triggerOnMount={!isMobile}>
             <motion.div 
               className="relative backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-8 md:p-12 max-w-[65ch] shadow-2xl text-center will-change-transform"
               initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}

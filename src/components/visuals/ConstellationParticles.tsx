@@ -51,7 +51,9 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // Cap DPR on mobile for performance
+    const isMobileDevice = window.innerWidth < 768;
+    const dpr = Math.min(window.devicePixelRatio || 1, isMobileDevice ? 1.5 : 2);
     let width = 0, height = 0;
 
     type P = { x: number; y: number; vx: number; vy: number; r: number };
@@ -97,12 +99,23 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({
     window.addEventListener("resize", resize);
     resize();
 
-    const draw = () => {
+    let lastFrameTime = 0;
+    const targetFPS = width < 768 ? 30 : 60; // Mobile FPS cap
+    const frameInterval = 1000 / targetFPS;
+
+    const draw = (currentTime = 0) => {
       // FIX: Business-grade autopause + performance throttling
       if (isPausedRef.current) {
         rafRef.current = requestAnimationFrame(draw);
         return;
       }
+
+      // FPS limiter for mobile
+      if (currentTime - lastFrameTime < frameInterval) {
+        rafRef.current = requestAnimationFrame(draw);
+        return;
+      }
+      lastFrameTime = currentTime;
 
       ctx.clearRect(0, 0, width, height);
 
