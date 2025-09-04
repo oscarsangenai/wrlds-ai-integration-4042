@@ -18,17 +18,41 @@ const Navbar = () => {
         setIsScrolled(false);
       }
     };
-    window.addEventListener('scroll', handleScroll);
     
-    // FIX: Set both navbar height variables for consistency
+    const updateNavHeight = () => {
+      const nav = document.querySelector('nav');
+      if (nav) {
+        const height = nav.getBoundingClientRect().height;
+        document.documentElement.style.setProperty('--nav-h', `${height}px`);
+        document.documentElement.style.setProperty('--header-h', `${height}px`);
+      }
+    };
+
+    // Setup ResizeObserver for navbar height stability
     const nav = document.querySelector('nav');
-    if (nav) {
-      const height = nav.getBoundingClientRect().height;
-      document.documentElement.style.setProperty('--nav-h', `${height}px`);
-      document.documentElement.style.setProperty('--header-h', `${height}px`);
+    let resizeObserver: ResizeObserver | null = null;
+    
+    if (nav && 'ResizeObserver' in window) {
+      resizeObserver = new ResizeObserver(() => {
+        updateNavHeight();
+      });
+      resizeObserver.observe(nav);
     }
     
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Listen for orientation changes
+    const handleOrientationChange = () => {
+      setTimeout(updateNavHeight, 100);
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('orientationchange', handleOrientationChange);
+    updateNavHeight(); // Initial call
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('orientationchange', handleOrientationChange);
+      resizeObserver?.disconnect();
+    };
   }, []);
 
   const location = useLocation();
@@ -55,7 +79,7 @@ const Navbar = () => {
     <motion.nav
       id="navbar"
       data-testid="navbar"
-      className={cn("fixed top-0 left-0 right-0 z-nav transition-all duration-300 w-full bg-[hsl(var(--footer))] shadow-lg")} 
+      className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300 w-full bg-[hsl(var(--footer))] shadow-lg")}
       initial={{
       opacity: 1,
       y: 0

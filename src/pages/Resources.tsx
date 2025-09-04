@@ -121,11 +121,7 @@ const Resources = () => {
   return <PageLayout showContact={false}>
       <SEO title="Resources - AI Articles, Case Studies & Learning Materials" description="Access AI-related articles, case studies, and learning materials. Stay updated with the latest in artificial intelligence research and applications." keywords={["AI resources", "artificial intelligence articles", "case studies", "learning materials", "AI research"]} />
       
-      <div className="min-h-screen">
-        {/* Futuristic background */}
-        <AuroraNebula />
-        <ConstellationParticles />
-        
+      <div className="min-h-[100dvh]">
         {/* Hero Section */}
         <section className="relative z-10 pt-20 pb-8 px-4 text-center">
           <div className="max-w-4xl mx-auto">

@@ -80,8 +80,43 @@ If issues occur:
 3. Remove mobile CSS utilities from `src/index.css`
 4. Restore original cookie banner positioning
 
+## Extended Fixes - Advanced Mobile Stability
+
+### Background Management
+- **Centralized ownership**: Moved all background effects to PageLayout component
+- **Proper isolation**: Added `isolate` and `overflow-hidden` to background wrappers
+- **Fixed z-index**: Replaced negative z-index (-z-10) with proper z-0 background, z-10 content structure
+- **Accessibility**: Added `aria-hidden="true"` and `role="presentation"` to decorative elements
+
+### Performance Optimizations
+- **Canvas sizing**: Added proper size guards and debounced resize handlers (150ms)
+- **FPS limiting**: Capped mobile animations to 30fps vs 60fps desktop
+- **Intersection observer**: Added visibility detection to pause offscreen animations
+- **Passive listeners**: All event listeners now use `{ passive: true }`
+- **DPR capping**: Limited mobile device pixel ratio to 1.5x for performance
+
+### Component Stability
+- **Navbar height**: Added ResizeObserver and orientation change handling for stable header height
+- **Footer isolation**: Added `relative isolate` to prevent background bleed
+- **Reduced motion**: Proper support for `prefers-reduced-motion`
+- **Canvas guards**: Prevent rendering with zero dimensions
+
+### Files Modified
+1. `src/components/PageLayout.tsx` - Centralized background management
+2. `src/components/Navbar.tsx` - Added ResizeObserver for height stability  
+3. `src/components/Footer.tsx` - Added isolation for background containment
+4. `src/components/visuals/ConstellationParticles.tsx` - Performance and stability improvements
+5. `src/index.css` - Mobile viewport utilities and overflow management
+6. `src/pages/About.tsx` - Removed duplicate backgrounds, fixed heights
+7. `src/pages/Community.tsx` - Removed duplicate backgrounds, fixed heights  
+8. `src/pages/GetInvolved.tsx` - Removed duplicate backgrounds, fixed heights
+9. `src/pages/Resources.tsx` - Removed duplicate backgrounds, fixed heights
+10. `src/pages/Spotlight.tsx` - Removed duplicate backgrounds, fixed heights
+
 ## Notes
 - Desktop functionality preserved
 - No regressions on ≥1280px screens
 - All changes follow progressive enhancement
 - Maintains keyboard navigation and focus management
+- Single background instance per page enforced
+- All viewport units use dvh with vh fallback

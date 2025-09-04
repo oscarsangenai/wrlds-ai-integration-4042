@@ -60,8 +60,13 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({
     let points: P[] = [];
 
     const resize = () => {
-      width = canvas.clientWidth;
-      height = canvas.clientHeight;
+      const rect = canvas.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      
+      // Guard against zero dimensions
+      if (width <= 0 || height <= 0) return;
+      
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -88,24 +93,47 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({
       }));
     };
 
+    // Debounced resize handler
+    let resizeTimeout: number;
+    const debouncedResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = window.setTimeout(resize, 150);
+    };
+
     const onMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
       mouse.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     };
     const onLeave = () => { mouse.current = null; };
 
-    canvas.addEventListener("mousemove", onMove);
-    canvas.addEventListener("mouseleave", onLeave);
-    window.addEventListener("resize", resize);
+    canvas.addEventListener("mousemove", onMove, { passive: true });
+    canvas.addEventListener("mouseleave", onLeave, { passive: true });
+    window.addEventListener("resize", debouncedResize, { passive: true });
     resize();
 
     let lastFrameTime = 0;
-    const targetFPS = width < 768 ? 30 : 60; // Mobile FPS cap
+    let isVisible = true;
+    const targetFPS = isMobileDevice ? 30 : 60; // Mobile FPS cap
     const frameInterval = 1000 / targetFPS;
 
+    // Setup intersection observer for performance
+    const intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { threshold: 0 }
+    );
+    intersectionObserver.observe(canvas);
+
     const draw = (currentTime = 0) => {
-      // FIX: Business-grade autopause + performance throttling
-      if (isPausedRef.current) {
+      // Enhanced pause logic with visibility check
+      if (isPausedRef.current || !isVisible || shouldReduceMotion) {
+        rafRef.current = requestAnimationFrame(draw);
+        return;
+      }
+
+      // Guard against zero dimensions
+      if (width <= 0 || height <= 0) {
         rafRef.current = requestAnimationFrame(draw);
         return;
       }
@@ -186,13 +214,15 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({
     
     return () => {
       cancelAnimationFrame(rafRef.current);
-      window.removeEventListener("resize", resize);
+      clearTimeout(resizeTimeout);
+      window.removeEventListener("resize", debouncedResize);
       canvas.removeEventListener("mousemove", onMove);
       canvas.removeEventListener("mouseleave", onLeave);
+      intersectionObserver.disconnect();
     };
   }, [density, handleVisibilityChange]);
 
-  return <canvas ref={ref} className={"pointer-events-none absolute inset-0 z-0 " + (className || "")} />;
+  return <canvas ref={ref} className={"pointer-events-none " + (className || "")} aria-hidden="true" role="presentation" />;
 };
 
 export default ConstellationParticles;

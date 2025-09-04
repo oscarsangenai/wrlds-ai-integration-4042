@@ -329,11 +329,7 @@ const Spotlight = () => {
         keywords={["AI community", "member spotlight", "community updates", "AI professionals", "achievements"]}
       />
       
-      <div className="min-h-screen">
-        {/* Futuristic background */}
-        <AuroraNebula />
-        <ConstellationParticles />
-        
+      <div className="min-h-[100dvh]">
         {/* Hero Section */}
         <section className="relative z-10 pt-20 pb-8 px-4 text-center">
           <div className="max-w-4xl mx-auto">

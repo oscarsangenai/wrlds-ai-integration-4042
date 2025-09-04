@@ -30,13 +30,17 @@ video {
 :root {
   --safe-top: env(safe-area-inset-top);
   --safe-bottom: env(safe-area-inset-bottom);
-  --vh: 100vh;
+  --vh: 100dvh;
 }
 
-@supports (height: 100dvh) {
+@supports not (height: 100dvh) {
   :root {
-    --vh: 100dvh;
+    --vh: 100vh;
   }
+}
+
+html, body {
+  overflow-x: hidden;
 }
 
 body {
@@ -51,6 +55,17 @@ body {
 
 .min-h-screen-safe {
   min-height: var(--vh);
+}
+
+/* Mobile-safe viewport height utilities */
+.min-h-dvh {
+  min-height: 100vh;
+}
+
+@supports (min-height: 100dvh) {
+  .min-h-dvh {
+    min-height: 100dvh;
+  }
 }
 
 @layer base {

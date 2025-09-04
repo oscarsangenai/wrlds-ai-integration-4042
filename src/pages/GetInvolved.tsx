@@ -321,13 +321,9 @@ const GetInvolved = () => {
       />
       
       <main className="relative pt-8 md:pt-12">
-        {/* Futuristic background */}
-        <AuroraNebula />
-        <ConstellationParticles />
-        
         {/* Hero Section */}
         <motion.section 
-          className="relative z-10 container mx-auto flex min-h-[40vh] max-w-5xl flex-col items-center justify-center gap-6 px-4 text-center overflow-visible"
+          className="relative z-10 container mx-auto flex min-h-[min(40dvh,400px)] max-w-5xl flex-col items-center justify-center gap-6 px-4 text-center"
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}

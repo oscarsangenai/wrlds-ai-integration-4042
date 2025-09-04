@@ -5,8 +5,6 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import AuroraNebula from '@/components/visuals/AuroraNebula';
-import ConstellationParticles from '@/components/visuals/ConstellationParticles';
 import CommunityMap from '@/components/CommunityMap';
 
 // Optional: Provide LinkedIn post URNs to embed latest posts. Example: "urn:li:share:123"
@@ -15,10 +13,7 @@ const Community = () => {
   return <PageLayout showContact={false}>
       <SEO title="Community — Gen AI Global" description="Follow us and join the conversation: LinkedIn and Discord." />
       <main className="relative pt-16 md:pt-20">
-        {/* Futuristic background */}
-        <AuroraNebula />
-        <ConstellationParticles />
-        <motion.section className="relative z-10 container mx-auto flex min-h-[calc(100vh-6rem)] max-w-5xl flex-col items-center justify-center gap-8 px-4 text-center overflow-visible pb-6" initial={{
+        <motion.section className="relative z-10 container mx-auto flex min-h-[min(calc(100dvh-6rem),600px)] max-w-5xl flex-col items-center justify-center gap-8 px-4 text-center pb-6" initial={{
         opacity: 0,
         y: 12
       }} whileInView={{
@@ -129,7 +124,7 @@ const Community = () => {
                       <span>Early access to events and workshops</span>
                     </li>
                   </ul>
-                  <Button onClick={() => window.open('https://form.fillout.com/t/6UAeDRhG7Bus', '_blank', 'noopener,noreferrer')} className="w-full group-hover:scale-105 transition-transform" size="lg">
+                  <Button type="button" onClick={() => window.open('https://form.fillout.com/t/6UAeDRhG7Bus', '_blank', 'noopener,noreferrer')} className="w-full group-hover:scale-105 transition-transform" size="lg">
                     Apply for Membership
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
