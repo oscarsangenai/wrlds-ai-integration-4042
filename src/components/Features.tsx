@@ -204,7 +204,9 @@ const Features = () => {
                     className={cn(
                       "w-full h-full object-cover transition-all duration-300",
                       isHijacked ? "grayscale-0" : "grayscale"
-                    )} 
+                    )}
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className={cn(
                     "absolute inset-0 transition-opacity duration-300",

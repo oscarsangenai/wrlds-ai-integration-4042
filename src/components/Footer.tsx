@@ -12,7 +12,9 @@ const Footer = () => {
             <img 
               src={`${import.meta.env.BASE_URL || '/'}lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png`} 
               alt="Gen AI Global Logo" 
-              className="h-10 w-auto mb-6" 
+              className="h-10 w-auto mb-6"
+              loading="lazy"
+              decoding="async"
             />
             <p className="text-gray-300 mb-6">
               Make AI accessible and ethical by empowering a global peer-driven community.

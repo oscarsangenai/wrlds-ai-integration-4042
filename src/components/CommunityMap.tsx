@@ -15,6 +15,8 @@ const CommunityMap: React.FC<CommunityMapProps> = ({
         src={`${import.meta.env.BASE_URL || '/'}lovable-uploads/b47eba27-c63a-47d2-912a-d6a26458caf2.png`}
         alt="Global network connectivity map showing connected countries"
         className="absolute inset-0 w-full h-full object-cover"
+        loading="lazy"
+        decoding="async"
       />
       
       {/* Overlay gradient for depth */}

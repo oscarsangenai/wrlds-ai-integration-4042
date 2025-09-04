@@ -6,6 +6,35 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile Stability - Global CSS Baseline */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+:root {
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+}
+
+body {
+  overscroll-behavior-y: auto;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -59,14 +88,35 @@
     @apply border-border;
   }
 
-  html, body {
-    @apply m-0 p-0 overflow-x-hidden;
+  /* Mobile Stability - Global CSS Baseline */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html, body, #root {
+    @apply m-0 p-0;
     width: 100%;
     max-width: 100%;
+    min-height: 100%;
+    /* Removed overflow-x: hidden for mobile stability */
+  }
+
+  img, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  :root {
+    --safe-top: env(safe-area-inset-top);
+    --safe-bottom: env(safe-area-inset-bottom);
   }
 
   body {
     @apply bg-white text-foreground font-space;
+    overscroll-behavior-y: auto;
   }
 }
 
@@ -302,6 +352,36 @@
 
 .animate-pulse-slow {
   animation: pulse-slow 4s ease-in-out infinite;
+}
+
+/* Mobile-safe viewport height utilities */
+.h-screen-fixed {
+  height: 100vh;
+}
+
+@supports (height: 100dvh) {
+  .h-screen-fixed {
+    height: 100dvh;
+  }
+}
+
+.min-h-screen-fixed {
+  min-height: 100vh;
+}
+
+@supports (min-height: 100dvh) {
+  .min-h-screen-fixed {
+    min-height: 100dvh;
+  }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Ripple pulse for CTAs (uses accent token) */

@@ -6,8 +6,12 @@ export const useScrollHijack = (sectionRef: React.RefObject<HTMLElement>, itemCo
   const [currentIndex, setCurrentIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
 
+  // Check if device supports fine pointer (desktop) and hover
+  const isDesktop = typeof window !== 'undefined' && window.matchMedia('(pointer: fine) and (hover: hover)').matches;
+
   const handleScroll = useCallback((e: Event) => {
-    if (!sectionRef.current) return;
+    // Only hijack scroll on desktop devices
+    if (!isDesktop || !sectionRef.current) return;
 
     const section = sectionRef.current;
     const rect = section.getBoundingClientRect();
@@ -18,11 +22,15 @@ export const useScrollHijack = (sectionRef: React.RefObject<HTMLElement>, itemCo
     
     if (isInSection && !isHijacked) {
       setIsHijacked(true);
+      // Only lock body scroll on desktop
       document.body.style.overflow = 'hidden';
     }
     
     if (isHijacked) {
-      e.preventDefault();
+      // Don't prevent default on mobile for natural scrolling
+      if (isDesktop) {
+        e.preventDefault();
+      }
       
       const deltaY = (e as WheelEvent).deltaY;
       
@@ -35,7 +43,9 @@ export const useScrollHijack = (sectionRef: React.RefObject<HTMLElement>, itemCo
           setIsHijacked(false);
           setCurrentIndex(0);
           document.body.style.overflow = 'auto';
-          window.scrollBy(0, 100); // Continue scrolling down
+          if (isDesktop) {
+            window.scrollBy(0, 100); // Continue scrolling down
+          }
         }
       } else {
         // Scrolling up
@@ -46,13 +56,18 @@ export const useScrollHijack = (sectionRef: React.RefObject<HTMLElement>, itemCo
           setIsHijacked(false);
           setCurrentIndex(0);
           document.body.style.overflow = 'auto';
-          window.scrollBy(0, -100); // Continue scrolling up
+          if (isDesktop) {
+            window.scrollBy(0, -100); // Continue scrolling up
+          }
         }
       }
     }
-  }, [isHijacked, currentIndex, itemCount, sectionRef]);
+  }, [isHijacked, currentIndex, itemCount, sectionRef, isDesktop]);
 
   useEffect(() => {
+    // Only enable scroll hijacking on desktop devices
+    if (!isDesktop) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isHijacked) return;
       
@@ -81,7 +96,8 @@ export const useScrollHijack = (sectionRef: React.RefObject<HTMLElement>, itemCo
       }
     };
 
-    window.addEventListener('wheel', handleScroll, { passive: false });
+    // Use passive listeners on mobile for better scroll performance
+    window.addEventListener('wheel', handleScroll, { passive: true });
     window.addEventListener('keydown', handleKeyDown);
     
     return () => {
@@ -89,10 +105,13 @@ export const useScrollHijack = (sectionRef: React.RefObject<HTMLElement>, itemCo
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'auto';
     };
-  }, [handleScroll]);
+  }, [handleScroll, isDesktop]);
 
-  // Handle touch events for mobile
+  // Handle touch events for mobile - but only on desktop devices
   useEffect(() => {
+    // Disable touch hijacking on mobile devices for natural scrolling
+    if (!isDesktop) return;
+
     let touchStartY = 0;
     let touchEndY = 0;
 
@@ -130,14 +149,14 @@ export const useScrollHijack = (sectionRef: React.RefObject<HTMLElement>, itemCo
       }
     };
 
-    window.addEventListener('touchstart', handleTouchStart, { passive: false });
-    window.addEventListener('touchend', handleTouchEnd, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
     
     return () => {
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [isHijacked, currentIndex, itemCount]);
+  }, [isHijacked, currentIndex, itemCount, isDesktop]);
 
   return {
     isHijacked,

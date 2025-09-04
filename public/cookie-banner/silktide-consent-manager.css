@@ -124,16 +124,29 @@
   border-radius: 5px;
   pointer-events: auto;
   border: 0px;
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
-  width: 600px;
-  max-width: calc(100% - 32px);
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
   transform: translate(0, -20px);
   opacity: 0;
   animation: silktide-slideInDown 350ms ease-out forwards;
   animation-delay: 0.3s;
   box-shadow: -5px 5px 10px 0px #00000012, 0px 0px 50px 0px #0000001a;
+}
+
+@media (min-width: 768px) {
+  #silktide-banner {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    left: auto;
+    width: 600px;
+    max-width: calc(100% - 32px);
+  }
 }
 
 #silktide-banner:focus {
