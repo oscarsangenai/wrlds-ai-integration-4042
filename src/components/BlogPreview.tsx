@@ -42,7 +42,7 @@ const BlogPreview = () => {
                   <BlogPostCard
                     title={post.title}
                     excerpt={post.excerpt}
-                    imageUrl={post.imageUrl || '/placeholder.svg'}
+                    imageUrl={post.imageUrl || `${import.meta.env.BASE_URL || '/'}placeholder.svg`}
                     date={post.date}
                     slug={post.slug}
                     category={post.category}
@@ -59,7 +59,7 @@ const BlogPreview = () => {
                 key={post.id}
                 title={post.title}
                 excerpt={post.excerpt}
-                imageUrl={post.imageUrl || '/placeholder.svg'}
+                imageUrl={post.imageUrl || `${import.meta.env.BASE_URL || '/'}placeholder.svg`}
                 date={post.date}
                 slug={post.slug}
                 category={post.category}

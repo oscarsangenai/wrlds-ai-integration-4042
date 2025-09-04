@@ -16,15 +16,15 @@ const formSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
   message: z.string().min(10, 'Message must be at least 10 characters'),
   honeypot: z.string().max(0, 'Bot detected'), // Honeypot field must be empty
-  timestamp: z.number() // To prevent automated quick submissions
+  timestamp: z.coerce.number() // Fixed: coerce string to number for proper validation
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-// EmailJS configuration - Updated with correct template ID
-const EMAILJS_SERVICE_ID = "service_i3h66xg";
-const EMAILJS_TEMPLATE_ID = "template_fgq53nh"; // Updated to the correct template ID
-const EMAILJS_PUBLIC_KEY = "wQmcZvoOqTAhGnRZ3";
+// EmailJS configuration - Read from environment variables
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
 const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -71,6 +71,17 @@ const ContactForm = () => {
         return;
       }
       
+      // Check if EmailJS is configured
+      if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+        toast({
+          title: "Contact form temporarily unavailable",
+          description: "Please email us directly at hello@wrlds.com",
+          variant: "default"
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
       // Remove honeypot and timestamp fields before sending
       const { honeypot, timestamp, ...emailData } = data;
       

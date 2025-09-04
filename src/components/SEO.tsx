@@ -30,7 +30,7 @@ const SEO: React.FC<SEOProps> = ({
   isBlogPost = false
 }) => {
   const location = useLocation();
-  const SITE_URL = 'https://genaiglobal.org';
+  const SITE_URL = import.meta.env.VITE_SITE_URL ?? window.location.origin;
   const currentUrl = `${SITE_URL}${location.pathname}`;
   const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `${SITE_URL}${imageUrl}`;
 

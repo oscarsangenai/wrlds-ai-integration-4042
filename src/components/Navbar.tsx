@@ -67,7 +67,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center">
-              <img src={`${import.meta.env.BASE_URL || '/'}lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png`} alt="Gen AI Global Logo" className="h-8 w-auto md:h-10" />
+              <img src={`${import.meta.env.BASE_URL || '/'}lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png`} alt="Gen AI Global Logo" className="h-8 w-auto md:h-10" loading="lazy" decoding="async" />
             </Link>
           </div>
           
@@ -105,7 +105,7 @@ const Navbar = () => {
           
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <button onClick={toggleMenu} className="inline-flex items-center p-2 focus:outline-none text-[hsl(var(--footer-foreground))] focus:ring-2 focus:ring-offset-2 focus:ring-[hsl(var(--primary))]">
+            <button type="button" onClick={toggleMenu} className="inline-flex items-center p-2 focus:outline-none text-[hsl(var(--footer-foreground))] focus:ring-2 focus:ring-offset-2 focus:ring-[hsl(var(--primary))]">
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>

@@ -75,6 +75,7 @@ const Hero = () => {
               <motion.div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8 justify-center items-center" variants={itemVariants}>
                 {/* Styled as a button but using an anchor tag for project navigation */}
                 <button 
+                  type="button"
                   className="w-full sm:w-auto min-h-[44px] px-6 sm:px-8 py-3 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-all shadow-lg hover:shadow-xl hover:shadow-gray-300/20 flex items-center justify-center group text-sm sm:text-base font-medium"
                   onClick={e => {
                     e.preventDefault();
@@ -92,6 +93,7 @@ const Hero = () => {
                 
                 {/* Using the Button component from shadcn but with custom styling to match the explore button */}
                 <button 
+                  type="button"
                   className="w-full sm:w-auto min-h-[44px] px-6 sm:px-8 py-3 bg-gray-700 text-white rounded-md hover:bg-gray-800 transition-all shadow-lg hover:shadow-xl hover:shadow-gray-300/20 flex items-center justify-center group text-sm sm:text-base font-medium"
                   onClick={scrollToContact}
                 >
