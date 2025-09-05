@@ -50,13 +50,17 @@
     <!-- End Google Tag Manager (noscript) -->
     <div id="root"></div>
     <script>
-      // Lazy-load blocking CDN script with timeout
+      // Async script loader with timeout cleanup
       (function(){
-        const controller = new AbortController();
-        const t = setTimeout(()=>controller.abort(), 5000);
-        import('https://cdn.gpteng.co/gptengineer.js', { signal: controller.signal })
-          .catch(()=>{})
-          .finally(()=>clearTimeout(t));
+        const s = document.createElement('script');
+        let done = false;
+        s.src = 'https://cdn.gpteng.co/gptengineer.js';
+        s.async = true;
+        s.defer = true;
+        s.onload = () => { done = true };
+        s.onerror = () => {};
+        const timeout = setTimeout(() => { if (!done) s.remove(); }, 5000);
+        document.head.appendChild(s);
       })();
     </script>
     <script type="module" src="./src/main.tsx"></script>

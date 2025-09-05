@@ -477,7 +477,7 @@ const Spotlight = () => {
                         <h4 className="font-semibold mb-2">Roles & Responsibilities</h4>
                         <div className="flex flex-wrap gap-2">
                           {member.roles.map((role, index) => (
-                            <Badge key={index} variant="secondary">
+                            <Badge key={role} variant="secondary">
                               {role}
                             </Badge>
                           ))}
@@ -488,7 +488,7 @@ const Spotlight = () => {
                         <h4 className="font-semibold mb-2">Key Achievements</h4>
                         <ul className="space-y-1">
                           {member.achievements.map((achievement, index) => (
-                            <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                            <li key={achievement} className="text-sm text-muted-foreground flex items-start gap-2">
                               <Star className="h-3 w-3 mt-1 text-primary flex-shrink-0" />
                               {achievement}
                             </li>

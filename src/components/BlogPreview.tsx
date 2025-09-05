@@ -69,9 +69,10 @@ const BlogPreview = () => {
           
           <div className="mt-4 flex justify-center md:hidden">
             <div className="flex gap-1">
+              {/* Static decorative list; index-based is acceptable here */}
               {[0, 1, 2].map((i) => (
                 <div 
-                  key={i} 
+                  key={`dot-${i}`} 
                   className={`h-1.5 rounded-full ${i === 0 ? 'w-6 bg-gray-800' : 'w-2 bg-gray-300'}`}
                 />
               ))}

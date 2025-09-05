@@ -189,6 +189,8 @@ const InteractiveImage = ({ src, alt, className }: InteractiveImageProps) => {
             transform: `scale(${scale}) translate(${position.x / scale}px, ${position.y / scale}px)`,
             transformOrigin: 'center',
           }}
+          loading="lazy"
+          decoding="async"
           draggable="false"
         />
         

@@ -177,7 +177,7 @@ const Features = () => {
             
             {features.map((feature, index) => (
               <div 
-                key={index} 
+                key={feature.title}
                 className={cn(
                   "feature-item rounded-xl overflow-hidden transform transition-all duration-500 relative shadow-lg",
                   isHijacked 
@@ -293,11 +293,11 @@ const Features = () => {
             <div className="rounded-xl overflow-hidden bg-white p-4 feature-item">
               <Carousel className="w-full max-w-7xl mx-auto">
                 <CarouselContent className="flex">
-                  {sensorCaseStudies.map((study, index) => <CarouselItem key={index} className="md:basis-1/3 flex-shrink-0">
+                  {sensorCaseStudies.map((study, index) => <CarouselItem key={study.title} className="md:basis-1/3 flex-shrink-0">
                       <Card className="border border-gray-100 shadow-md">
                         <CardContent className="p-0">
-                          <div className="w-full h-full">
-                            <img src={study.image} alt={study.title} className="w-full h-auto object-contain" />
+                            <div className="w-full h-full">
+                             <img src={study.image} alt={study.title} className="w-full h-auto object-contain" loading="lazy" decoding="async" />
                           </div>
                           <div className="p-4">
                             <h4 className="font-semibold text-lg">{study.title}</h4>
@@ -346,7 +346,7 @@ const Features = () => {
           
           <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8 mb-10 transition-all duration-300 hover:shadow-xl">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-              {stepFlowItems.map((item, index) => <HoverCard key={index}>
+              {stepFlowItems.map((item, index) => <HoverCard key={item.title}>
                   <HoverCardTrigger asChild>
                     <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 h-full cursor-pointer">
                       <div className="flex flex-col items-center text-center">

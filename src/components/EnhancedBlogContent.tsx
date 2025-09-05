@@ -47,7 +47,7 @@ const EnhancedBlogContent: React.FC<EnhancedBlogContentProps> = ({ content }) =>
         return (
           <ul key={index} className="list-disc list-inside mb-6 space-y-2">
             {section.items?.map((item, itemIndex) => (
-              <li key={itemIndex} className="text-gray-800 leading-relaxed">
+              <li key={`list-${itemIndex}-${String(item).slice(0,40)}`} className="text-gray-800 leading-relaxed">
                 {item}
               </li>
             ))}

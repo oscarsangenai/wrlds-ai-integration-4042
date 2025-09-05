@@ -70,8 +70,8 @@ const Careers = () => {
                         title: "Growth",
                         description: "Develop your skills in a rapidly expanding field with diverse challenges."
                       }
-                    ].map((benefit, i) => (
-                      <div key={i} className="bg-gray-50 p-6 rounded-lg border border-gray-100 h-full">
+                     ].map((benefit, i) => (
+                       <div key={benefit.title} className="bg-gray-50 p-6 rounded-lg border border-gray-100 h-full">
                         <h3 className="font-bold text-lg mb-2">{benefit.title}</h3>
                         <p className="text-gray-600">{benefit.description}</p>
                       </div>
@@ -86,6 +86,8 @@ const Careers = () => {
                           src={`${import.meta.env.BASE_URL || '/'}lovable-uploads/a9bb9110-964a-43b0-a5ab-7162140cd133.png`}
                           alt="Love Anderberg"
                           className="w-32 h-32 rounded-full mb-4 object-cover filter grayscale"
+                          loading="lazy"
+                          decoding="async"
                         />
                         <h3 className="text-xl font-bold text-gray-900">Love Anderberg</h3>
                         <p className="text-gray-600 mb-4">COO</p>

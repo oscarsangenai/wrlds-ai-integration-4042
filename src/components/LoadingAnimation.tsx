@@ -6,9 +6,10 @@ export const LoadingAnimation = () => {
   return (
     <div className="flex items-center justify-center">
       <div className="relative">
+        {/* Static decorative list; index-based is acceptable here */}
         {[0, 1, 2, 3].map((index) => (
           <motion.span
-            key={index}
+            key={`dot-${index}`}
             className="absolute inline-block w-4 h-4 bg-purple-500 rounded-full"
             animate={{
               scale: [1, 1.5, 1],

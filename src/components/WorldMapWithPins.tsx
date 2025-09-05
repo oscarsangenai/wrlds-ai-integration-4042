@@ -57,6 +57,8 @@ const WorldMapWithPins: React.FC = () => {
         src={networkWorldMap}
         alt="Network world map showing global connectivity"
         className="absolute inset-0 w-full h-full object-fill"
+        loading="lazy"
+        decoding="async"
       />
       
       {/* Overlay gradient for depth */}

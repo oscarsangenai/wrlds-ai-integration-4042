@@ -37,7 +37,7 @@ const ContactInfo = () => {
               linkedin: 'https://linkedin.com/in/judge4'
             }
           ].map((judge, index) => (
-            <div key={index} className="bg-white rounded-xl shadow-xl p-6 border border-gray-700 text-center">
+            <div key={judge.name} className="bg-white rounded-xl shadow-xl p-6 border border-gray-700 text-center">
               <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gray-200 flex items-center justify-center">
                 <span className="text-4xl text-gray-400">?</span>
               </div>
