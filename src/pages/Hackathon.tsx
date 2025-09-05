@@ -181,8 +181,8 @@ const Hackathon = () => {
                   title: 'Final Push & Judging',
                   summary: 'Last-minute efforts, final submissions, and results announcement'
                 }
-              ].map((week, index) => (
-                <Card key={index} className="rounded-2xl text-center">
+              ].map((week) => (
+                <Card key={week.week} className="rounded-2xl text-center">
                   <CardContent className="p-6">
                     <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
                       <Calendar className="h-6 w-6 text-primary" />
@@ -231,8 +231,8 @@ const Hackathon = () => {
                   range: '$500+',
                   perks: ['Advisory board consideration', 'Custom consultation session', 'Lifetime community membership']
                 }
-              ].map((tier, index) => (
-                <Card key={index} className="rounded-2xl text-center">
+              ].map((tier) => (
+                <Card key={tier.tier} className="rounded-2xl text-center">
                   <CardContent className="p-6">
                     <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-accent/10 flex items-center justify-center">
                       <Trophy className="h-6 w-6 text-accent" />
@@ -270,7 +270,7 @@ const Hackathon = () => {
                     'Livestream and virtual event integration',
                     '0% platform fee structure via optional tips'
                   ].map((feature, index) => (
-                    <div key={index} className="flex items-start gap-3">
+                    <div key={`feature-${index}`} className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
                       <span className="text-sm text-muted-foreground">{feature}</span>
                     </div>

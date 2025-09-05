@@ -265,6 +265,7 @@ const SidebarTrigger = React.forwardRef<
 
   return (
     <Button
+      type="button"
       ref={ref}
       data-sidebar="trigger"
       variant="ghost"
@@ -290,7 +291,7 @@ const SidebarRail = React.forwardRef<
   const { toggleSidebar } = useSidebar()
 
   return (
-    <button
+    <button type="button"
       ref={ref}
       data-sidebar="rail"
       aria-label="Toggle Sidebar"

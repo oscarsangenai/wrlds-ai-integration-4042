@@ -214,6 +214,7 @@ const OrgChart3D: React.FC = () => {
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <Button 
+            type="button"
             variant="outline" 
             onClick={handleExportPng} 
             className="bg-gradient-to-r from-purple-500/20 to-blue-500/20 backdrop-blur-sm border-white/30 rounded-2xl hover:from-purple-500/30 hover:to-blue-500/30 shadow-lg"
@@ -338,7 +339,7 @@ const OrgChart3D: React.FC = () => {
             )}
           </div>
           <div className="mt-4">
-            <Button onClick={() => setSelectedUnitId(null)} className="w-full">
+            <Button type="button" onClick={() => setSelectedUnitId(null)} className="w-full">
               Close
             </Button>
           </div>

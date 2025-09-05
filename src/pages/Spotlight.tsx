@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import PageLayout from '@/components/PageLayout';
 import SEO from '@/components/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,8 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Award, Users, Calendar, Star, Linkedin } from 'lucide-react';
 import { motion } from 'framer-motion';
-import AuroraNebula from '@/components/visuals/AuroraNebula';
-import ConstellationParticles from '@/components/visuals/ConstellationParticles';
+import { fmt } from '@/lib/dateUtils';
 
 interface MemberSpotlight {
   id: number;
@@ -311,14 +309,7 @@ const getUpdateColor = (type: string) => {
   }
 };
 
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
-  });
-};
+// Using imported fmt function from dateUtils
 
 const Spotlight = () => {
   return (
@@ -454,7 +445,7 @@ const Spotlight = () => {
                         <p className="text-lg text-primary font-medium mb-3">{member.title}</p>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
                           <Calendar className="h-4 w-4" />
-                          <span>Featured on {formatDate(member.date)}</span>
+                          <span>Featured on {fmt(member.date)}</span>
                         </div>
                       </div>
                       {member.linkedinUrl && (
@@ -476,23 +467,23 @@ const Spotlight = () => {
                       <div>
                         <h4 className="font-semibold mb-2">Roles & Responsibilities</h4>
                         <div className="flex flex-wrap gap-2">
-                          {member.roles.map((role, index) => (
-                            <Badge key={role} variant="secondary">
-                              {role}
-                            </Badge>
-                          ))}
+                           {member.roles.map((role) => (
+                             <Badge key={role} variant="secondary">
+                               {role}
+                             </Badge>
+                           ))}
                         </div>
                       </div>
 
                       <div>
                         <h4 className="font-semibold mb-2">Key Achievements</h4>
                         <ul className="space-y-1">
-                          {member.achievements.map((achievement, index) => (
-                            <li key={achievement} className="text-sm text-muted-foreground flex items-start gap-2">
-                              <Star className="h-3 w-3 mt-1 text-primary flex-shrink-0" />
-                              {achievement}
-                            </li>
-                          ))}
+                           {member.achievements.map((achievement) => (
+                             <li key={achievement} className="text-sm text-muted-foreground flex items-start gap-2">
+                               <Star className="h-3 w-3 mt-1 text-primary flex-shrink-0" />
+                               {achievement}
+                             </li>
+                           ))}
                         </ul>
                       </div>
                     </div>

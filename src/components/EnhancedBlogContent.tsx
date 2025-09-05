@@ -24,21 +24,21 @@ const EnhancedBlogContent: React.FC<EnhancedBlogContentProps> = ({ content }) =>
     switch (section.type) {
       case 'heading':
         return (
-          <h2 key={index} className="text-3xl font-bold mb-6 text-black border-b-2 border-black pb-2">
+          <h2 key={`heading-${index}`} className="text-3xl font-bold mb-6 text-black border-b-2 border-black pb-2">
             {section.content}
           </h2>
         );
       
       case 'subheading':
         return (
-          <h3 key={index} className="text-2xl font-semibold mb-4 text-black">
+          <h3 key={`subheading-${index}`} className="text-2xl font-semibold mb-4 text-black">
             {section.content}
           </h3>
         );
       
       case 'paragraph':
         return (
-          <p key={index} className="text-gray-800 mb-6 leading-relaxed text-lg">
+          <p key={`paragraph-${index}`} className="text-gray-800 mb-6 leading-relaxed text-lg">
             {section.content}
           </p>
         );
@@ -56,7 +56,7 @@ const EnhancedBlogContent: React.FC<EnhancedBlogContentProps> = ({ content }) =>
       
       case 'icon-list':
         return (
-          <div key={index} className="grid gap-4 mb-8">
+          <div key={`grid-${index}`} className="grid gap-4 mb-8">
             {section.items?.map((item, itemIndex) => {
               const icons = [Shield, Zap, Settings, Database];
               const IconComponent = icons[itemIndex % icons.length];
@@ -76,7 +76,7 @@ const EnhancedBlogContent: React.FC<EnhancedBlogContentProps> = ({ content }) =>
 
       case 'bibliography':
         return (
-          <div key={index} className="mb-8">
+          <div key={`steps-${index}`} className="mb-8">
             <ol className="list-none space-y-3">
               {section.items?.map((item, itemIndex) => (
                 <li key={itemIndex} className="text-gray-800 leading-relaxed text-sm bg-gray-50 p-3 rounded border-l-4 border-black">
@@ -89,7 +89,7 @@ const EnhancedBlogContent: React.FC<EnhancedBlogContentProps> = ({ content }) =>
       
       case 'stats':
         return (
-          <div key={index} className="grid md:grid-cols-3 gap-6 mb-8">
+          <div key={`stats-${index}`} className="grid md:grid-cols-3 gap-6 mb-8">
             {section.statsData?.map((stat, statIndex) => {
               const IconComponent = iconMap[stat.icon as keyof typeof iconMap] || TrendingUp;
               return (
@@ -113,7 +113,7 @@ const EnhancedBlogContent: React.FC<EnhancedBlogContentProps> = ({ content }) =>
         const colors = ['#000000', '#666666', '#999999', '#CCCCCC'];
         
         return (
-          <Card key={index} className="border-2 border-black mb-8">
+          <Card key={`card-${index}`} className="border-2 border-black mb-8">
             <CardContent className="p-6">
               <h4 className="text-xl font-semibold mb-4 text-black text-center">
                 {section.chartData.title}
@@ -153,7 +153,7 @@ const EnhancedBlogContent: React.FC<EnhancedBlogContentProps> = ({ content }) =>
       case 'table':
         if (!section.tableData) return null;
         return (
-          <Card key={index} className="border-2 border-black mb-8 overflow-hidden">
+          <Card key={`image-card-${index}`} className="border-2 border-black mb-8 overflow-hidden">
             <CardContent className="p-0">
               <table className="w-full">
                 <thead className="bg-black text-white">
@@ -183,7 +183,7 @@ const EnhancedBlogContent: React.FC<EnhancedBlogContentProps> = ({ content }) =>
       
       case 'quote':
         return (
-          <Card key={index} className="border-2 border-black bg-black text-white mb-8">
+          <Card key={`cta-card-${index}`} className="border-2 border-black bg-black text-white mb-8">
             <CardContent className="p-8 text-center">
               <blockquote className="text-xl italic font-medium">
                 "{section.content}"

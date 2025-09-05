@@ -10,12 +10,12 @@ import ConstellationParticles from '@/components/visuals/ConstellationParticles'
 import FireField from '@/components/FireField';
 import LightSweep from '@/components/visuals/LightSweep';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Clock, Users, Globe, BookOpen, Lightbulb, Share, Heart, Trophy, ArrowRight } from 'lucide-react';
+import { Users, Globe, BookOpen, Lightbulb, Share, Heart, ArrowRight } from 'lucide-react';
 
 const Index = () => {
   const shouldReduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
-  const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  // Removed unused countdown state
   const [animatedCounts, setAnimatedCounts] = useState({
     learners: 0,
     projects: 0,
@@ -23,28 +23,7 @@ const Index = () => {
     countries: 0
   });
 
-  // Hackathon countdown (Oct 15, 2025)
-  useEffect(() => {
-    const targetDate = new Date('2025-10-15T00:00:00Z').getTime();
-    
-    const updateCountdown = () => {
-      const now = new Date().getTime();
-      const difference = targetDate - now;
-      
-      if (difference > 0) {
-        setCountdown({
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((difference % (1000 * 60)) / 1000)
-        });
-      }
-    };
-
-    updateCountdown();
-    const interval = setInterval(updateCountdown, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  // Removed unused countdown effect
 
   // Animated counters
   useEffect(() => {
@@ -250,8 +229,8 @@ const Index = () => {
                 <h3 className="text-2xl font-semibold mb-4">{program.title}</h3>
                 <p className="text-muted-foreground mb-6">{program.description}</p>
                 <ul className="space-y-2">
-                  {program.features.map((feature) => (
-                    <li key={feature} className="flex items-start text-sm">
+                  {program.features.map((feature, index) => (
+                    <li key={`${program.title}-feature-${index}`} className="flex items-start text-sm">
                       <div className="w-1.5 h-1.5 bg-primary rounded-full mr-3 mt-2 flex-shrink-0"></div>
                       {feature}
                     </li>

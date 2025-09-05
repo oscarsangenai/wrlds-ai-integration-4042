@@ -217,6 +217,7 @@ function GraphContent() {
       {/* Export Button */}
       <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-overlay pointer-events-auto">
         <Button
+          type="button"
           onClick={handleExportPNG}
           variant="outline"
           size="sm"
@@ -275,7 +276,7 @@ function GraphContent() {
             )}
           </div>
           <div className="mt-4">
-            <Button onClick={() => setSelectedUnitId(null)} className="w-full">
+            <Button type="button" onClick={() => setSelectedUnitId(null)} className="w-full">
               Close
             </Button>
           </div>

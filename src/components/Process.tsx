@@ -107,7 +107,7 @@ const Process = () => {
           <div className="md:col-span-4 lg:col-span-3">
             <div className="sticky top-24 space-y-2">
               {processes.map((process) => (
-                <button
+                <button type="button"
                   key={process.id}
                   onClick={() => {
                     setActiveProcess(process.id);

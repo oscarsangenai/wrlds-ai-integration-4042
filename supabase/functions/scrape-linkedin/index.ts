@@ -59,7 +59,10 @@ serve(async (req) => {
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('Bright Data API error:', errorText)
+      // Guard console.error for production
+      if (Deno.env.get('DENO_ENV') !== 'production') {
+        console.error('Bright Data API error:', errorText)
+      }
       return new Response(
         JSON.stringify({ 
           error: 'Failed to scrape LinkedIn posts',
@@ -90,12 +93,15 @@ serve(async (req) => {
     )
 
   } catch (error) {
-    console.error('Error in scrape-linkedin function:', error)
+    // Guard console.error for production
+    if (Deno.env.get('DENO_ENV') !== 'production') {
+      console.error('Error in scrape-linkedin function:', error)
+    }
     
     return new Response(
       JSON.stringify({ 
         error: 'Internal server error',
-        details: error.message 
+        details: error instanceof Error ? error.message : 'Unknown error'
       }),
       { 
         status: 500, 
@@ -105,14 +111,14 @@ serve(async (req) => {
   }
 })
 
-function parseLinkedInPosts(data: any): LinkedInPost[] {
+function parseLinkedInPosts(data: unknown): LinkedInPost[] {
   const posts: LinkedInPost[] = []
   
   try {
     // Bright Data typically returns an array of collected data
     const collectData = Array.isArray(data) ? data : [data]
     
-    collectData.forEach((item: any, index: number) => {
+    collectData.forEach((item: unknown, index: number) => {
       if (item.text || item.content || item.post_text || item.description) {
         const content = item.text || item.content || item.post_text || item.description || ''
         
@@ -247,7 +253,10 @@ function parseLinkedInPosts(data: any): LinkedInPost[] {
     })
     
   } catch (parseError) {
-    console.error('Error parsing LinkedIn posts:', parseError)
+    // Guard console.error for production
+    if (Deno.env.get('DENO_ENV') !== 'production') {
+      console.error('Error parsing LinkedIn posts:', parseError)
+    }
   }
   
   return posts.slice(0, 15) // Increase limit to capture more posts

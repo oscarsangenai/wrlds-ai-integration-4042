@@ -227,8 +227,7 @@ const Projects = () => {
           
           {!isMobile && (
             <>
-              <button 
-                type="button"
+              <button type="button"
                 className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 rounded-full flex items-center justify-center text-gray-500 hover:bg-white z-30 shadow-md transition-all duration-300 hover:scale-110 touch-none" 
                 onClick={() => setActiveProject(prev => (prev - 1 + projects.length) % projects.length)}
                 aria-label="Previous project"
@@ -236,8 +235,7 @@ const Projects = () => {
                 <ChevronLeft className="w-5 h-5" />
               </button>
               
-              <button 
-                type="button"
+              <button type="button"
                 className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 rounded-full flex items-center justify-center text-gray-500 hover:bg-white z-30 shadow-md transition-all duration-300 hover:scale-110 touch-none" 
                 onClick={() => setActiveProject(prev => (prev + 1) % projects.length)}
                 aria-label="Next project"
@@ -249,9 +247,8 @@ const Projects = () => {
           
           <div className="absolute bottom-6 left-0 right-0 flex justify-center items-center space-x-3 z-30">
             {projects.map((_, idx) => (
-              <button 
-                type="button"
-                key={idx} 
+              <button type="button"
+                key={idx}
                 className={`w-3 h-3 rounded-full transition-all duration-300 touch-none ${activeProject === idx ? 'bg-gray-500 w-6' : 'bg-gray-200 hover:bg-gray-300'}`} 
                 onClick={() => setActiveProject(idx)}
                 aria-label={`Go to project ${idx + 1}`}

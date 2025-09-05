@@ -225,6 +225,7 @@ const InteractiveImage = ({ src, alt, className }: InteractiveImageProps) => {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
+              type="button"
               variant="secondary" 
               size="sm" 
               className="bg-white/80 backdrop-blur-sm shadow-md h-8 w-8 p-0"
@@ -240,6 +241,7 @@ const InteractiveImage = ({ src, alt, className }: InteractiveImageProps) => {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
+              type="button"
               variant="secondary" 
               size="sm" 
               className="bg-white/80 backdrop-blur-sm shadow-md h-8 w-8 p-0"
@@ -258,6 +260,7 @@ const InteractiveImage = ({ src, alt, className }: InteractiveImageProps) => {
         <Popover>
           <PopoverTrigger asChild>
             <Button
+              type="button"
               variant="ghost" 
               size="sm" 
               className="bg-white/60 backdrop-blur-sm h-8 w-8 p-0 rounded-full"

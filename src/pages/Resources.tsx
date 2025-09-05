@@ -1,17 +1,14 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import resourcesData from '@/data/resources.json';
 import PageLayout from '@/components/PageLayout';
 import SEO from '@/components/SEO';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { ExternalLink, Calendar, User, Search, Award, Linkedin, Users, Loader2 } from 'lucide-react';
-import { useToast } from "@/components/ui/use-toast";
-import { motion } from 'framer-motion';
-import AuroraNebula from '@/components/visuals/AuroraNebula';
-import ConstellationParticles from '@/components/visuals/ConstellationParticles';
+import { ExternalLink, Calendar, User, Search } from 'lucide-react';
+import { formatDateShort } from '@/lib/dateUtils';
 interface Resource {
   id: number;
   title: string;
@@ -27,9 +24,7 @@ interface Resource {
 // Load resources from JSON file
 const resources: Resource[] = resourcesData.resources;
 const Resources = () => {
-  const {
-    toast
-  } = useToast();
+  // Removed unused toast hook
   const [selectedTag, setSelectedTag] = useState<string>("All");
   const [selectedSector, setSelectedSector] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -95,17 +90,10 @@ const Resources = () => {
       filtered = filtered.filter(resource => resource.title.toLowerCase().includes(query) || resource.description.toLowerCase().includes(query) || resource.author.toLowerCase().includes(query));
     }
 
-    // Sort by date (newest first)
+    // Sort by date (newest first) using Date constructor for sorting
     return filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [selectedTag, selectedSector, searchQuery]);
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
+  // Using imported formatDateShort function from dateUtils
   const getTagColor = (tag: string) => {
     const tagColors: Record<string, string> = {
       'News/Article': 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300',
@@ -223,7 +211,7 @@ const Resources = () => {
                           <div className="flex items-center gap-2">
                             <Calendar className="h-4 w-4" />
                             <span className="font-medium">Date:</span>
-                            <span>{formatDate(resource.date)}</span>
+                            <span>{formatDateShort(resource.date)}</span>
                           </div>
                         </div>
 

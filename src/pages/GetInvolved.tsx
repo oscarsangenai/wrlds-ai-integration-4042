@@ -369,8 +369,8 @@ const GetInvolved = () => {
                       <CardContent>
                         <p className="text-muted-foreground mb-3">{role.description}</p>
                         <div className="flex flex-wrap gap-1">
-                          {role.skills.map((skill, index) => (
-                            <Badge key={index} variant="outline" className="text-xs">
+                          {role.skills.map((skill) => (
+                            <Badge key={skill} variant="outline" className="text-xs">
                               {skill}
                             </Badge>
                           ))}
@@ -422,7 +422,8 @@ const GetInvolved = () => {
                     }}
                   >
 
-                    <Button 
+                    <Button
+                      type="button"
                       onClick={handleFilloutRedirect}
                       className="w-full" 
                       size="lg"

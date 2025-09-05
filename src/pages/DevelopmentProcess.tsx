@@ -146,7 +146,7 @@ const DevelopmentProcess = () => {
                         <h3 className="text-xl font-bold mb-2 mt-3 md:mt-0">{process.title}</h3>
                         <p className="text-gray-600 mb-3 text-sm">{process.description}</p>
                         
-                        <button onClick={() => setActiveProcess(process.id)} className={cn("text-sm font-medium transition-colors", activeProcess === process.id ? "text-gray-700" : "text-gray-500 hover:text-gray-700")}>
+                        <button type="button" onClick={() => setActiveProcess(process.id)} className={cn("text-sm font-medium transition-colors", activeProcess === process.id ? "text-gray-700" : "text-gray-500 hover:text-gray-700")}>
                           {activeProcess === process.id ? "Currently Viewing" : "View Details"}
                         </button>
                       </div>

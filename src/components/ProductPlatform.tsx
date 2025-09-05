@@ -41,7 +41,7 @@ const ProductPlatform = () => {
                 { icon: <Database className="text-black w-4 h-4 sm:w-5 sm:h-5" />, text: "Local Storage" },
                 { icon: <Wifi className="text-black w-4 h-4 sm:w-5 sm:h-5" />, text: "Cellular Connection" }
               ].map((item, index) => (
-                <div key={index} className="bg-white rounded-lg p-3 sm:p-4 flex items-center">
+                <div key={`security-${index}`} className="bg-white rounded-lg p-3 sm:p-4 flex items-center">
                   <div className="mr-3 sm:mr-4 flex-shrink-0">{item.icon}</div>
                   <span className="text-gray-800 font-medium text-xs sm:text-sm">{item.text}</span>
                 </div>
@@ -97,7 +97,7 @@ const ProductPlatform = () => {
                 { icon: <Cloud className="w-4 h-4 sm:w-5 sm:h-5" />, name: "Cloud" },
                 { icon: <Code className="w-4 h-4 sm:w-5 sm:h-5" />, name: "Dev Tools" }
               ].map((item, index) => (
-                <div key={index} className="bg-white rounded-lg p-2 sm:p-3 text-center flex flex-col items-center justify-center">
+                <div key={`analytics-${index}`} className="bg-white rounded-lg p-2 sm:p-3 text-center flex flex-col items-center justify-center">
                   <div className="mb-1 sm:mb-2">{item.icon}</div>
                   <div className="text-[10px] sm:text-xs">{item.name}</div>
                 </div>
@@ -143,7 +143,7 @@ const ProductPlatform = () => {
                 { icon: <FileText className="text-black w-4 h-4 sm:w-5 sm:h-5" />, text: "Customized Reports" },
                 { icon: <Code className="text-black w-4 h-4 sm:w-5 sm:h-5" />, text: "Third-party Integration" }
               ].map((item, index) => (
-                <div key={index} className="bg-white rounded-lg p-3 sm:p-4 flex items-center">
+                <div key={`collaboration-${index}`} className="bg-white rounded-lg p-3 sm:p-4 flex items-center">
                   <div className="mr-3 sm:mr-4 flex-shrink-0">{item.icon}</div>
                   <span className="text-gray-800 font-medium text-xs sm:text-sm">{item.text}</span>
                 </div>
