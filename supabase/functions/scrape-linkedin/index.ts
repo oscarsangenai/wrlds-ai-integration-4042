@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { corsHeaders } from '../_shared/cors.ts'
+import { getCorsHeaders } from '../_shared/cors.ts'
 
 interface LinkedInPost {
   id: string;
@@ -14,6 +14,8 @@ interface LinkedInPost {
 }
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req.headers.get('origin') || undefined)
+  
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -111,6 +113,21 @@ serve(async (req) => {
   }
 })
 
+interface BrightDataItem {
+  text?: string;
+  content?: string;
+  post_text?: string;
+  description?: string;
+  hashtags?: string[];
+  url?: string;
+  post_url?: string;
+  link?: string;
+  author?: string;
+  date?: string;
+  published_date?: string;
+  created_date?: string;
+}
+
 function parseLinkedInPosts(data: unknown): LinkedInPost[] {
   const posts: LinkedInPost[] = []
   
@@ -118,9 +135,9 @@ function parseLinkedInPosts(data: unknown): LinkedInPost[] {
     // Bright Data typically returns an array of collected data
     const collectData = Array.isArray(data) ? data : [data]
     
-    collectData.forEach((item: unknown, index: number) => {
+    collectData.forEach((item: BrightDataItem, index: number) => {
       if (item.text || item.content || item.post_text || item.description) {
-        const content = item.text || item.content || item.post_text || item.description || ''
+        const content: string = item.text || item.content || item.post_text || item.description || ''
         
         // Enhanced patterns to catch more Member of the Week variations
         const memberOfWeekPatterns = [
@@ -144,8 +161,8 @@ function parseLinkedInPosts(data: unknown): LinkedInPost[] {
         const isMemberSpotlight = memberOfWeekPatterns.some(pattern => pattern.test(content))
         
         // Also check hashtags specifically
-        const hashtags = item.hashtags || extractHashtags(content)
-        const hasRelevantHashtags = hashtags && (
+        const hashtags: string[] = item.hashtags || extractHashtags(content)
+        const hasRelevantHashtags = hashtags.length > 0 && (
           hashtags.includes('memberoftheweek') ||
           hashtags.includes('membersspotlight') ||
           hashtags.includes('aipioneers') ||
@@ -170,11 +187,11 @@ function parseLinkedInPosts(data: unknown): LinkedInPost[] {
             /(?:@|mention\s+)([A-Z][a-z]+\s+[A-Z][a-z]+)/gi
           ]
           
-          let memberName = 'Community Member'
+          let memberName: string = 'Community Member'
           for (const pattern of namePatterns) {
             const nameMatch = content.match(pattern)
             if (nameMatch && nameMatch[1]) {
-              const extractedName = nameMatch[1].trim()
+              const extractedName: string = nameMatch[1].trim()
               // Validate name (avoid common false positives)
               if (!extractedName.match(/^(Gen|AI|Global|LinkedIn|Member|Week|Spotlight)$/i) && 
                   extractedName.split(' ').length >= 2 && 
@@ -197,7 +214,7 @@ function parseLinkedInPosts(data: unknown): LinkedInPost[] {
             /([A-Z][\w\s&,-]+?)\s+(?:at|@)\s+([A-Z][\w\s&,-]+)/gi
           ]
           
-          let memberTitle = 'Community Member'
+          let memberTitle: string = 'Community Member'
           for (const pattern of titlePatterns) {
             const titleMatch = content.match(pattern)
             if (titleMatch) {
@@ -211,7 +228,7 @@ function parseLinkedInPosts(data: unknown): LinkedInPost[] {
           }
           
           // Enhanced description extraction
-          let memberDescription = content
+          let memberDescription: string = content
           // Remove hashtags and clean up
           memberDescription = memberDescription.replace(/#[\w]+/g, '').trim()
           // Remove excessive whitespace
@@ -224,14 +241,14 @@ function parseLinkedInPosts(data: unknown): LinkedInPost[] {
           // Extract potential LinkedIn URL from content or use item URL
           const linkedinUrlMatch = content.match(/https:\/\/www\.linkedin\.com\/[^\s)]+/) ||
                                    content.match(/linkedin\.com\/[^\s)]+/)
-          const linkedinUrl = item.url || 
+          const linkedinUrl: string = item.url || 
                               item.post_url || 
                               item.link ||
-                              (linkedinUrlMatch ? 'https://' + linkedinUrlMatch[0].replace('https://', '') : null) ||
+                              (linkedinUrlMatch ? 'https://' + linkedinUrlMatch[0].replace('https://', '') : '') ||
                               'https://www.linkedin.com/company/gen-ai-global/posts/'
 
           // Extract date more reliably
-          const dateStr = item.date || 
+          const dateStr: string = item.date || 
                          item.published_date || 
                          item.created_date ||
                          extractDateFromText(content) ||

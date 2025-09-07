@@ -1,6 +1,5 @@
 
 import { useLocation, Link } from "react-router-dom";
-import { useEffect } from "react";
 import PageLayout from "@/components/PageLayout";
 
 const NotFound = () => {
