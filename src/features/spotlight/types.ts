@@ -28,3 +28,18 @@ export interface PaginationState {
   pageSize: number;
   totalPages: number;
 }
+
+export interface LinkedInScrapeResponse {
+  success: boolean;
+  posts: Array<{
+    id: string;
+    content: string;
+    author: string;
+    date: string; // ISO yyyy-mm-dd
+    type: 'member-spotlight' | 'general';
+    linkedinUrl: string;
+    memberName?: string;
+    memberTitle?: string;
+    memberDescription?: string;
+  }>;
+}

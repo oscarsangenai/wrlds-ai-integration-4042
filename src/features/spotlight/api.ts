@@ -1,4 +1,4 @@
-import { MemberSpotlight } from './types';
+import { MemberSpotlight, LinkedInScrapeResponse } from './types';
 import fallbackData from '@/data/memberSpotlights.json';
 
 // Data fetcher with fallback to embedded JSON
@@ -30,7 +30,7 @@ export const isLinkedInScraperEnabled = (): boolean => {
 };
 
 // Optional LinkedIn scraper client (feature-flagged)
-export const scrapeLinkedInProfile = async (profileUrl: string): Promise<any> => {
+export const scrapeLinkedInProfile = async (profileUrl: string): Promise<LinkedInScrapeResponse> => {
   if (!isLinkedInScraperEnabled()) {
     throw new Error('LinkedIn scraper is disabled');
   }

@@ -85,7 +85,7 @@ const PrivacyPolicy = () => {
               </p>
               
               <h2 className="text-2xl font-semibold mt-8 mb-4">10. Contact Us</h2>
-              <p className="text-gray-600 mb-4">If you have any questions about this Privacy Policy, please contact us at hello@wrlds.com</p>
+              <p className="text-gray-600 mb-4">If you have any questions about this Privacy Policy, please contact us at hello@genaiglobal.org</p>
               
             </div>
           </div>

@@ -75,7 +75,7 @@ const ContactForm = () => {
       if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
         toast({
           title: "Contact form temporarily unavailable",
-          description: "Please email us directly at hello@wrlds.com",
+          description: "Please email us directly at hello@genaiglobal.org",
           variant: "default"
         });
         setIsSubmitting(false);
@@ -221,7 +221,7 @@ const ContactForm = () => {
               </div>
               <h3 className="text-xl font-semibold mb-2">Email Us</h3>
               <p className="text-gray-600 mb-2">For general inquiries:</p>
-              <a href="mailto:hello@wrlds.com" className="text-blue-500 hover:underline">hello@wrlds.com</a>
+              <a href="mailto:hello@genaiglobal.org" className="text-blue-500 hover:underline">hello@genaiglobal.org</a>
               <p className="text-gray-600 mt-2 mb-2">
             </p>
             </div>
