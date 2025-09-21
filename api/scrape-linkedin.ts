@@ -6,7 +6,7 @@ export default async function handler(
 ) {
   // CORS handling
   const origin = req.headers.origin
-  const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'https://genaiglobal.org').split(',')
+  const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'https://genaiglobal.org,http://localhost:8080').split(',')
   const allowedOrigin = origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0]
   
   res.setHeader('Access-Control-Allow-Origin', allowedOrigin)
@@ -14,7 +14,7 @@ export default async function handler(
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
   
   if (req.method === 'OPTIONS') {
-    return res.status(200).end()
+    return res.status(204).end()
   }
   
   if (req.method !== 'POST') {
@@ -32,21 +32,35 @@ export default async function handler(
   }
   
   try {
-    const response = await fetch(`${scraperBaseUrl}/scrape-linkedin`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify(req.body),
-    })
+    const abortController = new AbortController();
+    const timeoutId = setTimeout(() => abortController.abort(), 10000);
     
-    if (!response.ok) {
-      throw new Error(`Scraper service error: ${response.status}`)
+    try {
+      const response = await fetch(`${scraperBaseUrl}/scrape-linkedin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify(req.body),
+        signal: abortController.signal,
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        throw { message: `Scraper service error: ${response.status}`, status: response.status };
+      }
+      
+      const data = await response.json();
+      res.status(200).json(data);
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      if (fetchError instanceof Error && fetchError.name === 'AbortError') {
+        throw { message: 'timeout', status: 408 };
+      }
+      throw fetchError;
     }
-    
-    const data = await response.json()
-    res.status(200).json(data)
   } catch (error) {
     console.error('LinkedIn scraper error:', error)
     res.status(500).json({ 

@@ -4,6 +4,10 @@ import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default tseslint.config(
   { ignores: ["dist", "node_modules"] },
@@ -16,7 +20,7 @@ export default tseslint.config(
       globals: globals.browser,
       parserOptions: {
         project: ["./tsconfig.app.json", "./tsconfig.node.json"],
-        tsconfigRootDir: import.meta.dirname || process.cwd(),
+        tsconfigRootDir: __dirname,
       },
     },
     plugins: { react, "react-hooks": reactHooks, "react-refresh": reactRefresh },

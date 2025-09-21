@@ -32,6 +32,34 @@ const ContactForm = () => {
   
   const { toast } = useToast();
   
+  // Check if EmailJS is configured
+  const emailEnabled = Boolean(EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY);
+  
+  if (!emailEnabled) {
+    return (
+      <section id="contact" className="bg-gradient-to-b from-white to-black text-white relative py-[25px]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-block mb-3 px-3 py-1 bg-white text-black rounded-full text-sm font-medium">
+              Get In Touch
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">
+              Contact Us Today
+            </h2>
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 max-w-md mx-auto">
+              <p className="text-gray-800 text-sm">
+                Email temporarily unavailable. Please contact us directly at{' '}
+                <a href="mailto:hello@genaiglobal.org" className="text-blue-600 hover:underline">
+                  hello@genaiglobal.org
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+  
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -204,7 +232,7 @@ const ContactForm = () => {
                       </FormControl>
                     </FormItem>} />
                 
-                <button type="submit" disabled={isSubmitting} className="w-full bg-black hover:bg-gray-800 text-white py-3 px-6 rounded-md transition-colors flex items-center justify-center disabled:opacity-70">
+                <button type="submit" disabled={isSubmitting || !emailEnabled} className="w-full bg-black hover:bg-gray-800 text-white py-3 px-6 rounded-md transition-colors flex items-center justify-center disabled:opacity-70">
                   {isSubmitting ? "Sending..." : <>
                       Send Message
                       <Send className="ml-2 h-4 w-4" />

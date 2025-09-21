@@ -1,123 +1,167 @@
-# Welcome to your Lovable project
+# WRLDS AI Integration Platform
 
-## Project info
+A modern React application built with TypeScript, Vite, and Tailwind CSS, featuring AI-powered sensor solutions and member spotlight functionality.
 
-**URL**: https://lovable.dev/projects/ec1d4f1e-2506-4da5-a91b-34afa90cceb6
+## Quick Start
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/ec1d4f1e-2506-4da5-a91b-34afa90cceb6) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/ec1d4f1e-2506-4da5-a91b-34afa90cceb6) and click on Share -> Publish.
-
-## Deployment & Base Path Configuration
-
-### Environment Variables
-Copy `.env.example` to `.env` and configure:
-- `BASE_URL`: Set to `/` for root deployment or `/subdirectory/` for subdirectory deployment
-
-### Build
 ```bash
+# Install dependencies
+npm ci
+
+# Start development server
+npm run dev
+
+# Build for production
 npm run build
-npm run preview  # Test production build locally
+
+# Preview production build
+npm run preview
 ```
 
-### Hosting Platforms
+## Environment Variables
 
-#### Netlify
-- Automatic deployment via `public/_redirects`
-- Security headers via `public/_headers`
+Create a `.env` file based on `.env.example`:
 
-#### Vercel
-- Automatic deployment via `public/vercel.json`
-- SPA fallback and security headers included
+```bash
+# Required for Supabase integration
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
-#### GitHub Pages
-- Enable Pages in repository settings
-- Use `public/404.html` for SPA routing
-- Set `BASE_URL` if deploying to subdirectory
+# Optional: EmailJS for contact form
+VITE_EMAILJS_PUBLIC_KEY=your_emailjs_public_key
+VITE_EMAILJS_SERVICE_ID=your_emailjs_service_id
+VITE_EMAILJS_TEMPLATE_ID=your_emailjs_template_id
 
-#### Cloudflare Pages
-- Automatic SPA fallback detection
-- Use `public/_headers` for security
+# Optional: LinkedIn scraping feature
+VITE_ENABLE_LINKEDIN=0
 
-### Base Path Configuration
-For subdirectory deployment:
-1. Set `BASE_URL=/your-subdirectory/` in environment
-2. Update `vite.config.ts` base path
-3. Ensure all asset paths are relative
+# Server-only (Vercel API)
+SCRAPER_BASE_URL=https://your-scraper-service.com
+BRIGHT_DATA_API_KEY=your_api_key
+ALLOWED_ORIGINS=https://genaiglobal.org,http://localhost:8080
+```
 
-## Troubleshooting
+## Development
 
-### Common Issues
-- **404 on refresh**: Ensure SPA fallback is configured for your hosting platform
-- **Assets not loading**: Check base path configuration
-- **Layout issues**: Verify CSS custom properties are loaded
+### Host Configuration
 
-### Performance
-- Fonts are preloaded for optimal LCP
-- Images should use responsive sizing
-- Tree-shaking enabled for optimal bundle size
+The development server uses `host: true` for IPv4/IPv6 compatibility. Override with:
+
+```bash
+HOST=0.0.0.0 npm run dev  # IPv4 only
+HOST=:: npm run dev       # IPv6 only
+```
+
+### Type Checking
+
+```bash
+npm run typecheck  # Check TypeScript without compilation
+```
+
+### Linting
+
+```bash
+npm run lint       # ESLint with zero-warning policy
+```
+
+### Dependency Auditing
+
+```bash
+npm run audit:unused  # Check for unused runtime dependencies
+```
+
+## Architecture
+
+### Module Organization
+
+Large modules have been split for maintainability:
+- **UI Components**: `src/components/ui/` (each <300 LOC)
+- **Features**: Domain-specific functionality in `src/features/`
+- **Data**: Static data split by domain in `src/data/`
+- **Pages**: Route components with extracted presentational components
+
+### Performance Features
+
+- **Bundle Optimization**: Manual chunks for React and vendor libs
+- **Tree Shaking**: Production builds drop console/debugger statements
+- **Image Optimization**: WebP conversion for images >1MB
+- **Lazy Loading**: Non-hero images load on demand
+- **Timeout Protection**: 10s timeouts on all fetch operations
 
 ### Security
-- CSP headers configured in deployment files
-- XSS protection enabled
-- Frame options set to DENY
 
-## I want to use a custom domain - is that possible?
+- **CSP Headers**: Comprehensive Content Security Policy
+- **CORS**: Allowlist-based origin validation
+- **Form Protection**: Honeypot and timing-based bot detection
+- **No Secrets in Bundle**: All sensitive data server-side only
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+## API Integration
+
+### LinkedIn Scraper (Optional)
+
+Enable with `VITE_ENABLE_LINKEDIN=1`. Requires server-side configuration:
+
+```bash
+SCRAPER_BASE_URL=https://your-scraper-service.com
+BRIGHT_DATA_API_KEY=your_api_key
+```
+
+### Error Handling
+
+All fetch operations include:
+- Timeout protection (10s)
+- Proper error typing with status codes
+- Retry logic (2 attempts for 5xx, none for 4xx)
+
+## Image Optimization
+
+### Development
+
+Images are automatically optimized during build:
+- PNGs >1MB converted to WebP
+- Responsive loading with `width`/`height` attributes
+- Lazy loading for non-critical images
+
+### CSP Checklist
+
+Current CSP allows:
+- ✅ Self-hosted assets
+- ✅ Google Fonts (fonts.googleapis.com, fonts.gstatic.com)
+- ✅ Google Analytics/Tag Manager
+- ✅ Supabase (*.supabase.co)
+- ✅ EmailJS (api.emailjs.com)
+- ✅ GPT Engineer (cdn.gpteng.co)
+- ✅ Silktide cookie consent (silktide.com)
+
+## Built-in Features
+
+- **Dark/Light Mode**: Theme persistence with next-themes
+- **Responsive Design**: Mobile-first Tailwind CSS
+- **Accessibility**: ARIA labels, focus management, keyboard navigation
+- **SEO**: Dynamic meta tags, sitemap, structured data
+- **Analytics**: Google Analytics integration
+- **Error Boundaries**: Graceful error handling
+- **Loading States**: Skeleton screens and spinners
+
+## Deployment
+
+### Vercel (Recommended)
+
+1. Connect repository to Vercel
+2. Set environment variables in dashboard
+3. Deploy automatically on push
+
+### Netlify
+
+1. Set build command: `npm run build`
+2. Set publish directory: `dist`
+3. Configure environment variables
+4. Deploy
+
+## Built-in Vite Variables
+
+Note: `import.meta.env.DEV` is available by default in Vite for development mode detection.
+
+## License
+
+Private - All rights reserved

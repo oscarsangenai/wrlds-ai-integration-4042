@@ -9,9 +9,9 @@ export const useMemberSpotlights = () => {
     staleTime: 10 * 60 * 1000, // 10 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes (formerly cacheTime)
     refetchOnWindowFocus: false,
-    retry: (failureCount, error) => {
-      // Don't retry on client errors, only network issues
-      if (error.message.includes('4')) return false;
+    retry: (failureCount, error: Error & { status?: number }) => {
+      const status = typeof error.status === 'number' ? error.status : undefined;
+      if (status && status >= 400 && status < 500) return false;
       return failureCount < 2;
     },
   });

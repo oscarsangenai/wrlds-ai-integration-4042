@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   return {
     base: env.BASE_URL || '/',
     server: { 
-      host: '::', 
+      host: true, // Use HOST=0.0.0.0 for IPv4
       port: 8080, 
       strictPort: true 
     },
@@ -32,6 +32,9 @@ export default defineConfig(({ mode }) => {
             vendor: ['react-router-dom', '@tanstack/react-query']
           }
         }
+      },
+      esbuild: {
+        drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : []
       }
     }
   };
