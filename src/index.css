@@ -6,6 +6,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CSS Variables for semantic theming */
+
 /* Mobile Stability - Global CSS Baseline */
 *,
 *::before,

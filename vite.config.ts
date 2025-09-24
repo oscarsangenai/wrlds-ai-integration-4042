@@ -23,18 +23,41 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       target: 'es2020',
-      sourcemap: mode !== 'production',
-      chunkSizeWarningLimit: 1500,
+      sourcemap: false,
+      cssCodeSplit: true,
+      chunkSizeWarningLimit: 500,
       rollupOptions: {
         output: {
-          manualChunks: {
-            react: ['react', 'react-dom'],
-            vendor: ['react-router-dom', '@tanstack/react-query']
+          manualChunks: (id) => {
+            // React core
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'react-vendor'
+            }
+            // Router
+            if (id.includes('react-router')) {
+              return 'router-vendor'
+            }
+            // UI libraries
+            if (id.includes('@radix-ui') || id.includes('framer-motion')) {
+              return 'ui-vendor'
+            }
+            // Charts and visualization
+            if (id.includes('recharts') || id.includes('dagre') || id.includes('@xyflow')) {
+              return 'charts-vendor'
+            }
+            // Date/utility libraries
+            if (id.includes('date-fns') || id.includes('zod') || id.includes('emailjs')) {
+              return 'utils-vendor'
+            }
+            // Other node_modules
+            if (id.includes('node_modules')) {
+              return 'vendor'
+            }
           }
         }
       },
       esbuild: {
-        drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : []
+        drop: mode === 'production' ? ['console', 'debugger'] : []
       }
     }
   };
