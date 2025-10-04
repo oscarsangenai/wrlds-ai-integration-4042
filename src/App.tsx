@@ -28,6 +28,11 @@ const PetProject = lazy(() => import('./pages/PetProject'));
 const SportRetailProject = lazy(() => import('./pages/SportRetailProject'));
 const WorkwearProject = lazy(() => import('./pages/WorkwearProject'));
 
+// Hidden registration pages - DO NOT ADD TO NAVIGATION
+const MemberApply = lazy(() => import('./pages/apply/MemberApply'));
+const VolunteerApply = lazy(() => import('./pages/apply/VolunteerApply'));
+
+
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
   return (
@@ -65,7 +70,13 @@ const AnimatedRoutes = () => {
           <Route path="/projects/pet" element={<TransitionRoute><PetProject /></TransitionRoute>} />
           <Route path="/projects/sport-retail" element={<TransitionRoute><SportRetailProject /></TransitionRoute>} />
           <Route path="/projects/workwear" element={<TransitionRoute><WorkwearProject /></TransitionRoute>} />
+          
+          {/* Hidden registration routes - accessible by direct URL only, not in site navigation */}
+          <Route path="/apply/member" element={<TransitionRoute><MemberApply /></TransitionRoute>} />
+          <Route path="/apply/volunteer" element={<TransitionRoute><VolunteerApply /></TransitionRoute>} />
+          
           <Route path="*" element={<TransitionRoute><NotFound /></TransitionRoute>} />
+
         </Routes>
       </Suspense>
     </AnimatePresence>
