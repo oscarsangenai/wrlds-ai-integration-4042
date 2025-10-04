@@ -123,6 +123,43 @@ const Navbar = () => {
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                 ))}
+                
+                {/* Apply dropdown */}
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-transparent text-[hsl(var(--primary-foreground))]">
+                    Apply
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent className="bg-background">
+                    <ul className="grid w-[200px] gap-3 p-4">
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to="/apply/member"
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none">General Member</div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              Join our community
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to="/apply/volunteer"
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none">Volunteer</div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              Help build our community
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
           </div>
@@ -159,6 +196,27 @@ const Navbar = () => {
               {item.label}
             </Link>
           ))}
+          
+          {/* Apply section */}
+          <div className="pt-2 border-t border-white/10">
+            <div className="px-3 py-1.5 text-xs font-semibold text-[hsl(var(--footer-foreground))]/60 uppercase tracking-wider">
+              Apply
+            </div>
+            <Link
+              to="/apply/member"
+              className="block px-3 py-1.5 rounded-md text-sm text-[hsl(var(--footer-foreground))] hover:text-[hsl(var(--accent))]"
+              onClick={() => { setIsMenuOpen(false); window.scrollTo(0,0); }}
+            >
+              General Member
+            </Link>
+            <Link
+              to="/apply/volunteer"
+              className="block px-3 py-1.5 rounded-md text-sm text-[hsl(var(--footer-foreground))] hover:text-[hsl(var(--accent))]"
+              onClick={() => { setIsMenuOpen(false); window.scrollTo(0,0); }}
+            >
+              Volunteer
+            </Link>
+          </div>
         </div>
       </div>
     </motion.nav>
