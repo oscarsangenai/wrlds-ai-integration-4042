@@ -14,6 +14,7 @@ interface SEOProps {
   category?: string;
   keywords?: string[];
   isBlogPost?: boolean;
+  noIndex?: boolean;
 }
 
 const SEO: React.FC<SEOProps> = ({
@@ -27,7 +28,8 @@ const SEO: React.FC<SEOProps> = ({
   author,
   category,
   keywords = ['Gen AI Global', 'responsible AI', 'AI community', 'education', 'research', 'volunteer'],
-  isBlogPost = false
+  isBlogPost = false,
+  noIndex = false
 }) => {
   const location = useLocation();
   const SITE_URL = import.meta.env.VITE_SITE_URL ?? window.location.origin;
@@ -196,7 +198,7 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="description" content={description} />
       <link rel="canonical" href={currentUrl} />
       <meta name="keywords" content={keywordString} />
-      <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+      <meta name="robots" content={noIndex ? "noindex, nofollow" : "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"} />
       
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={isBlogPost ? 'article' : type} />

@@ -23,18 +23,32 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       target: 'es2020',
-      sourcemap: mode !== 'production',
+      sourcemap: false,
+      cssCodeSplit: true,
       chunkSizeWarningLimit: 1500,
       rollupOptions: {
         output: {
-          manualChunks: {
-            react: ['react', 'react-dom'],
-            vendor: ['react-router-dom', '@tanstack/react-query']
+          manualChunks: (id) => {
+            if (id.includes('node_modules')) {
+              if (id.includes('react') || id.includes('react-dom')) {
+                return 'react';
+              }
+              if (id.includes('framer-motion')) {
+                return 'framer';
+              }
+              if (id.includes('@radix-ui') || id.includes('lucide-react')) {
+                return 'ui';
+              }
+              if (id.includes('react-router') || id.includes('@tanstack')) {
+                return 'vendor';
+              }
+              return 'vendor';
+            }
           }
         }
       },
       esbuild: {
-        drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : []
+        drop: mode === 'production' ? ['console', 'debugger'] : []
       }
     }
   };

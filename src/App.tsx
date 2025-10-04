@@ -21,6 +21,7 @@ const Hackathon = lazy(() => import('./pages/Hackathon'));
 const GetInvolved = lazy(() => import('./pages/GetInvolved'));
 const Placeholder = lazy(() => import('./pages/Placeholder'));
 const Careers = lazy(() => import('./pages/Careers'));
+const ApplicationConfirmation = lazy(() => import('./pages/ApplicationConfirmation'));
 const FireCatProject = lazy(() => import('./pages/FireCatProject'));
 const HockeyProject = lazy(() => import('./pages/HockeyProject'));
 const PetProject = lazy(() => import('./pages/PetProject'));
@@ -58,6 +59,7 @@ const AnimatedRoutes = () => {
           <Route path="/privacy-policy" element={<TransitionRoute><PrivacyPolicy /></TransitionRoute>} />
           <Route path="/terms-of-service" element={<TransitionRoute><Placeholder /></TransitionRoute>} />
           <Route path="/careers" element={<TransitionRoute><Careers /></TransitionRoute>} />
+          <Route path="/application-confirmation" element={<TransitionRoute><ApplicationConfirmation /></TransitionRoute>} />
           <Route path="/projects/firecat" element={<TransitionRoute><FireCatProject /></TransitionRoute>} />
           <Route path="/projects/hockey" element={<TransitionRoute><HockeyProject /></TransitionRoute>} />
           <Route path="/projects/pet" element={<TransitionRoute><PetProject /></TransitionRoute>} />

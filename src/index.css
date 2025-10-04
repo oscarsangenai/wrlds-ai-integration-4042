@@ -71,32 +71,32 @@ body {
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 10%;
+    --foreground: 0 0% 7%; /* #121212 from style guide */
 
     /* Layout spacing variables */
-    --header-h: 4rem; /* FIX: Add missing header height variable for hero centering */
+    --header-h: 4rem;
     --nav-h: 72px;
     --tabs-bottom: 120px;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
+    --card-foreground: 0 0% 7%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
+    --popover-foreground: 0 0% 7%;
 
-    /* Brand tokens (HSL) */
-    --brand-primary: 350 100% 23%; /* #750014 */
+    /* Brand tokens from style guide (HSL) */
+    --brand-primary: 270 100% 60%; /* Purple from button states */
     --brand-accent: 277 91% 64%; /* #B74EF7 */
 
     /* Semantic mapping */
     --primary: var(--brand-primary);
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 208 9% 58%; /* neutral */
-    --secondary-foreground: 0 0% 10%;
+    --secondary: 223 10% 53%; /* #7D8398 from style guide */
+    --secondary-foreground: 0 0% 100%;
 
     --muted: 0 0% 95%;
-    --muted-foreground: 0 0% 40%;
+    --muted-foreground: 223 10% 53%; /* #7D8398 */
 
     --accent: var(--brand-accent);
     --accent-foreground: 0 0% 100%;
@@ -106,11 +106,11 @@ body {
 
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 0 0% 50%;
+    --ring: 270 100% 60%;
 
     /* Additional semantic tokens */
-    --footer: 0 0% 0%;           /* #000000 */
-    --footer-foreground: 0 0% 100%; /* #FFFFFF */
+    --footer: 0 0% 0%;
+    --footer-foreground: 0 0% 100%;
 
     --radius: 0.5rem;
   }
@@ -148,8 +148,9 @@ body {
   }
 
   body {
-    @apply bg-white text-foreground font-space;
+    @apply bg-white text-foreground font-sans;
     overscroll-behavior-y: auto;
+    line-height: 1.5; /* 150% from style guide */
   }
 }
 
