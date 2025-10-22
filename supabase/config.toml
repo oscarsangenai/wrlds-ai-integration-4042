@@ -1,1 +1,4 @@
 project_id = "neqkxwfvxwusrtzexmgk"
+
+[functions.gen-ai-global-admissions-webhook]
+verify_jwt = false

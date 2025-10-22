@@ -31,6 +31,7 @@ const WorkwearProject = lazy(() => import('./pages/WorkwearProject'));
 // Hidden registration pages - DO NOT ADD TO NAVIGATION
 const MemberApply = lazy(() => import('./pages/apply/MemberApply'));
 const VolunteerApply = lazy(() => import('./pages/apply/VolunteerApply'));
+const FormSubmissions = lazy(() => import('./pages/FormSubmissions'));
 
 
 const App = () => {
@@ -74,6 +75,9 @@ const AnimatedRoutes = () => {
           {/* Hidden registration routes - accessible by direct URL only, not in site navigation */}
           <Route path="/apply/member" element={<TransitionRoute><MemberApply /></TransitionRoute>} />
           <Route path="/apply/volunteer" element={<TransitionRoute><VolunteerApply /></TransitionRoute>} />
+          
+          {/* Admin dashboard for form submissions */}
+          <Route path="/admin/form-submissions" element={<TransitionRoute><FormSubmissions /></TransitionRoute>} />
           
           <Route path="*" element={<TransitionRoute><NotFound /></TransitionRoute>} />
 

@@ -1,12 +1,205 @@
 # Registration Pages Documentation
 
-## Overview
+This document describes the hidden registration pages and the **Fillout webhook integration** for the Gen AI Global community.
 
-Two hidden registration pages for community member and volunteer applications:
-- `/apply/member` - General Member Application
-- `/apply/volunteer` - Volunteer Application
+## Pages Overview
 
-These pages are **intentionally hidden from site navigation** and only accessible via direct URL.
+### 1. General Member Application (`/apply/member`)
+- Full registration form for general members
+- Includes fields for expertise, LinkedIn, MIT course details
+- File upload support for certificates
+- Success screen with confirmation message
+
+### 2. Volunteer Application (`/apply/volunteer`)
+- Extended form for volunteer applicants
+- Additional fields for volunteer roles and availability
+- CV/Resume upload functionality
+- Success screen with next steps
+
+### 3. Form Submissions Dashboard (`/admin/form-submissions`)
+- Admin dashboard to view all form submissions
+- Real-time statistics and submission list
+- Webhook testing and configuration
+- Direct link to Supabase database
+
+---
+
+## Fillout Webhook Integration
+
+### Overview
+The application includes a complete backend integration for receiving form submissions from Fillout via webhook. All submissions are stored in Supabase with file uploads automatically processed.
+
+### Webhook Endpoint
+```
+POST https://neqkxwfvxwusrtzexmgk.supabase.co/functions/v1/gen-ai-global-admissions-webhook
+```
+
+### Database Schema
+
+**Table:** `gen_ai_global_admissions`
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | BIGSERIAL | Primary key |
+| submission_id | TEXT | Unique Fillout submission ID |
+| full_name | TEXT | Applicant's full name |
+| email | TEXT | Email address |
+| linkedin_profile_url | TEXT | LinkedIn profile URL |
+| primary_field_of_expertise | TEXT | Primary expertise area |
+| taken_mit_course | BOOLEAN | Whether took MIT course |
+| certificate_url | TEXT | Certificate file URL (Supabase storage) |
+| willing_to_volunteer | BOOLEAN | Volunteering willingness |
+| motivation | TEXT | Why join Gen AI Global |
+| ai_tools_experience | TEXT | AI tools experience level |
+| coding_experience | TEXT | Coding experience level |
+| interested_in_volunteering | BOOLEAN | Interest in volunteering |
+| cv_resume_url | TEXT | CV/Resume file URL (Supabase storage) |
+| discord_sharing_consent | BOOLEAN | Discord sharing consent |
+| admission_understanding | BOOLEAN | Admission understanding |
+| submitted_at | TIMESTAMP | Submission timestamp |
+| timezone | TEXT | User's timezone |
+| time_to_complete | DECIMAL | Form completion time (seconds) |
+| raw_payload | JSONB | Complete raw webhook payload |
+| created_at | TIMESTAMP | Record creation time |
+
+### Storage Buckets
+
+1. **form_uploads** - Stores all form file uploads (certificates, CVs)
+2. **certificates** - Dedicated storage for MIT course certificates
+
+Both buckets are configured with public read access and proper RLS policies.
+
+### Fillout Form Configuration
+
+**Form ID:** `wHKtxCmdQDus`
+
+#### Field Mapping
+The webhook automatically maps Fillout field IDs to database columns:
+
+| Fillout Field | Field ID | Database Column |
+|---------------|----------|-----------------|
+| Full Name | 3Q4U | full_name |
+| Email | 5ZLy | email |
+| LinkedIn Profile URL | sxJB | linkedin_profile_url |
+| Primary Field / Area of Expertise | 8xUt | primary_field_of_expertise |
+| Have you taken an MIT course | 3gMg | taken_mit_course |
+| Certificate upload | cRVh | certificate_url |
+| Are you willing to volunteer | 6vhu | willing_to_volunteer |
+| Why do you want to join | eK9t | motivation |
+| AI tools experience | ioT3 | ai_tools_experience |
+| Coding experience | jEcc | coding_experience |
+| Interested in volunteering | bAiY | interested_in_volunteering |
+| CV/Resume upload | sZNa | cv_resume_url |
+| Discord consent | vCg5 | discord_sharing_consent |
+
+### File Upload Processing
+
+When files are submitted through Fillout:
+1. Webhook receives file URLs from Fillout
+2. Files are downloaded from Fillout servers
+3. Files are uploaded to Supabase storage buckets
+4. Supabase storage URLs are stored in database
+5. Original Fillout URLs are not stored
+
+**Supported formats:** PDF, JPG, PNG  
+**Max file size:** 15MB per file
+
+### Setting Up the Webhook in Fillout
+
+1. Log in to your Fillout account
+2. Open form `wHKtxCmdQDus` (Gen A.I Global-General Admissions Form)
+3. Go to Settings → Integrations → Webhooks
+4. Add new webhook with URL:
+   ```
+   https://neqkxwfvxwusrtzexmgk.supabase.co/functions/v1/gen-ai-global-admissions-webhook
+   ```
+5. Set trigger to "On form submission"
+6. Test the webhook using the dashboard test button
+
+### Environment Variables
+
+The following secrets are configured in Supabase:
+
+- `FILLOUT_API_KEY` - Your Fillout API key (for schema fetching)
+- `SUPABASE_URL` - Supabase project URL (auto-configured)
+- `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key (auto-configured)
+
+### Testing the Integration
+
+1. Navigate to `/admin/form-submissions`
+2. Click "Test Webhook" button
+3. Check that test submission appears in the table
+4. Verify in Supabase database that record was created
+
+### Webhook Response Format
+
+**Success Response:**
+```json
+{
+  "success": true,
+  "message": "Submission received and stored",
+  "submissionId": "c6c5158c-9aa0-4bb0-baca-e58d8ddbf21c"
+}
+```
+
+**Error Response:**
+```json
+{
+  "success": false,
+  "error": "Error message here"
+}
+```
+
+### Features
+
+- ✅ Automatic duplicate detection (by submission_id)
+- ✅ File upload processing and storage
+- ✅ Boolean value conversion ("Yes"/"No" → true/false)
+- ✅ Raw payload storage for debugging
+- ✅ Comprehensive error logging
+- ✅ Admin dashboard with statistics
+- ✅ Real-time submission monitoring
+
+### Security
+
+- Webhook endpoint is public (no JWT required) but validates all input
+- Row Level Security (RLS) enabled on database table
+- Storage buckets have proper access policies
+- All file uploads are validated and sanitized
+- Raw payloads stored for audit trail
+
+### Monitoring & Logs
+
+View webhook logs in Supabase Dashboard:
+1. Go to [Edge Functions](https://supabase.com/dashboard/project/neqkxwfvxwusrtzexmgk/functions/gen-ai-global-admissions-webhook/logs)
+2. Monitor real-time webhook calls
+3. Debug any failed submissions
+4. View detailed error messages
+
+---
+
+## Legacy Registration Forms (Internal Use)
+
+The `/apply/member` and `/apply/volunteer` pages remain available for internal testing and development purposes.
+
+### Features
+- Full validation using react-hook-form + Zod schemas
+- File upload with progress tracking (max 15MB)
+- Multi-file queue with delete/cancel
+- Success screens matching brand style
+- Accessible form controls (ARIA labels, keyboard navigation)
+
+### API Endpoints (Development Only)
+
+#### POST /api/upload
+- Accepts multipart/form-data
+- Returns mock file upload response
+
+#### POST /api/apply
+- Accepts JSON application data
+- Returns mock success response
+
+**Note:** These legacy endpoints are replaced by the Fillout webhook for production use.
 
 ## Features
 
