@@ -14,7 +14,78 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      gen_ai_global_admissions: {
+        Row: {
+          admission_understanding: boolean | null
+          ai_tools_experience: string | null
+          certificate_url: string | null
+          coding_experience: string | null
+          created_at: string | null
+          cv_resume_url: string | null
+          discord_sharing_consent: boolean | null
+          email: string | null
+          full_name: string | null
+          id: number
+          interested_in_volunteering: boolean | null
+          linkedin_profile_url: string | null
+          motivation: string | null
+          primary_field_of_expertise: string | null
+          raw_payload: Json | null
+          submission_id: string
+          submitted_at: string | null
+          taken_mit_course: boolean | null
+          time_to_complete: number | null
+          timezone: string | null
+          willing_to_volunteer: boolean | null
+        }
+        Insert: {
+          admission_understanding?: boolean | null
+          ai_tools_experience?: string | null
+          certificate_url?: string | null
+          coding_experience?: string | null
+          created_at?: string | null
+          cv_resume_url?: string | null
+          discord_sharing_consent?: boolean | null
+          email?: string | null
+          full_name?: string | null
+          id?: number
+          interested_in_volunteering?: boolean | null
+          linkedin_profile_url?: string | null
+          motivation?: string | null
+          primary_field_of_expertise?: string | null
+          raw_payload?: Json | null
+          submission_id: string
+          submitted_at?: string | null
+          taken_mit_course?: boolean | null
+          time_to_complete?: number | null
+          timezone?: string | null
+          willing_to_volunteer?: boolean | null
+        }
+        Update: {
+          admission_understanding?: boolean | null
+          ai_tools_experience?: string | null
+          certificate_url?: string | null
+          coding_experience?: string | null
+          created_at?: string | null
+          cv_resume_url?: string | null
+          discord_sharing_consent?: boolean | null
+          email?: string | null
+          full_name?: string | null
+          id?: number
+          interested_in_volunteering?: boolean | null
+          linkedin_profile_url?: string | null
+          motivation?: string | null
+          primary_field_of_expertise?: string | null
+          raw_payload?: Json | null
+          submission_id?: string
+          submitted_at?: string | null
+          taken_mit_course?: boolean | null
+          time_to_complete?: number | null
+          timezone?: string | null
+          willing_to_volunteer?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
