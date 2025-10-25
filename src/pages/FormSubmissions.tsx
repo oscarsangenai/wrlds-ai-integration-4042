@@ -29,7 +29,7 @@ const FormSubmissions = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const webhookUrl = `https://neqkxwfvxwusrtzexmgk.supabase.co/functions/v1/gen-ai-global-admissions-webhook`;
-  const importUrl = `https://neqkxwfvxwusrtzexmgk.supabase.co/functions/v1/import-fillout-csv`;
+  const importUrl = `https://neqkxwfvxwusrtzexmgk.supabase.co/functions/v1/import-gen-ai-global-admissions`;
 
   const fetchSubmissions = async () => {
     setLoading(true);
