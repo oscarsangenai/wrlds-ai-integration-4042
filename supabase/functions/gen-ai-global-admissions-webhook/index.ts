@@ -6,52 +6,48 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-interface FilloutField {
+interface FilloutQuestion {
+  id: string;
+  name: string;
+  type: string;
   value: any;
-  selectedOptionIds?: string[];
 }
 
 interface FilloutPayload {
-  mode: string;
-  sessionToken: string;
-  stepId: string;
-  model: {
-    [key: string]: {
-      [fieldId: string]: FilloutField;
-    };
-  };
-  globals: {
+  formId: string;
+  formName: string;
+  submission: {
     submissionId: string;
-  };
-  metadata: {
-    timeToCompleteInSeconds: number;
-    timezone: string;
+    submissionTime: string;
+    lastUpdatedAt: string;
+    questions: FilloutQuestion[];
   };
 }
 
 // Field ID to database column mapping
 const FIELD_MAPPING: Record<string, string> = {
   "3Q4U": "full_name",
-  "3gMg": "taken_mit_course",
   "5ZLy": "email",
-  "6vhu": "willing_to_volunteer",
-  "8xUt": "primary_field_of_expertise",
-  "bAiY": "interested_in_volunteering",
-  "cRVh": "certificate_url",
-  "eK9t": "motivation",
-  "ioT3": "ai_tools_experience",
-  "jEcc": "coding_experience",
-  "sZNa": "cv_resume_url",
   "sxJB": "linkedin_profile_url",
-  "vCg5": "discord_sharing_consent",
+  "eK9t": "primary_field_of_expertise",
+  "rqeQ": "taken_mit_course",
+  "cRVh": "certificate_url",
+  "3gMg": "willing_to_volunteer",
+  "8xUt": "motivation",
+  "jEcc": "ai_tools_experience",
+  "ioT3": "coding_experience",
+  "vCg5": "interested_in_volunteering",
+  "sZNa": "cv_resume_url",
+  "bAiY": "discord_sharing_consent",
+  "6vhu": "admission_understanding",
 };
 
 const parseBoolean = (value: any): boolean => {
   if (value === null || value === undefined) return false;
   if (typeof value === "boolean") return value;
   if (typeof value === "string") {
-    const lower = value.toLowerCase();
-    return lower === "yes" || lower === "true";
+    const lower = value.toLowerCase().trim();
+    return lower === "yes" || lower === "true" || lower === "currently enrolled in cohort";
   }
   return false;
 };
@@ -107,15 +103,15 @@ const downloadAndUploadFile = async (
 };
 
 const processFileField = async (
-  field: FilloutField,
+  value: any,
   supabase: any
 ): Promise<string | null> => {
-  if (!field.value || !Array.isArray(field.value) || field.value.length === 0) {
+  if (!value || !Array.isArray(value) || value.length === 0) {
     return null;
   }
   
   // Handle multiple files - upload first file
-  const file = field.value[0];
+  const file = value[0];
   if (file.url && file.filename) {
     return await downloadAndUploadFile(file.url, file.filename, supabase);
   }
@@ -138,7 +134,7 @@ const handler = async (req: Request): Promise<Response> => {
     const payload: FilloutPayload = await req.json();
     console.log("Received webhook payload:", JSON.stringify(payload, null, 2));
 
-    const submissionId = payload.globals?.submissionId;
+    const submissionId = payload.submission?.submissionId;
     if (!submissionId) {
       throw new Error("Missing submission ID");
     }
@@ -165,29 +161,30 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Extract form data from the model
-    const stepData = payload.model["7Fdi"] || {};
+    // Create a map of question ID to value
+    const questionsMap = new Map(
+      payload.submission.questions.map(q => [q.id, q.value])
+    );
     
     // Initialize data object
     const formData: any = {
       submission_id: submissionId,
       raw_payload: payload,
-      timezone: payload.metadata?.timezone || null,
-      time_to_complete: payload.metadata?.timeToCompleteInSeconds || null,
+      submitted_at: payload.submission.submissionTime || new Date().toISOString(),
     };
 
     // Process each field
     for (const [fieldId, dbColumn] of Object.entries(FIELD_MAPPING)) {
-      const field = stepData[fieldId];
+      const value = questionsMap.get(fieldId);
       
-      if (!field) {
+      if (value === undefined || value === null) {
         formData[dbColumn] = null;
         continue;
       }
 
       // Handle file uploads
       if (fieldId === "cRVh" || fieldId === "sZNa") {
-        formData[dbColumn] = await processFileField(field, supabase);
+        formData[dbColumn] = await processFileField(value, supabase);
         continue;
       }
 
@@ -196,20 +193,15 @@ const handler = async (req: Request): Promise<Response> => {
         dbColumn === "taken_mit_course" ||
         dbColumn === "willing_to_volunteer" ||
         dbColumn === "interested_in_volunteering" ||
-        dbColumn === "discord_sharing_consent"
+        dbColumn === "discord_sharing_consent" ||
+        dbColumn === "admission_understanding"
       ) {
-        formData[dbColumn] = parseBoolean(field.value);
-        continue;
-      }
-
-      // Handle text fields with selectedOptionIds (use the value, not IDs)
-      if (field.selectedOptionIds && field.selectedOptionIds.length > 0) {
-        formData[dbColumn] = field.value || null;
+        formData[dbColumn] = parseBoolean(value);
         continue;
       }
 
       // Default: store the value as-is
-      formData[dbColumn] = field.value || null;
+      formData[dbColumn] = value;
     }
 
     console.log("Processed form data:", JSON.stringify(formData, null, 2));
