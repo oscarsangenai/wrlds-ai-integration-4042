@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Copy, RefreshCw, ExternalLink } from "lucide-react";
+import { Copy, RefreshCw, ExternalLink, Upload } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -25,8 +25,11 @@ const FormSubmissions = () => {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const webhookUrl = `https://neqkxwfvxwusrtzexmgk.supabase.co/functions/v1/gen-ai-global-admissions-webhook`;
+  const importUrl = `https://neqkxwfvxwusrtzexmgk.supabase.co/functions/v1/import-fillout-csv`;
 
   const fetchSubmissions = async () => {
     setLoading(true);
@@ -118,6 +121,45 @@ const FormSubmissions = () => {
     }
   };
 
+  const handleCSVUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.csv')) {
+      toast.error("Please upload a CSV file");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch(importUrl, {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        toast.success(
+          `Import completed! Success: ${result.stats.success}, Skipped: ${result.stats.skipped}, Errors: ${result.stats.errors}`
+        );
+        fetchSubmissions();
+      } else {
+        toast.error(`Import failed: ${result.error || "Unknown error"}`);
+      }
+    } catch (error: any) {
+      toast.error(`Import failed: ${error.message}`);
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString();
   };
@@ -182,6 +224,47 @@ const FormSubmissions = () => {
                   Open Supabase
                 </Button>
               </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* CSV Import */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Import CSV from Fillout</CardTitle>
+            <CardDescription>
+              Upload a CSV export from Fillout to bulk import submissions
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".csv"
+                  onChange={handleCSVUpload}
+                  className="hidden"
+                  id="csv-upload"
+                />
+                <label htmlFor="csv-upload">
+                  <Button
+                    variant="outline"
+                    disabled={uploading}
+                    onClick={() => fileInputRef.current?.click()}
+                    asChild
+                  >
+                    <span>
+                      <Upload className="h-4 w-4 mr-2" />
+                      {uploading ? "Importing..." : "Upload CSV File"}
+                    </span>
+                  </Button>
+                </label>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                The CSV should be exported from Fillout with all form responses. 
+                Duplicate submissions (based on Submission ID) will be automatically skipped.
+              </p>
             </div>
           </CardContent>
         </Card>
