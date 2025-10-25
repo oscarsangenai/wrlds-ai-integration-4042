@@ -146,13 +146,12 @@ const handler = async (req: Request): Promise<Response> => {
       try {
         const columns = parseCSVLine(lines[i]);
         
-        if (columns.length < 20) {
-          console.log(`Skipping row ${i + 1}: insufficient columns`);
-          skipCount++;
-          continue;
+        // Pad columns with empty strings if insufficient
+        while (columns.length < 23) {
+          columns.push("");
         }
 
-        const submissionId = columns[0].trim();
+        const submissionId = columns[0]?.trim();
         if (!submissionId) {
           console.log(`Skipping row ${i + 1}: no submission ID`);
           skipCount++;
