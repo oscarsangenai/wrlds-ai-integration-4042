@@ -6,56 +6,37 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// CSV column index to database column mapping
-const COLUMN_MAPPING: Record<number, string> = {
-  0: "submission_id",           // "Submission ID"
-  5: "full_name",               // "Full Name"
-  6: "email",                   // "Email"
-  7: "linkedin_profile_url",    // "LinkedIn Profile URL"
-  8: "primary_field_of_expertise", // "Primary Field / Area of Expertise"
-  9: "taken_mit_course",        // "Have you taken an MIT course"
-  10: "certificate_url",        // "If yes, please submit your certificate"
-  11: "willing_to_volunteer",   // "Are you willing to volunteer?"
-  13: "motivation",             // "Why do you want to join"
-  14: "ai_tools_experience",    // AI tools experience
-  15: "coding_experience",      // coding experience
-  16: "interested_in_volunteering", // interested in volunteering
-  17: "cv_resume_url",          // CV/Resume URL
-  18: "discord_sharing_consent", // discord sharing consent
-  19: "admission_understanding", // admission understanding
-};
-
-const parseBoolean = (value: string): boolean => {
-  if (!value || value.trim() === "") return false;
-  const lower = value.toLowerCase().trim();
-  return lower === "yes" || lower === "true" || lower === "currently enrolled in cohort";
-};
-
-const parseCSVLine = (line: string): string[] => {
-  const result: string[] = [];
-  let current = "";
-  let inQuotes = false;
-  
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    
-    if (char === '"') {
-      if (inQuotes && line[i + 1] === '"') {
-        current += '"';
-        i++;
-      } else {
-        inQuotes = !inQuotes;
-      }
-    } else if (char === ',' && !inQuotes) {
-      result.push(current);
-      current = "";
-    } else {
-      current += char;
-    }
+const parseBoolean = (value: any): boolean => {
+  if (value === true || value === false) return value;
+  if (!value || (typeof value === 'string' && value.trim() === "")) return false;
+  if (typeof value === 'string') {
+    const lower = value.toLowerCase().trim();
+    return lower === "yes" || lower === "true" || lower === "currently enrolled in cohort";
   }
+  return false;
+};
+
+const extractPrimaryField = (fieldObj: any): string | null => {
+  if (!fieldObj) return null;
+  if (typeof fieldObj === 'string') return fieldObj;
   
-  result.push(current);
-  return result;
+  // Handle nested structure: { " Area of Expertise...": { "UI, etc.)": "value" } }
+  try {
+    const keys = Object.keys(fieldObj);
+    if (keys.length > 0) {
+      const firstValue = fieldObj[keys[0]];
+      if (typeof firstValue === 'string') return firstValue;
+      if (typeof firstValue === 'object') {
+        const nestedKeys = Object.keys(firstValue);
+        if (nestedKeys.length > 0) {
+          return firstValue[nestedKeys[0]];
+        }
+      }
+    }
+  } catch (e) {
+    console.error('Error extracting primary field:', e);
+  }
+  return null;
 };
 
 const downloadAndUploadFile = async (
@@ -126,113 +107,137 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    const csvContent = await file.text();
-    const lines = csvContent.split("\n").filter(line => line.trim() !== "");
+    const fileContent = await file.text();
+    let submissions: any[];
     
-    if (lines.length < 2) {
+    try {
+      submissions = JSON.parse(fileContent);
+      if (!Array.isArray(submissions)) {
+        throw new Error("JSON must be an array");
+      }
+    } catch (parseError: any) {
       return new Response(
-        JSON.stringify({ success: false, error: "CSV file is empty or invalid" }),
+        JSON.stringify({ success: false, error: `Invalid JSON: ${parseError.message}` }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+    
+    if (submissions.length === 0) {
+      return new Response(
+        JSON.stringify({ success: false, error: "JSON array is empty" }),
         { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
-    const records = [];
+    console.log(`Processing ${submissions.length} submissions from JSON`);
+
     const errors = [];
     let successCount = 0;
     let skipCount = 0;
 
-    // Skip header row, process data rows
-    for (let i = 1; i < lines.length; i++) {
+    for (let i = 0; i < submissions.length; i++) {
+      const submission = submissions[i];
+      const rowNum = i + 1;
+      
       try {
-        const columns = parseCSVLine(lines[i]);
+        const submissionId = submission["Submission ID"]?.trim();
         
-        if (columns.length < 20) {
-          console.log(`Skipping row ${i + 1}: insufficient columns (has ${columns.length}, needs 20)`);
-          console.log(`Row content: ${lines[i].substring(0, 200)}...`);
-          console.log(`Parsed columns:`, JSON.stringify(columns.slice(0, 10)));
+        if (!submissionId) {
+          console.log(`Skipping row ${rowNum}: no submission ID`);
+          console.log(`Submission data:`, JSON.stringify(submission).substring(0, 200));
           skipCount++;
           continue;
         }
 
-        const submissionId = columns[0]?.trim();
-        if (!submissionId) {
-          console.log(`Skipping row ${i + 1}: no submission ID`);
-          console.log(`Row content: ${lines[i].substring(0, 200)}...`);
-          skipCount++;
-          continue;
-        }
+        console.log(`Processing row ${rowNum}: ${submissionId}`);
 
         // Check for duplicate
         const { data: existing } = await supabase
           .from("gen_ai_global_admissions")
           .select("id")
           .eq("submission_id", submissionId)
-          .single();
+          .maybeSingle();
 
         if (existing) {
-          console.log(`Skipping row ${i + 1}: duplicate submission ID ${submissionId}`);
+          console.log(`Skipping row ${rowNum}: duplicate submission ID ${submissionId}`);
           skipCount++;
           continue;
         }
 
-        const formData: any = {
+        // Extract primary field from nested structure
+        const primaryField = extractPrimaryField(submission["Primary Field "]);
+
+        const insertData: any = {
           submission_id: submissionId,
-          full_name: columns[5]?.trim() || null,
-          email: columns[6]?.trim() || null,
-          linkedin_profile_url: columns[7]?.trim() || null,
-          primary_field_of_expertise: columns[8]?.trim() || null,
-          taken_mit_course: parseBoolean(columns[9]),
-          willing_to_volunteer: parseBoolean(columns[11]),
-          motivation: columns[13]?.trim() || null,
-          ai_tools_experience: columns[14]?.trim() || null,
-          coding_experience: columns[15]?.trim() || null,
-          interested_in_volunteering: parseBoolean(columns[16]),
-          discord_sharing_consent: parseBoolean(columns[18]),
-          admission_understanding: parseBoolean(columns[19]),
+          full_name: submission["Full Name"]?.trim() || null,
+          email: submission["Email"]?.trim() || null,
+          linkedin_profile_url: submission["LinkedIn Profile URL"]?.trim() || null,
+          primary_field_of_expertise: primaryField,
+          taken_mit_course: parseBoolean(
+            submission['Have you taken an MIT course with Dr. Sanchez or another M.I.T P.E Instructor (e.g., "AI for Digital Professionals")?']
+          ),
+          willing_to_volunteer: parseBoolean(
+            submission["Since you're not part of the MIT Professional Education course, the only way to join is by volunteering in one of our teams for 30 minutes a day. Are you willing to volunteer?"]
+          ),
+          motivation: submission["Why do you want to join Gen AI Global?Briefly share your motivation and what you hope to contribute or gain."]?.trim() || null,
+          ai_tools_experience: submission["What is your current level of experience with AI tools (e.g., ChatGPT, Claude, Midjourney, etc.)?"]?.trim() || null,
+          coding_experience: submission["What is your current level of coding or technical experience?"]?.trim() || null,
+          interested_in_volunteering: parseBoolean(
+            submission["Would you be interested in volunteering to help run or support one of our teams? (e.g., Cybersecurity, Agile & Community Ops, Agent Dev Instructor, I.T, etc.)"]
+          ),
+          discord_sharing_consent: parseBoolean(
+            submission["I understand that my information may be shared in the Gen AI Global Discord community as part of our open-source structure."]
+          ),
+          admission_understanding: parseBoolean(
+            submission["I understand that not all applicants are accepted and that final admission is based on a curated review process."]
+          ),
           submitted_at: new Date().toISOString(),
         };
 
         // Handle certificate URL
-        const certificateUrl = columns[10]?.trim();
+        const certificateUrl = submission["If yes, please submit your certificate"]?.trim();
         if (certificateUrl && certificateUrl.startsWith("http")) {
+          console.log(`Downloading certificate for ${submissionId}...`);
           const fileName = certificateUrl.split("/").pop() || "certificate.pdf";
-          formData.certificate_url = await downloadAndUploadFile(certificateUrl, fileName, supabase);
+          insertData.certificate_url = await downloadAndUploadFile(certificateUrl, fileName, supabase);
         } else {
-          formData.certificate_url = null;
+          insertData.certificate_url = null;
         }
 
         // Handle CV/Resume URL
-        const cvUrl = columns[17]?.trim();
+        const cvUrl = submission["To apply for a Gen AI Global volunteer role, or general member position, please upload your CV or resume (PDF preferred)"]?.trim();
         if (cvUrl && cvUrl.startsWith("http")) {
+          console.log(`Downloading CV/resume for ${submissionId}...`);
           const fileName = cvUrl.split("/").pop() || "resume.pdf";
-          formData.cv_resume_url = await downloadAndUploadFile(cvUrl, fileName, supabase);
+          insertData.cv_resume_url = await downloadAndUploadFile(cvUrl, fileName, supabase);
         } else {
-          formData.cv_resume_url = null;
+          insertData.cv_resume_url = null;
         }
 
         const { error } = await supabase
           .from("gen_ai_global_admissions")
-          .insert(formData);
+          .insert(insertData);
 
         if (error) {
-          console.error(`Error inserting row ${i + 1}:`, error);
-          errors.push({ row: i + 1, error: error.message });
+          console.error(`Error inserting row ${rowNum} (${submissionId}):`, error);
+          errors.push({ row: rowNum, submissionId, error: error.message });
         } else {
           successCount++;
-          console.log(`Successfully imported row ${i + 1}: ${submissionId}`);
+          console.log(`✓ Successfully imported row ${rowNum}: ${submissionId}`);
         }
       } catch (error: any) {
-        console.error(`Error processing row ${i + 1}:`, error);
-        errors.push({ row: i + 1, error: error.message });
+        console.error(`Error processing row ${rowNum}:`, error);
+        console.error(`Submission data:`, JSON.stringify(submission).substring(0, 300));
+        errors.push({ row: rowNum, error: error.message, submission: submission["Submission ID"] });
       }
     }
 
     return new Response(
       JSON.stringify({
         success: true,
-        message: "CSV import completed",
+        message: "JSON import completed",
         stats: {
-          total: lines.length - 1,
+          total: submissions.length,
           success: successCount,
           skipped: skipCount,
           errors: errors.length,
@@ -245,7 +250,7 @@ const handler = async (req: Request): Promise<Response> => {
       }
     );
   } catch (error: any) {
-    console.error("Error processing CSV import:", error);
+    console.error("Error processing import:", error);
     return new Response(
       JSON.stringify({
         success: false,
