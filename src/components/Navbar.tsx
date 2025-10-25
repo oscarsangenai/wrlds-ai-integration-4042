@@ -97,7 +97,7 @@ const Navbar = () => {
           
           {/* Desktop Navigation */}
           <div className="hidden md:block">
-            <NavigationMenu className="text-[hsl(var(--primary-foreground))]">
+            <NavigationMenu className="z-50 text-[hsl(var(--primary-foreground))]">
               <NavigationMenuList>
                  {[
                    { to: '/', label: 'Home' },
@@ -129,7 +129,7 @@ const Navbar = () => {
                   <NavigationMenuTrigger className="bg-transparent hover:bg-transparent text-[hsl(var(--primary-foreground))]">
                     Apply
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="bg-background">
+                  <NavigationMenuContent className="z-50 bg-background">
                     <ul className="grid w-[200px] gap-3 p-4">
                       <li>
                         <NavigationMenuLink asChild>
