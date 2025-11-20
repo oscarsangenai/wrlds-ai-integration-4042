@@ -129,7 +129,7 @@ const Navbar = () => {
                   <NavigationMenuTrigger className="bg-transparent hover:bg-transparent text-[hsl(var(--primary-foreground))]">
                     Apply
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="z-50 bg-background">
+                  <NavigationMenuContent className="bg-white dark:bg-background border border-border/20">
                     <ul className="grid w-[200px] gap-3 p-4">
                       <li>
                         <NavigationMenuLink asChild>
