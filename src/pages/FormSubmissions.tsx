@@ -51,8 +51,9 @@ const FormSubmissions = () => {
       if (error) throw error;
 
       setSubmissions(data || []);
-    } catch (error: any) {
-      console.error("Error fetching submissions:", error);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error fetching submissions:", errorMessage);
       toast.error("Failed to load submissions");
     } finally {
       setLoading(false);
@@ -116,8 +117,9 @@ const FormSubmissions = () => {
       } else {
         toast.error(`Test failed: ${result.error || "Unknown error"}`);
       }
-    } catch (error: any) {
-      toast.error(`Test failed: ${error.message}`);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      toast.error(`Test failed: ${errorMessage}`);
     }
   };
 
@@ -150,8 +152,9 @@ const FormSubmissions = () => {
       } else {
         toast.error(`Import failed: ${result.error || "Unknown error"}`);
       }
-    } catch (error: any) {
-      toast.error(`Import failed: ${error.message}`);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      toast.error(`Import failed: ${errorMessage}`);
     } finally {
       setUploading(false);
       if (fileInputRef.current) {

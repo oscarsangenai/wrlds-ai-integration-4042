@@ -18,28 +18,32 @@ npm run build
 npm run preview
 ```
 
-## Environment Variables
+## Environment Setup
 
-Create a `.env` file based on `.env.example`:
+**Required:** Copy `.env.example` to `.env` and configure:
 
 ```bash
 # Required for Supabase integration
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your_anon_key_here
 
 # Optional: EmailJS for contact form
-VITE_EMAILJS_PUBLIC_KEY=your_emailjs_public_key
-VITE_EMAILJS_SERVICE_ID=your_emailjs_service_id
-VITE_EMAILJS_TEMPLATE_ID=your_emailjs_template_id
+VITE_EMAILJS_PUBLIC_KEY=
+VITE_EMAILJS_SERVICE_ID=
+VITE_EMAILJS_TEMPLATE_ID=
 
-# Optional: LinkedIn scraping feature
+# Optional: External services
+VITE_GIVEBUTTER_URL=
+VITE_DISCORD_URL=
 VITE_ENABLE_LINKEDIN=0
 
-# Server-only (Vercel API)
-SCRAPER_BASE_URL=https://your-scraper-service.com
-BRIGHT_DATA_API_KEY=your_api_key
+# Server-only (Vercel API - not exposed to client)
+SCRAPER_BASE_URL=
+BRIGHT_DATA_API_KEY=
 ALLOWED_ORIGINS=https://genaiglobal.org,http://localhost:8080
 ```
+
+**Note:** The app will fail-fast with descriptive errors if required Supabase variables are missing.
 
 ## Development
 

@@ -2,13 +2,32 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-const SUPABASE_URL = "https://neqkxwfvxwusrtzexmgk.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lcWt4d2Z2eHd1c3J0emV4bWdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExMjk2NjgsImV4cCI6MjA3NjcwNTY2OH0.2YDCP-Zs_pnhYbHNckscSv9N0N0P3ifpuESa_0xPsdc";
+// Environment-driven Supabase configuration
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+// Fail-fast validation for required environment variables
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  const missingVars = [];
+  if (!SUPABASE_URL) missingVars.push('VITE_SUPABASE_URL');
+  if (!SUPABASE_ANON_KEY) missingVars.push('VITE_SUPABASE_ANON_KEY');
+  
+  const errorMessage = `Missing required environment variables: ${missingVars.join(', ')}. Please add them to your .env file. See .env.example for reference.`;
+  
+  if (import.meta.env.DEV) {
+    // In development, throw immediately to fail fast
+    throw new Error(errorMessage);
+  } else {
+    // In production, log error and prevent misconfigured client
+    console.error(errorMessage);
+    throw new Error('Supabase configuration error. Please contact support.');
+  }
+}
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     storage: localStorage,
     persistSession: true,
