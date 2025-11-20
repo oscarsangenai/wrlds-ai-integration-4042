@@ -10,7 +10,7 @@ interface FilloutQuestion {
   id: string;
   name: string;
   type: string;
-  value: any;
+  value: unknown;
 }
 
 interface FilloutPayload {
@@ -42,7 +42,7 @@ const FIELD_MAPPING: Record<string, string> = {
   "6vhu": "admission_understanding",
 };
 
-const parseBoolean = (value: any): boolean => {
+const parseBoolean = (value: unknown): boolean => {
   if (value === null || value === undefined) return false;
   if (typeof value === "boolean") return value;
   if (typeof value === "string") {
@@ -55,7 +55,7 @@ const parseBoolean = (value: any): boolean => {
 const downloadAndUploadFile = async (
   fileUrl: string,
   fileName: string,
-  supabase: any
+  supabase: ReturnType<typeof createClient>
 ): Promise<string | null> => {
   try {
     console.log(`Downloading file from: ${fileUrl}`);
@@ -77,7 +77,7 @@ const downloadAndUploadFile = async (
     const uniqueFileName = `${timestamp}_${sanitizedFileName}`;
     
     // Upload to Supabase storage
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from("form_uploads")
       .upload(uniqueFileName, fileData, {
         contentType: blob.type,
@@ -103,15 +103,15 @@ const downloadAndUploadFile = async (
 };
 
 const processFileField = async (
-  value: any,
-  supabase: any
+  value: unknown,
+  supabase: ReturnType<typeof createClient>
 ): Promise<string | null> => {
   if (!value || !Array.isArray(value) || value.length === 0) {
     return null;
   }
   
   // Handle multiple files - upload first file
-  const file = value[0];
+  const file = value[0] as { url?: string; filename?: string };
   if (file.url && file.filename) {
     return await downloadAndUploadFile(file.url, file.filename, supabase);
   }
@@ -167,7 +167,7 @@ const handler = async (req: Request): Promise<Response> => {
     );
     
     // Initialize data object
-    const formData: any = {
+    const formData: Record<string, unknown> = {
       submission_id: submissionId,
       raw_payload: payload,
       submitted_at: payload.submission.submissionTime || new Date().toISOString(),
@@ -231,12 +231,13 @@ const handler = async (req: Request): Promise<Response> => {
         headers: { "Content-Type": "application/json", ...corsHeaders },
       }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error processing webhook:", error);
+    const errorMessage = error instanceof Error ? error.message : "Internal server error";
     return new Response(
       JSON.stringify({
         success: false,
-        error: error.message || "Internal server error",
+        error: errorMessage,
       }),
       {
         status: 500,

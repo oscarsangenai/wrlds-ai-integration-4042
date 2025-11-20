@@ -6,7 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const parseBoolean = (value: any): boolean => {
+const parseBoolean = (value: unknown): boolean => {
   if (value === true || value === false) return value;
   if (!value || (typeof value === 'string' && value.trim() === "")) return false;
   if (typeof value === 'string') {
@@ -16,20 +16,22 @@ const parseBoolean = (value: any): boolean => {
   return false;
 };
 
-const extractPrimaryField = (fieldObj: any): string | null => {
+const extractPrimaryField = (fieldObj: unknown): string | null => {
   if (!fieldObj) return null;
   if (typeof fieldObj === 'string') return fieldObj;
   
   // Handle nested structure: { " Area of Expertise...": { "UI, etc.)": "value" } }
   try {
-    const keys = Object.keys(fieldObj);
-    if (keys.length > 0) {
-      const firstValue = fieldObj[keys[0]];
-      if (typeof firstValue === 'string') return firstValue;
-      if (typeof firstValue === 'object') {
-        const nestedKeys = Object.keys(firstValue);
-        if (nestedKeys.length > 0) {
-          return firstValue[nestedKeys[0]];
+    if (typeof fieldObj === 'object' && fieldObj !== null) {
+      const keys = Object.keys(fieldObj);
+      if (keys.length > 0) {
+        const firstValue = (fieldObj as Record<string, unknown>)[keys[0]];
+        if (typeof firstValue === 'string') return firstValue;
+        if (typeof firstValue === 'object' && firstValue !== null) {
+          const nestedKeys = Object.keys(firstValue);
+          if (nestedKeys.length > 0) {
+            return (firstValue as Record<string, string>)[nestedKeys[0]];
+          }
         }
       }
     }
@@ -42,7 +44,7 @@ const extractPrimaryField = (fieldObj: any): string | null => {
 const downloadAndUploadFile = async (
   fileUrl: string,
   fileName: string,
-  supabase: any
+  supabase: ReturnType<typeof createClient>
 ): Promise<string | null> => {
   try {
     if (!fileUrl || fileUrl.trim() === "") return null;
@@ -63,7 +65,7 @@ const downloadAndUploadFile = async (
     const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, "_");
     const uniqueFileName = `${timestamp}_${sanitizedFileName}`;
     
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from("form_uploads")
       .upload(uniqueFileName, fileData, {
         contentType: blob.type,
@@ -108,16 +110,26 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     const fileContent = await file.text();
-    let submissions: any[];
+    
+    interface SubmissionData {
+      "Submission ID"?: string;
+      "Full Name"?: string;
+      "Email"?: string;
+      [key: string]: unknown;
+    }
+    
+    let submissions: SubmissionData[];
     
     try {
-      submissions = JSON.parse(fileContent);
-      if (!Array.isArray(submissions)) {
+      const parsed = JSON.parse(fileContent);
+      if (!Array.isArray(parsed)) {
         throw new Error("JSON must be an array");
       }
-    } catch (parseError: any) {
+      submissions = parsed;
+    } catch (parseError) {
+      const errorMessage = parseError instanceof Error ? parseError.message : "Invalid JSON format";
       return new Response(
-        JSON.stringify({ success: false, error: `Invalid JSON: ${parseError.message}` }),
+        JSON.stringify({ success: false, error: `Invalid JSON: ${errorMessage}` }),
         { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
@@ -131,7 +143,14 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log(`Processing ${submissions.length} submissions from JSON`);
 
-    const errors = [];
+    interface ImportError {
+      row: number;
+      error: string;
+      submissionId?: string;
+      submission?: string;
+    }
+
+    const errors: ImportError[] = [];
     let successCount = 0;
     let skipCount = 0;
 
@@ -167,11 +186,11 @@ const handler = async (req: Request): Promise<Response> => {
         // Extract primary field from nested structure
         const primaryField = extractPrimaryField(submission["Primary Field "]);
 
-        const insertData: any = {
+        const insertData: Record<string, unknown> = {
           submission_id: submissionId,
-          full_name: submission["Full Name"]?.trim() || null,
-          email: submission["Email"]?.trim() || null,
-          linkedin_profile_url: submission["LinkedIn Profile URL"]?.trim() || null,
+          full_name: submission["Full Name"]?.toString().trim() || null,
+          email: submission["Email"]?.toString().trim() || null,
+          linkedin_profile_url: submission["LinkedIn Profile URL"]?.toString().trim() || null,
           primary_field_of_expertise: primaryField,
           taken_mit_course: parseBoolean(
             submission['Have you taken an MIT course with Dr. Sanchez or another M.I.T P.E Instructor (e.g., "AI for Digital Professionals")?']
@@ -179,9 +198,9 @@ const handler = async (req: Request): Promise<Response> => {
           willing_to_volunteer: parseBoolean(
             submission["Since you're not part of the MIT Professional Education course, the only way to join is by volunteering in one of our teams for 30 minutes a day. Are you willing to volunteer?"]
           ),
-          motivation: submission["Why do you want to join Gen AI Global?Briefly share your motivation and what you hope to contribute or gain."]?.trim() || null,
-          ai_tools_experience: submission["What is your current level of experience with AI tools (e.g., ChatGPT, Claude, Midjourney, etc.)?"]?.trim() || null,
-          coding_experience: submission["What is your current level of coding or technical experience?"]?.trim() || null,
+          motivation: submission["Why do you want to join Gen AI Global?Briefly share your motivation and what you hope to contribute or gain."]?.toString().trim() || null,
+          ai_tools_experience: submission["What is your current level of experience with AI tools (e.g., ChatGPT, Claude, Midjourney, etc.)?"]?.toString().trim() || null,
+          coding_experience: submission["What is your current level of coding or technical experience?"]?.toString().trim() || null,
           interested_in_volunteering: parseBoolean(
             submission["Would you be interested in volunteering to help run or support one of our teams? (e.g., Cybersecurity, Agile & Community Ops, Agent Dev Instructor, I.T, etc.)"]
           ),
@@ -195,7 +214,7 @@ const handler = async (req: Request): Promise<Response> => {
         };
 
         // Handle certificate URL
-        const certificateUrl = submission["If yes, please submit your certificate"]?.trim();
+        const certificateUrl = submission["If yes, please submit your certificate"]?.toString().trim();
         if (certificateUrl && certificateUrl.startsWith("http")) {
           console.log(`Downloading certificate for ${submissionId}...`);
           const fileName = certificateUrl.split("/").pop() || "certificate.pdf";
@@ -205,7 +224,7 @@ const handler = async (req: Request): Promise<Response> => {
         }
 
         // Handle CV/Resume URL
-        const cvUrl = submission["To apply for a Gen AI Global volunteer role, or general member position, please upload your CV or resume (PDF preferred)"]?.trim();
+        const cvUrl = submission["To apply for a Gen AI Global volunteer role, or general member position, please upload your CV or resume (PDF preferred)"]?.toString().trim();
         if (cvUrl && cvUrl.startsWith("http")) {
           console.log(`Downloading CV/resume for ${submissionId}...`);
           const fileName = cvUrl.split("/").pop() || "resume.pdf";
@@ -225,10 +244,11 @@ const handler = async (req: Request): Promise<Response> => {
           successCount++;
           console.log(`✓ Successfully imported row ${rowNum}: ${submissionId}`);
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error(`Error processing row ${rowNum}:`, error);
         console.error(`Submission data:`, JSON.stringify(submission).substring(0, 300));
-        errors.push({ row: rowNum, error: error.message, submission: submission["Submission ID"] });
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        errors.push({ row: rowNum, error: errorMessage, submission: submission["Submission ID"]?.toString() });
       }
     }
 
@@ -249,12 +269,13 @@ const handler = async (req: Request): Promise<Response> => {
         headers: { "Content-Type": "application/json", ...corsHeaders },
       }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error processing import:", error);
+    const errorMessage = error instanceof Error ? error.message : "Internal server error";
     return new Response(
       JSON.stringify({
         success: false,
-        error: error.message || "Internal server error",
+        error: errorMessage,
       }),
       {
         status: 500,
