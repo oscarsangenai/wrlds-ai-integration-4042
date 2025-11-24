@@ -20,7 +20,7 @@ npm run preview
 
 ## Environment Setup
 
-**Required:** Copy `.env.example` to `.env` and configure:
+**Required:** Copy `.env.example` to `.env` and configure with your real credentials:
 
 ```bash
 # Required for Supabase integration
@@ -43,7 +43,11 @@ BRIGHT_DATA_API_KEY=
 ALLOWED_ORIGINS=https://genaiglobal.org,http://localhost:8080
 ```
 
-**Note:** The app will fail-fast with descriptive errors if required Supabase variables are missing.
+**Security Note:** 
+- The `.env` file contains placeholder values by default for security
+- Replace placeholders with your real credentials before running locally
+- Never commit real credentials to version control
+- The app will fail-fast with descriptive errors if required variables are missing or invalid
 
 ## Development
 
