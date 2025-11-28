@@ -1,11 +1,9 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Session } from "@supabase/supabase-js";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Copy, RefreshCw, ExternalLink, Upload, LogOut } from "lucide-react";
+import { Copy, RefreshCw, ExternalLink, Upload } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -24,42 +22,11 @@ interface Submission {
 }
 
 const FormSubmissions = () => {
-  const navigate = useNavigate();
-  const [session, setSession] = useState<Session | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [authLoading, setAuthLoading] = useState(true);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
   const [uploading, setUploading] = useState(false);
-  const [signedUrls, setSignedUrls] = useState<Record<string, string>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Check authentication and admin role
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setAuthLoading(false);
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  // Check admin role
-  useEffect(() => {
-    if (session?.user) {
-      supabase.rpc('has_role', { 
-        _user_id: session.user.id, 
-        _role: 'admin' 
-      }).then(({ data }) => {
-        setIsAdmin(data || false);
-      });
-    }
-  }, [session]);
 
   const webhookUrl = `https://neqkxwfvxwusrtzexmgk.supabase.co/functions/v1/gen-ai-global-admissions-webhook`;
   const importUrl = `https://neqkxwfvxwusrtzexmgk.supabase.co/functions/v1/import-gen-ai-global-admissions`;
@@ -84,30 +51,6 @@ const FormSubmissions = () => {
       if (error) throw error;
 
       setSubmissions(data || []);
-
-      // Generate signed URLs for files
-      if (data && data.length > 0) {
-        const urls: Record<string, string> = {};
-        for (const submission of data) {
-          if (submission.cv_resume_url) {
-            const { data: urlData } = await supabase.storage
-              .from("form_uploads")
-              .createSignedUrl(submission.cv_resume_url, 3600);
-            if (urlData?.signedUrl) {
-              urls[`cv_${submission.id}`] = urlData.signedUrl;
-            }
-          }
-          if (submission.certificate_url) {
-            const { data: urlData } = await supabase.storage
-              .from("form_uploads")
-              .createSignedUrl(submission.certificate_url, 3600);
-            if (urlData?.signedUrl) {
-              urls[`cert_${submission.id}`] = urlData.signedUrl;
-            }
-          }
-        }
-        setSignedUrls(urls);
-      }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       console.error("Error fetching submissions:", errorMessage);
@@ -118,10 +61,8 @@ const FormSubmissions = () => {
   };
 
   useEffect(() => {
-    if (isAdmin) {
-      fetchSubmissions();
-    }
-  }, [isAdmin]);
+    fetchSubmissions();
+  }, []);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -182,11 +123,6 @@ const FormSubmissions = () => {
     }
   };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate("/auth");
-  };
-
   const handleCSVUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -231,53 +167,14 @@ const FormSubmissions = () => {
     return new Date(dateString).toLocaleString();
   };
 
-  // Show loading while checking auth
-  if (authLoading) {
-    return (
-      <PageLayout>
-        <div className="container mx-auto px-4 py-20 text-center">
-          <p>Loading...</p>
-        </div>
-      </PageLayout>
-    );
-  }
-
-  // Redirect if not authenticated
-  if (!session) {
-    navigate("/auth");
-    return null;
-  }
-
-  // Show access denied if not admin
-  if (!isAdmin) {
-    return (
-      <PageLayout>
-        <div className="container mx-auto px-4 py-20 text-center">
-          <h1 className="text-3xl font-bold mb-4">Access Denied</h1>
-          <p className="mb-6">You need admin privileges to access this page.</p>
-          <Button onClick={handleLogout}>
-            <LogOut className="mr-2 h-4 w-4" />
-            Logout
-          </Button>
-        </div>
-      </PageLayout>
-    );
-  }
-
   return (
     <PageLayout>
       <div className="container mx-auto py-8 px-4 max-w-7xl">
-        <div className="mb-8 flex justify-between items-center">
-          <div>
-            <h1 className="text-4xl font-bold mb-2">Form Submissions Dashboard</h1>
-            <p className="text-muted-foreground">
-              Manage and monitor Gen AI Global admission form submissions
-            </p>
-          </div>
-          <Button onClick={handleLogout} variant="outline">
-            <LogOut className="mr-2 h-4 w-4" />
-            Logout
-          </Button>
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2">Form Submissions Dashboard</h1>
+          <p className="text-muted-foreground">
+            Manage and monitor Gen AI Global admission form submissions
+          </p>
         </div>
 
         {/* Webhook Configuration */}

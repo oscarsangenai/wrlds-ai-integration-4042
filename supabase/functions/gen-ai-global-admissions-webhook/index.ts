@@ -89,9 +89,13 @@ const downloadAndUploadFile = async (
       return null;
     }
     
-    // Return the file path (not URL) - admin dashboard will generate signed URLs
-    console.log(`File uploaded successfully: ${uniqueFileName}`);
-    return uniqueFileName;
+    // Get public URL
+    const { data: publicUrlData } = supabase.storage
+      .from("form_uploads")
+      .getPublicUrl(uniqueFileName);
+    
+    console.log(`File uploaded successfully: ${publicUrlData.publicUrl}`);
+    return publicUrlData.publicUrl;
   } catch (error) {
     console.error("Error in downloadAndUploadFile:", error);
     return null;
