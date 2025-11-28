@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
 import { Users, Briefcase, ExternalLink } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { useInView } from '@/hooks/useInView';
 
 // Current volunteer opportunities - Static data as specified
 const volunteerRoles = [
@@ -142,6 +142,7 @@ const GetInvolved = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
+  const { ref: heroRef, isInView: heroInView } = useInView<HTMLElement>({ threshold: 0.2 });
 
   const fromJoin = searchParams.get('from') === 'join';
 
@@ -181,12 +182,9 @@ const GetInvolved = () => {
       
       <main className="relative pt-8 md:pt-12">
         {/* Hero Section */}
-        <motion.section 
-          className="relative z-10 container mx-auto flex min-h-[min(40dvh,400px)] max-w-5xl flex-col items-center justify-center gap-6 px-4 text-center"
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
+        <section 
+          ref={heroRef}
+          className={`relative z-10 container mx-auto flex min-h-[min(40dvh,400px)] max-w-5xl flex-col items-center justify-center gap-6 px-4 text-center ${heroInView ? 'animate-slide-up' : ''}`}
         >
           <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent text-balance text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl font-sans">
             Get Involved
@@ -194,7 +192,7 @@ const GetInvolved = () => {
           <p className="max-w-2xl text-balance text-muted-foreground">
             Join our volunteer community and help democratize AI knowledge. Find opportunities that match your skills and passion.
           </p>
-        </motion.section>
+        </section>
         
         <div className="relative z-10 container mx-auto max-w-6xl px-4 py-4">
 
