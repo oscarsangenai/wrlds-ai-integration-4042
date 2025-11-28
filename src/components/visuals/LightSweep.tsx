@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useReducedMotion } from 'framer-motion';
 
 interface LightSweepProps {
   children: React.ReactNode;
@@ -8,42 +7,43 @@ interface LightSweepProps {
   triggerOnMount?: boolean;
 }
 
-// FIX: Business-grade directional light sweep for premium feel
+/**
+ * Pure CSS light sweep effect for premium interactions.
+ * Uses CSS animations from index.css - respects prefers-reduced-motion automatically.
+ * No framer-motion dependency.
+ */
 const LightSweep: React.FC<LightSweepProps> = ({ 
   children, 
   target = 'hero',
   className = '',
   triggerOnMount = false
 }) => {
-  const shouldReduceMotion = useReducedMotion();
   const [isHovered, setIsHovered] = useState(false);
   const [hasAnimatedOnMount, setHasAnimatedOnMount] = useState(false);
 
-  // FIX: Trigger first-paint hero sweep
+  // Trigger first-paint hero sweep
   useEffect(() => {
-    if (target === 'hero' && triggerOnMount && !shouldReduceMotion && !hasAnimatedOnMount) {
+    if (target === 'hero' && triggerOnMount && !hasAnimatedOnMount) {
       const timer = setTimeout(() => {
         setHasAnimatedOnMount(true);
-      }, 200); // Small delay for mount
+      }, 200);
       return () => clearTimeout(timer);
     }
-  }, [target, triggerOnMount, shouldReduceMotion, hasAnimatedOnMount]);
+  }, [target, triggerOnMount, hasAnimatedOnMount]);
 
   const baseClasses = "relative overflow-hidden";
   
-  // FIX: CSS mask gradient sweep - fallback to opacity if unsupported
-  const sweepClasses = shouldReduceMotion 
-    ? "" 
-    : target === 'hero' 
-      ? hasAnimatedOnMount && triggerOnMount
-        ? "before:animate-[lightSweepHero_1.2s_ease-out_forwards] before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:translate-x-[-100%] before:skew-x-[25deg] before:pointer-events-none"
-        : ""
-      : isHovered
-        ? "before:animate-[lightSweepCta_0.6s_ease-out_forwards] before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/15 before:to-transparent before:translate-x-[-100%] before:skew-x-[25deg] before:pointer-events-none"
-        : "";
+  // CSS gradient sweep - automatically disabled by prefers-reduced-motion
+  const sweepClasses = target === 'hero' 
+    ? hasAnimatedOnMount && triggerOnMount
+      ? "before:animate-[lightSweepHero_1.2s_ease-out_forwards] before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:translate-x-[-100%] before:skew-x-[25deg] before:pointer-events-none"
+      : ""
+    : isHovered
+      ? "before:animate-[lightSweepCta_0.6s_ease-out_forwards] before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/15 before:to-transparent before:translate-x-[-100%] before:skew-x-[25deg] before:pointer-events-none"
+      : "";
 
   const handleMouseEnter = () => {
-    if (target === 'cta' && !shouldReduceMotion) {
+    if (target === 'cta') {
       setIsHovered(true);
     }
   };

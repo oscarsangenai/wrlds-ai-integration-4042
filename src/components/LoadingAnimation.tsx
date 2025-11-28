@@ -1,27 +1,16 @@
-
-import React from 'react';
-import { motion } from 'framer-motion';
-
+/**
+ * Pure CSS loading spinner with staggered pulse animation.
+ * No framer-motion dependency - uses CSS keyframes from index.css.
+ * Respects prefers-reduced-motion via CSS media query.
+ */
 export const LoadingAnimation = () => {
   return (
-    <div className="flex items-center justify-center">
-      <div className="relative">
-        {/* Static decorative list; index-based is acceptable here */}
+    <div className="flex items-center justify-center min-h-[100px]">
+      <div className="relative w-[48px] h-4">
         {[0, 1, 2, 3].map((index) => (
-          <motion.span
+          <span
             key={`dot-${index}`}
-            className="absolute inline-block w-4 h-4 bg-purple-500 rounded-full"
-            animate={{
-              scale: [1, 1.5, 1],
-              opacity: [1, 0.5, 1]
-            }}
-            transition={{
-              duration: 1.2,
-              repeat: Infinity,
-              repeatType: "loop",
-              delay: index * 0.2,
-              ease: "easeInOut"
-            }}
+            className={`absolute inline-block w-4 h-4 bg-primary rounded-full dot-pulse dot-pulse-${index + 1}`}
             style={{
               left: `${index * 12}px`
             }}
