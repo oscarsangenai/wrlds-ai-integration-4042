@@ -21,8 +21,7 @@ const TransitionRoute = ({ children, className }: TransitionRouteProps) => {
   return (
     <div
       className={cn(
-        'opacity-0',
-        isActive && 'animate-in opacity-100',
+        isActive ? 'animate-slide-up' : 'opacity-0',
         className
       )}
     >
