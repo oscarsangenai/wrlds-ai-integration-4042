@@ -30,16 +30,20 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks: (id) => {
             if (id.includes('node_modules')) {
-              if (id.includes('react') || id.includes('react-dom')) {
-                return 'react';
+              // Keep React together with React-DOM in one chunk
+              if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
+                return 'react-vendor';
               }
+              // UI libraries in separate chunk
               if (id.includes('@radix-ui') || id.includes('lucide-react')) {
-                return 'ui';
+                return 'ui-vendor';
               }
-              if (id.includes('react-router') || id.includes('@tanstack')) {
-                return 'vendor';
+              // Router and query in another chunk
+              if (id.includes('react-router') || id.includes('@tanstack/react-query')) {
+                return 'router-vendor';
               }
-              return 'vendor';
+              // Everything else
+              return 'libs-vendor';
             }
           }
         }
