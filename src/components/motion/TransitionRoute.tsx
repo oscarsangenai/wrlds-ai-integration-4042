@@ -1,35 +1,34 @@
-import { memo, PropsWithChildren, useMemo } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 interface TransitionRouteProps extends PropsWithChildren {
   className?: string;
 }
 
-const TransitionRoute = memo(({ children, className }: TransitionRouteProps) => {
-  const reduceMotion = useReducedMotion();
+/**
+ * CSS-based route transition wrapper.
+ * Applies .animate-in class on mount for smooth page entrances.
+ * Respects prefers-reduced-motion for accessibility.
+ */
+const TransitionRoute = ({ children, className }: TransitionRouteProps) => {
+  const [isActive, setIsActive] = useState(false);
 
-  const variants = useMemo(
-    () => ({
-      initial: reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 },
-      animate: { opacity: 1, y: 0 },
-      exit: reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 },
-    }),
-    [reduceMotion]
-  );
+  useEffect(() => {
+    // Trigger animation on mount
+    setIsActive(true);
+  }, []);
 
   return (
-    <motion.div
-      variants={variants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-      className={cn(className)}
+    <div
+      className={cn(
+        'opacity-0',
+        isActive && 'animate-in opacity-100',
+        className
+      )}
     >
       {children}
-    </motion.div>
+    </div>
   );
-});
+};
 
 export default TransitionRoute;

@@ -1,7 +1,6 @@
 import React, { Suspense, lazy, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import TransitionRoute from '@/components/motion/TransitionRoute';
 import LoadingAnimation from '@/components/LoadingAnimation';
 
@@ -46,11 +45,9 @@ const App = () => {
 };
 
 const AnimatedRoutes = () => {
-  const location = useLocation();
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      <Suspense fallback={<LoadingAnimation />}>
-        <Routes location={location} key={location.pathname}>
+    <Suspense fallback={<LoadingAnimation />}>
+      <Routes>
           <Route path="/" element={<TransitionRoute><Index /></TransitionRoute>} />
           <Route path="/about" element={<TransitionRoute><About /></TransitionRoute>} />
           <Route path="/hackathon" element={<TransitionRoute><Hackathon /></TransitionRoute>} />
@@ -83,7 +80,6 @@ const AnimatedRoutes = () => {
 
         </Routes>
       </Suspense>
-    </AnimatePresence>
   );
 };
 
