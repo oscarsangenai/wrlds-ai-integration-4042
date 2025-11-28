@@ -84,6 +84,30 @@ const FormSubmissions = () => {
       if (error) throw error;
 
       setSubmissions(data || []);
+
+      // Generate signed URLs for files
+      if (data && data.length > 0) {
+        const urls: Record<string, string> = {};
+        for (const submission of data) {
+          if (submission.cv_resume_url) {
+            const { data: urlData } = await supabase.storage
+              .from("form_uploads")
+              .createSignedUrl(submission.cv_resume_url, 3600);
+            if (urlData?.signedUrl) {
+              urls[`cv_${submission.id}`] = urlData.signedUrl;
+            }
+          }
+          if (submission.certificate_url) {
+            const { data: urlData } = await supabase.storage
+              .from("form_uploads")
+              .createSignedUrl(submission.certificate_url, 3600);
+            if (urlData?.signedUrl) {
+              urls[`cert_${submission.id}`] = urlData.signedUrl;
+            }
+          }
+        }
+        setSignedUrls(urls);
+      }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       console.error("Error fetching submissions:", errorMessage);
