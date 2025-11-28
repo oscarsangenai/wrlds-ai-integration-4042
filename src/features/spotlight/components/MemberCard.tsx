@@ -35,7 +35,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, index }) => {
   return (
     <div
       ref={ref}
-      className={`opacity-0 ${isInView ? `animate-slide-up ${staggerClass}` : ''}`}
+      className={`${isInView ? `animate-slide-up ${staggerClass}` : ''}`}
     >
       <Card className="h-full hover:shadow-lg transition-all duration-200 border-border/50 hover:border-accent/50 group">
         <CardHeader className="pb-4">

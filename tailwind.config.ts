@@ -152,11 +152,11 @@ export default {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				// Core entrance/exit animations
-				'fade-in': 'fade-in 0.3s ease-out',
+				'fade-in': 'fade-in 0.3s ease-out forwards',
 				'fade-out': 'fade-out 0.3s ease-out',
-				'slide-up': 'slide-up 0.4s ease-out',
-				'slide-down': 'slide-down 0.4s ease-out',
-				'scale-in': 'scale-in 0.3s ease-out',
+				'slide-up': 'slide-up 0.4s ease-out forwards',
+				'slide-down': 'slide-down 0.4s ease-out forwards',
+				'scale-in': 'scale-in 0.3s ease-out forwards',
 				// Legacy animations
 				'slide-in': 'slide-in 0.4s ease-out',
 				'float': 'float 6s ease-in-out infinite',
