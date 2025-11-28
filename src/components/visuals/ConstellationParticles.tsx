@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useCallback } from "react";
-import { useReducedMotion } from "framer-motion";
 
 interface ConstellationParticlesProps {
   className?: string;
@@ -33,12 +32,16 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({
   const mouse = useRef<{ x: number; y: number } | null>(null);
   const rafRef = useRef<number>(0);
   const isPausedRef = useRef(false);
-  const shouldReduceMotion = useReducedMotion();
+
+  // Check prefers-reduced-motion via matchMedia (CSS-based approach)
+  const shouldReduceMotion = useRef(
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
 
   // FIX: Autopause when offscreen or tab hidden
   const handleVisibilityChange = useCallback(() => {
-    isPausedRef.current = document.hidden || paused || shouldReduceMotion;
-  }, [paused, shouldReduceMotion]);
+    isPausedRef.current = document.hidden || paused || shouldReduceMotion.current;
+  }, [paused]);
 
   useEffect(() => {
     document.addEventListener('visibilitychange', handleVisibilityChange);
