@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import PageLayout from '@/components/PageLayout';
 import SEO from '@/components/SEO';
@@ -25,12 +25,13 @@ const Index = () => {
 
   // Removed unused countdown effect
 
-  // Animated counters
+  // Animated counters with proper cleanup
   useEffect(() => {
     const targets = { learners: 1000, projects: 30, contributors: 500, countries: 60 };
     const duration = 2000;
     const steps = 60;
     const stepTime = duration / steps;
+    const timerIds: NodeJS.Timeout[] = [];
 
     Object.keys(targets).forEach(key => {
       let currentCount = 0;
@@ -45,7 +46,14 @@ const Index = () => {
         }
         setAnimatedCounts(prev => ({ ...prev, [key]: Math.floor(currentCount) }));
       }, stepTime);
+      
+      timerIds.push(timer);
     });
+
+    // Cleanup function to clear all intervals on unmount
+    return () => {
+      timerIds.forEach(timerId => clearInterval(timerId));
+    };
   }, []);
 
   return (
