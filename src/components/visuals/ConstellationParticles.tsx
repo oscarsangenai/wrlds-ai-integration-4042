@@ -130,7 +130,7 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({
 
     const draw = (currentTime = 0) => {
       // Enhanced pause logic with visibility check
-      if (isPausedRef.current || !isVisible || shouldReduceMotion) {
+      if (isPausedRef.current || !isVisible || shouldReduceMotion.current) {
         rafRef.current = requestAnimationFrame(draw);
         return;
       }

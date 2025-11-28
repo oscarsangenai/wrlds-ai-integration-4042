@@ -454,9 +454,22 @@ body {
 .dot-pulse-3 { animation-delay: 0.4s; }
 .dot-pulse-4 { animation-delay: 0.6s; }
 
+/* Slide-up keyframe for entrance animations */
+@keyframes slide-up {
+  0% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 /* Generic animation utility classes */
 .animate-in {
   animation: slide-up 0.4s ease-out forwards;
+  opacity: 1;
 }
 
 .animate-out {
