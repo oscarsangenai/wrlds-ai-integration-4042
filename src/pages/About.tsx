@@ -3,8 +3,6 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import SEO from '@/components/SEO';
 import PageLayout from '@/components/PageLayout';
 import { motion } from 'framer-motion';
-import AuroraNebula from '@/components/visuals/AuroraNebula';
-import ConstellationParticles from '@/components/visuals/ConstellationParticles';
 // Lazy-load to prevent SSR issues
 const NeonOrgGraph = lazy(() => import('@/components/NeonOrgGraph'));
 
