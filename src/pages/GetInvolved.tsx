@@ -283,24 +283,6 @@ const GetInvolved = () => {
       window.location.href = formUrl.toString();
       return;
 
-      toast({
-        title: "Application Submitted!",
-        description: "Thank you for your interest in volunteering. We'll review your application and get back to you soon.",
-      });
-
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        timezone: '',
-        availability: '',
-        preferredDepartment: '',
-        portfolioUrl: '',
-        notes: '',
-        consent: false
-      });
-      setSelectedSkills([]);
-
     } catch (error) {
       toast({
         title: "Submission failed",
