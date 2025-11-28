@@ -105,7 +105,7 @@ const Index = () => {
           <LightSweep target="hero" triggerOnMount={!isMobile}>
             <div 
               ref={heroRef}
-              className={`relative backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-8 md:p-12 max-w-[65ch] shadow-2xl text-center will-change-transform opacity-0 ${heroInView ? 'animate-slide-up' : ''}`}
+              className={`relative backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-8 md:p-12 max-w-[65ch] shadow-2xl text-center will-change-transform ${heroInView ? 'animate-slide-up' : ''}`}
             >
             <div className="space-y-6">
               {/* Trust badges */}
