@@ -149,18 +149,6 @@ const GetInvolved = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    timezone: '',
-    availability: '',
-    preferredDepartment: '',
-    portfolioUrl: '',
-    notes: '',
-    consent: false
-  });
 
   const fromJoin = searchParams.get('from') === 'join';
 
@@ -179,119 +167,15 @@ const GetInvolved = () => {
     }
   }, [fromJoin, toast]);
 
-  const availableSkills = [
-    "AI/ML", "Python", "JavaScript", "React", "Node.js", "Data Science",
-    "Community Building", "Content Writing", "Social Media", "Video Production",
-    "Technical Writing", "Documentation", "Event Planning", "Project Management",
-    "UI/UX Design", "Figma", "Research", "Data Analysis", "Networking",
-    "Public Speaking", "Marketing", "SEO", "Graphic Design", "Photography"
-  ];
-
   const openRoles = volunteerRoles.filter(role => role.status === 'open');
   const departments = [...new Set(openRoles.map(role => role.department))];
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const toggleSkill = (skill: string) => {
-    setSelectedSkills(prev => 
-      prev.includes(skill) 
-        ? prev.filter(s => s !== skill)
-        : [...prev, skill]
-    );
-  };
-
-  const validateForm = () => {
-    if (!formData.name.trim() || !formData.email.trim() || !formData.timezone) {
-      toast({
-        title: "Required fields missing",
-        description: "Please fill in your name, email, and timezone.",
-        variant: "destructive"
-      });
-      return false;
-    }
-
-    if (!formData.consent) {
-      toast({
-        title: "Consent required",
-        description: "Please agree to the terms and privacy policy to continue.",
-        variant: "destructive"
-      });
-      return false;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      toast({
-        title: "Invalid email",
-        description: "Please enter a valid email address.",
-        variant: "destructive"
-      });
-      return false;
-    }
-
-    if (formData.portfolioUrl && !formData.portfolioUrl.startsWith('http')) {
-      toast({
-        title: "Invalid portfolio URL",
-        description: "Please enter a valid URL starting with http:// or https://",
-        variant: "destructive"
-      });
-      return false;
-    }
-
-    return true;
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateForm()) return;
-
-    setIsLoading(true);
-
-    try {
-      // Note: Supabase integration would handle:
-      // 1. Insert into volunteer_applications table
-      // 2. Send confirmation email via edge function
-      // 3. Trigger admin notification workflow
-      // 4. Log application event for analytics
-
-      const applicationData = {
-        name: formData.name,
-        email: formData.email,
-        timezone: formData.timezone,
-        availability: formData.availability,
-        preferred_department: formData.preferredDepartment,
-        portfolio_url: formData.portfolioUrl,
-        notes: formData.notes,
-        skills: selectedSkills,
-        source: fromJoin ? 'join-redirect' : 'direct',
-        status: 'received',
-        submitted_at: new Date().toISOString()
-      };
-
-      // Redirect to external form for now
-      const formUrl = new URL('https://form.fillout.com/t/xb99AybuLUus');
-      
-      // Pre-fill form with basic data if supported
-      if (formData.name) formUrl.searchParams.set('name', formData.name);
-      if (formData.email) formUrl.searchParams.set('email', formData.email);
-      
-      // Open form in same tab to maintain user flow
-      window.location.href = formUrl.toString();
-      return;
-
-    } catch (error) {
-      toast({
-        title: "Submission failed",
-        description: "There was an error submitting your application. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    // Redirect to external Fillout form
+    const formUrl = new URL('https://form.fillout.com/t/xb99AybuLUus');
+    window.location.href = formUrl.toString();
   };
 
   return (
