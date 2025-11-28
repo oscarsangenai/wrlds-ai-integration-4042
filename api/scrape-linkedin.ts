@@ -4,9 +4,11 @@ export default async function handler(
   req: VercelRequest, 
   res: VercelResponse
 ) {
-  // CORS handling
+  // CORS handling with trimmed origin parsing
   const origin = req.headers.origin
-  const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'https://genaiglobal.org,http://localhost:8080').split(',')
+  const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'https://genaiglobal.org,http://localhost:8080')
+    .split(',')
+    .map(o => o.trim())
   const allowedOrigin = origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0]
   
   res.setHeader('Access-Control-Allow-Origin', allowedOrigin)
@@ -49,23 +51,42 @@ export default async function handler(
       clearTimeout(timeoutId);
       
       if (!response.ok) {
-        throw { message: `Scraper service error: ${response.status}`, status: response.status };
+        const errorData = await response.json().catch(() => ({}));
+        return res.status(response.status).json({ 
+          error: 'Scraper service error',
+          details: errorData.message || `HTTP ${response.status}`,
+          status: response.status
+        });
       }
       
       const data = await response.json();
-      res.status(200).json(data);
+      return res.status(200).json(data);
     } catch (fetchError) {
       clearTimeout(timeoutId);
+      
       if (fetchError instanceof Error && fetchError.name === 'AbortError') {
-        throw { message: 'timeout', status: 408 };
+        return res.status(408).json({ 
+          error: 'Request timeout',
+          details: 'timeout'
+        });
       }
       throw fetchError;
     }
   } catch (error) {
-    console.error('LinkedIn scraper error:', error)
-    res.status(500).json({ 
+    console.error('LinkedIn scraper error:', error);
+    
+    // Handle structured errors with status codes
+    if (error && typeof error === 'object' && 'status' in error) {
+      return res.status((error as { status: number }).status).json({ 
+        error: 'Scraper request failed',
+        details: (error as { message?: string }).message || 'Unknown error'
+      });
+    }
+    
+    // Fallback for unexpected errors
+    return res.status(500).json({ 
       error: 'Scraper request failed',
       details: error instanceof Error ? error.message : 'Unknown error'
-    })
+    });
   }
 }
