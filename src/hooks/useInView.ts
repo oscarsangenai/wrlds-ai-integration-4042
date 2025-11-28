@@ -6,8 +6,8 @@ interface UseInViewOptions {
   triggerOnce?: boolean;
 }
 
-interface UseInViewResult {
-  ref: React.RefObject<HTMLElement>;
+interface UseInViewResult<T extends HTMLElement = HTMLElement> {
+  ref: React.RefObject<T>;
   isInView: boolean;
 }
 
@@ -21,12 +21,14 @@ interface UseInViewResult {
  * @param options.triggerOnce - Only trigger once, default true
  * 
  * @example
- * const { ref, isInView } = useInView({ threshold: 0.2 });
+ * const { ref, isInView } = useInView<HTMLDivElement>({ threshold: 0.2 });
  * <div ref={ref} className={isInView ? 'animate-fade-in' : 'opacity-0'}>
  */
-export function useInView(options: UseInViewOptions = {}): UseInViewResult {
+export function useInView<T extends HTMLElement = HTMLElement>(
+  options: UseInViewOptions = {}
+): UseInViewResult<T> {
   const { threshold = 0.1, rootMargin = '0px', triggerOnce = true } = options;
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<T>(null);
   const [isInView, setIsInView] = useState(false);
 
   useEffect(() => {
