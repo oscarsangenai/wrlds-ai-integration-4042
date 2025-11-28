@@ -1,5 +1,4 @@
 
-import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import PageLayout from '@/components/PageLayout';
@@ -45,35 +44,15 @@ const ProjectPageLayout: React.FC<ProjectPageLayoutProps> = ({
           <div className={`absolute inset-0 ${darkMode ? 'bg-black/70' : 'bg-white/70'}`}></div>
           
           <div className="absolute inset-0 flex flex-col items-center justify-center p-4 z-10">
-            <motion.div 
-              className="flex flex-col items-center justify-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <motion.h1 
-                className={`text-4xl md:text-5xl font-bold mb-4 text-center ${textColor}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
+            <div className="flex flex-col items-center justify-center animate-fade-in">
+              <h1 className={`text-4xl md:text-5xl font-bold mb-4 text-center ${textColor} stagger-1 animate-slide-up`}>
                 {title}
-              </motion.h1>
-              <motion.div 
-                className={`w-20 h-1 ${darkMode ? 'bg-white' : 'bg-gray-800'} mb-6`}
-                initial={{ width: 0 }}
-                animate={{ width: 80 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-              />
-              <motion.p 
-                className={`text-xl text-center max-w-2xl ${darkMode ? 'text-white' : 'text-gray-700'}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-              >
+              </h1>
+              <div className={`w-20 h-1 ${darkMode ? 'bg-white' : 'bg-gray-800'} mb-6 stagger-2 animate-scale-in`} />
+              <p className={`text-xl text-center max-w-2xl ${darkMode ? 'text-white' : 'text-gray-700'} stagger-3 animate-fade-in`}>
                 {subtitle}
-              </motion.p>
-            </motion.div>
+              </p>
+            </div>
           </div>
         </div>
         
@@ -87,14 +66,9 @@ const ProjectPageLayout: React.FC<ProjectPageLayoutProps> = ({
         
         {/* Case Study Content */}
         <div className="w-full max-w-4xl mx-auto px-6 md:px-8 py-12">
-          <motion.div 
-            className="prose prose-lg max-w-none"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
+          <div className="prose prose-lg max-w-none animate-slide-up">
             {children}
-          </motion.div>
+          </div>
         </div>
       </div>
     </PageLayout>
