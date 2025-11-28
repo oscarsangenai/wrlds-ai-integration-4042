@@ -1,32 +1,33 @@
 
-import { motion } from "framer-motion";
 import { Database, Gauge, Cpu, Bluetooth, Battery, Server, ArrowRight, Smartphone, Code, Wifi, Cloud, MonitorSmartphone, FileText } from 'lucide-react';
+import { useInView } from '@/hooks/useInView';
 
 const ProductPlatform = () => {
+  const { ref: titleRef, isInView: titleInView } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  const { ref: column1Ref, isInView: column1InView } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  const { ref: column2Ref, isInView: column2InView } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  const { ref: column3Ref, isInView: column3InView } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  
   return (
     <div className="w-full relative">
       {/* Product Title Section */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mb-6"
+      <div
+        ref={titleRef}
+        className={`mb-6 ${titleInView ? 'animate-slide-up' : ''}`}
       >
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Product</h2>
         <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-4xl">
           5 years invested into tech focused end-to-end platform allowing customer brand to own pricing, branding, marketing and sales. Wrlds can help with all aspects of
           product creation, certification, initial production and app development.
         </p>
-      </motion.div>
+      </div>
 
       {/* Platform Architecture - Three Column Layout for desktop, Vertical for mobile */}
       <div className="flex flex-col lg:flex-row gap-6 w-full">
         {/* Physical Devices Column */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex-1"
+        <div 
+          ref={column1Ref}
+          className={`flex-1 ${column1InView ? 'animate-slide-up' : ''}`}
         >
           <div className="bg-gray-200 rounded-xl p-4 sm:p-6">
             <h3 className="text-lg sm:text-xl font-bold text-center mb-1">Physical Devices</h3>
@@ -52,17 +53,12 @@ const ProductPlatform = () => {
               The hardware that collects data<br />from the physical world
             </p>
           </div>
-        </motion.div>
+        </div>
 
         {/* Flow Arrows - Mobile and Desktop have different appearance */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="hidden lg:flex items-center justify-center"
-        >
+        <div className="hidden lg:flex items-center justify-center">
           <ArrowRight className="text-black w-8 h-8" />
-        </motion.div>
+        </div>
         
         {/* Mobile Flow Indicator - Only visible on mobile/tablet */}
         <div className="flex lg:hidden items-center justify-center my-2">
@@ -70,11 +66,9 @@ const ProductPlatform = () => {
         </div>
 
         {/* WRLDS Platform Column */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex-[1.5]"
+        <div 
+          ref={column2Ref}
+          className={`flex-[1.5] ${column2InView ? 'animate-slide-up stagger-1' : ''}`}
         >
           <div className="bg-gray-200 rounded-xl p-4 sm:p-6">
             <div className="flex flex-col items-center mb-3 sm:mb-4">
@@ -108,17 +102,12 @@ const ProductPlatform = () => {
               Our platform processes data and<br />powers intelligent applications
             </p>
           </div>
-        </motion.div>
+        </div>
 
         {/* Flow Arrows - Desktop Only */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="hidden lg:flex items-center justify-center"
-        >
+        <div className="hidden lg:flex items-center justify-center">
           <ArrowRight className="text-black w-8 h-8" />
-        </motion.div>
+        </div>
         
         {/* Mobile Flow Indicator - Only visible on mobile/tablet */}
         <div className="flex lg:hidden items-center justify-center my-2">
@@ -126,11 +115,9 @@ const ProductPlatform = () => {
         </div>
 
         {/* User Applications Column */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-          className="flex-1"
+        <div 
+          ref={column3Ref}
+          className={`flex-1 ${column3InView ? 'animate-slide-up stagger-2' : ''}`}
         >
           <div className="bg-gray-200 rounded-xl p-4 sm:p-6">
             <h3 className="text-lg sm:text-xl font-bold text-center mb-1">User Applications</h3>
@@ -154,7 +141,7 @@ const ProductPlatform = () => {
               How people interact with and<br />benefit from the collected data
             </p>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

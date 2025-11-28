@@ -1,16 +1,20 @@
 
 import { ArrowLeft, ArrowRight, FileText, Code, Cpu } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { motion } from "framer-motion";
 import ProductPlatform from '@/components/ProductPlatform';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Card, CardContent } from "@/components/ui/card";
 import { useState, useEffect } from 'react';
 import PageLayout from '@/components/PageLayout';
+import { useInView } from '@/hooks/useInView';
 
 const TechDetails = () => {
   const isMobile = useIsMobile();
   const [progressValue, setProgressValue] = useState(0);
+  const { ref: titleRef, isInView: titleInView } = useInView<HTMLHeadingElement>({ threshold: 0.2 });
+  const { ref: introRef, isInView: introInView } = useInView<HTMLParagraphElement>({ threshold: 0.2 });
+  const { ref: architectureRef, isInView: architectureInView } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  const { ref: approachRef, isInView: approachInView } = useInView<HTMLDivElement>({ threshold: 0.2 });
 
   // Animate progress bar on component mount
   useEffect(() => {
@@ -33,40 +37,26 @@ const TechDetails = () => {
               Back to Home
             </Link>
             
-            <motion.h1 initial={{
-            opacity: 0,
-            y: -10
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.5
-          }} className="text-3xl sm:text-4xl font-bold mb-6">
+            <h1 
+              ref={titleRef}
+              className={`text-3xl sm:text-4xl font-bold mb-6 ${titleInView ? 'animate-slide-up' : ''}`}
+            >
               Technical Deep Dive
-            </motion.h1>
+            </h1>
             
             <div className="prose prose-lg max-w-none">
-              <motion.p initial={{
-              opacity: 0
-            }} animate={{
-              opacity: 1
-            }} transition={{
-              duration: 0.5,
-              delay: 0.2
-            }} className="text-base sm:text-lg text-gray-600 mb-12">
+              <p 
+                ref={introRef}
+                className={`text-base sm:text-lg text-gray-600 mb-12 ${introInView ? 'animate-slide-up stagger-1' : ''}`}
+              >
                 Explore the technical details behind our smart textile sensor technology and learn how our system architecture enables rapid development and deployment.
-              </motion.p>
+              </p>
               
               {/* System Architecture Section */}
-              <motion.div initial={{
-              opacity: 0,
-              y: 20
-            }} animate={{
-              opacity: 1,
-              y: 0
-            }} transition={{
-              duration: 0.6
-            }} className="mb-16">
+              <div 
+                ref={architectureRef}
+                className={`mb-16 ${architectureInView ? 'animate-slide-up' : ''}`}
+              >
                 <div className="flex items-center gap-2 mb-4">
                   <FileText className="w-5 h-5 text-gray-700" />
                   <h2 className="text-2xl font-bold">System Architecture</h2>
@@ -89,19 +79,13 @@ const TechDetails = () => {
                     <ProductPlatform />
                   </CardContent>
                 </Card>
-              </motion.div>
+              </div>
               
               {/* Our Approach Section */}
-              <motion.div initial={{
-              opacity: 0,
-              y: 20
-            }} animate={{
-              opacity: 1,
-              y: 0
-            }} transition={{
-              duration: 0.6,
-              delay: 0.2
-            }}>
+              <div 
+                ref={approachRef}
+                className={`${approachInView ? 'animate-slide-up stagger-1' : ''}`}
+              >
                 <div className="flex items-center gap-2 mb-4">
                   <Code className="w-5 h-5 text-gray-700" />
                   <h2 className="text-2xl font-bold">Our Approach</h2>
@@ -125,24 +109,20 @@ const TechDetails = () => {
                   title: "Development & Testing",
                   icon: <FileText className="w-5 h-5 text-gray-700" />,
                   description: "We rigorously develop and test all components to ensure they meet performance and reliability standards."
-                }].map((phase, i) => <motion.div key={phase.title} initial={{
-                  opacity: 0,
-                  y: 10
-                }} animate={{
-                  opacity: 1,
-                  y: 0
-                }} transition={{
-                  duration: 0.4,
-                  delay: 0.3 + i * 0.1
-                }} className="bg-gray-50 p-6 rounded-lg border border-gray-100 hover:shadow-md transition-all duration-300">
-                      <div className="flex items-center gap-2 mb-3">
-                        {phase.icon}
-                        <h3 className="font-semibold text-lg">{phase.title}</h3>
-                      </div>
-                      <p className="text-gray-600 text-base">{phase.description}</p>
-                    </motion.div>)}
+                }].map((phase, i) => 
+                  <div 
+                    key={phase.title} 
+                    className={`bg-gray-50 p-6 rounded-lg border border-gray-100 hover:shadow-md transition-all duration-300 animate-slide-up stagger-${(i % 3) + 1}`}
+                  >
+                    <div className="flex items-center gap-2 mb-3">
+                      {phase.icon}
+                      <h3 className="font-semibold text-lg">{phase.title}</h3>
+                    </div>
+                    <p className="text-gray-600 text-base">{phase.description}</p>
+                  </div>
+                )}
                 </div>
-              </motion.div>
+              </div>
             </div>
             
             <div className="mt-16 pt-8 border-t border-gray-200">

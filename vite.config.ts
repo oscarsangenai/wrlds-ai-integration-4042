@@ -33,9 +33,6 @@ export default defineConfig(({ mode }) => {
               if (id.includes('react') || id.includes('react-dom')) {
                 return 'react';
               }
-              if (id.includes('framer-motion')) {
-                return 'framer';
-              }
               if (id.includes('@radix-ui') || id.includes('lucide-react')) {
                 return 'ui';
               }
