@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useState, useRef } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import PageLayout from '@/components/PageLayout';
 import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
@@ -10,11 +9,13 @@ import ConstellationParticles from '@/components/visuals/ConstellationParticles'
 import FireField from '@/components/FireField';
 import LightSweep from '@/components/visuals/LightSweep';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useInView } from '@/hooks/useInView';
 import { Users, Globe, BookOpen, Lightbulb, Share, Heart, ArrowRight } from 'lucide-react';
 
 const Index = () => {
-  const shouldReduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
+  const { ref: heroRef, isInView: heroInView } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  
   // Removed unused countdown state
   const [animatedCounts, setAnimatedCounts] = useState({
     learners: 0,
@@ -72,7 +73,7 @@ const Index = () => {
         className="pointer-events-none absolute inset-0 -z-20 overflow-visible opacity-100"
       >
         <AuroraNebula />
-        {!isMobile && !shouldReduceMotion && (
+        {!isMobile && (
           <ConstellationParticles 
             density={36} 
             autoMobileDensity={true}
@@ -89,7 +90,7 @@ const Index = () => {
       </div>
       
       {/* Fire background - desktop only for performance */}
-      {!isMobile && !shouldReduceMotion && (
+      {!isMobile && (
         <div 
           aria-hidden="true" 
           className="pointer-events-none absolute inset-0 -z-10 overflow-visible opacity-40"
@@ -102,11 +103,9 @@ const Index = () => {
       <section className="relative z-0 min-h-[calc(100dvh-var(--header-h))] grid place-items-center px-4 py-8">
           {/* Premium light sweep - mobile performance aware */}
           <LightSweep target="hero" triggerOnMount={!isMobile}>
-            <motion.div 
-              className="relative backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-8 md:p-12 max-w-[65ch] shadow-2xl text-center will-change-transform"
-              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            <div 
+              ref={heroRef}
+              className={`relative backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-8 md:p-12 max-w-[65ch] shadow-2xl text-center will-change-transform opacity-0 ${heroInView ? 'animate-slide-up' : ''}`}
             >
             <div className="space-y-6">
               {/* Trust badges */}
@@ -161,7 +160,7 @@ const Index = () => {
                 </LightSweep>
               </div>
             </div>
-            </motion.div>
+            </div>
           </LightSweep>
         </section>
 

@@ -1,33 +1,25 @@
 import React, { useCallback } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Linkedin, ExternalLink } from 'lucide-react';
+import { Linkedin } from 'lucide-react';
 import { MemberSpotlight } from '../types';
 import { fmt } from '@/lib/dateUtils';
 import AchievementPills from './AchievementPills';
+import { useInView } from '@/hooks/useInView';
 
 interface MemberCardProps {
   member: MemberSpotlight;
   index: number;
 }
 
+/**
+ * Member spotlight card with CSS-based stagger animations.
+ * Uses useInView hook to trigger animation on scroll.
+ * Stagger delay is applied via CSS animation-delay based on index.
+ */
 const MemberCard: React.FC<MemberCardProps> = ({ member, index }) => {
-  const shouldReduceMotion = useReducedMotion();
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { 
-        duration: shouldReduceMotion ? 0.2 : 0.4,
-        delay: shouldReduceMotion ? 0 : index * 0.05,
-        ease: 'easeOut'
-      }
-    }
-  };
+  const { ref, isInView } = useInView<HTMLDivElement>({ threshold: 0.2 });
 
   const handleLinkedInClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -37,12 +29,13 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, index }) => {
   const isValidLinkedInUrl = member.linkedinUrl && 
     (member.linkedinUrl.startsWith('http://') || member.linkedinUrl.startsWith('https://'));
 
+  // Calculate stagger class based on index (cycle through stagger-1, stagger-2, stagger-3)
+  const staggerClass = `stagger-${(index % 3) + 1}`;
+
   return (
-    <motion.div
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
+    <div
+      ref={ref}
+      className={`opacity-0 ${isInView ? `animate-slide-up ${staggerClass}` : ''}`}
     >
       <Card className="h-full hover:shadow-lg transition-all duration-200 border-border/50 hover:border-accent/50 group">
         <CardHeader className="pb-4">
@@ -115,7 +108,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, index }) => {
           )}
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 };
 
