@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import PageLayout from '@/components/PageLayout';
 import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
@@ -8,54 +7,43 @@ import AuroraNebula from '@/components/visuals/AuroraNebula';
 import ConstellationParticles from '@/components/visuals/ConstellationParticles';
 import FireField from '@/components/FireField';
 import LightSweep from '@/components/visuals/LightSweep';
+import AnimatedCounter from '@/components/AnimatedCounter';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useInView } from '@/hooks/useInView';
 import { Users, Globe, BookOpen, Lightbulb, Share, Heart, ArrowRight } from 'lucide-react';
 
+// Static metrics config - defined outside component to prevent re-creation
+const METRICS = [
+  { icon: Users, label: 'Talent Pipeline', target: 1000, suffix: '+ AI Professionals & Rising Talent Trained' },
+  { icon: Lightbulb, label: 'Program Delivery', target: 30, suffix: ' Open-Source AI Learning Cohorts Completed' },
+  { icon: Share, label: 'Open Innovation Network', target: 500, suffix: '+ Global Experts & Innovators Driving Solutions' },
+  { icon: Globe, label: 'Global Footprint', target: 60, suffix: ' Countries— Local Insights, Global Impact' }
+] as const;
+
+const PROGRAMS = [
+  {
+    icon: BookOpen,
+    title: 'Open-Source Education',
+    description: 'Comprehensive programs and Projects for all levels, from non-coders to advanced practitioners.',
+    features: ['Non-Coders Course — AI for beginners and non-technical professionals', 'Agent Dev Class — Hands-on training for agent development', 'Interactive Workshops — Skill-building and collaboration with experts', 'Self-Managed Infrastructure — Securely own and operate our website, bots, and cloud environment with enterprise-grade reliability and built-in cybersecurity']
+  },
+  {
+    icon: Share,
+    title: 'Collaboration',
+    description: 'Cross-industry build space that turns high-value problems into open-source agents and measurable pilots.',
+    features: ['AI Forge Sprints — Foresight → design → prototype with expert/faculty reviews', 'Ethical AI Scorecard — Governance baked into every build (risk, privacy, bias)', 'Agent Ops — Deployment runbooks, evals, and metrics (time saved, quality lift)', 'Business Model Canvas — Adoption plan and ROI case for real-world rollout']
+  },
+  {
+    icon: Lightbulb,
+    title: 'Knowledge-Sharing Platform',
+    description: 'Accessible, peer-driven content and thought leadership for global impact.',
+    features: ['LinkedIn Submissions — Public contributions and project showcases', 'Discussion Channels — Community-driven Q&A and brainstorming', 'In-Person Events — Networking and strategic meetups', 'Research Hub & Open Resources — Curated knowledge for enterprise decision-making']
+  }
+] as const;
+
 const Index = () => {
   const isMobile = useIsMobile();
   const { ref: heroRef, isInView: heroInView } = useInView<HTMLDivElement>({ threshold: 0.2 });
-  
-  // Removed unused countdown state
-  const [animatedCounts, setAnimatedCounts] = useState({
-    learners: 0,
-    projects: 0,
-    contributors: 0,
-    countries: 0
-  });
-
-  // Removed unused countdown effect
-
-  // Animated counters with proper cleanup
-  useEffect(() => {
-    const targets = { learners: 1000, projects: 30, contributors: 500, countries: 60 };
-    const duration = 2000;
-    const steps = 60;
-    const stepTime = duration / steps;
-    const timerIds: NodeJS.Timeout[] = [];
-
-    Object.keys(targets).forEach(key => {
-      let currentCount = 0;
-      const targetCount = targets[key as keyof typeof targets];
-      const increment = targetCount / steps;
-
-      const timer = setInterval(() => {
-        currentCount += increment;
-        if (currentCount >= targetCount) {
-          currentCount = targetCount;
-          clearInterval(timer);
-        }
-        setAnimatedCounts(prev => ({ ...prev, [key]: Math.floor(currentCount) }));
-      }, stepTime);
-      
-      timerIds.push(timer);
-    });
-
-    // Cleanup function to clear all intervals on unmount
-    return () => {
-      timerIds.forEach(timerId => clearInterval(timerId));
-    };
-  }, []);
 
   return (
     <PageLayout showContact={false}>
@@ -66,7 +54,6 @@ const Index = () => {
         keywords={['Gen AI Global', 'responsible AI', 'AI democratization', 'nonprofit', 'open standards', 'cross-sector']}
       />
       
-      {/* FIX: Remove nested main - PageLayout already provides motion.main */}
       {/* Background layers - optimized for mobile performance */}
       <div 
         aria-hidden="true" 
@@ -176,17 +163,16 @@ const Index = () => {
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { icon: Users, label: 'Talent Pipeline', value: animatedCounts.learners, suffix: '+ AI Professionals & Rising Talent Trained' },
-              { icon: Lightbulb, label: 'Program Delivery', value: animatedCounts.projects, suffix: ' Open-Source AI Learning Cohorts Completed' },
-              { icon: Share, label: 'Open Innovation Network', value: animatedCounts.contributors, suffix: '+ Global Experts & Innovators Driving Solutions' },
-              { icon: Globe, label: 'Global Footprint', value: animatedCounts.countries, suffix: ' Countries— Local Insights, Global Impact' }
-            ].map((metric) => (
+            {METRICS.map((metric) => (
               <div key={metric.label} className="text-center bg-card/50 rounded-lg p-6 border backdrop-blur-sm group hover:bg-card/70 transition-all duration-300">
                 <metric.icon className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
                 <div className="text-sm font-semibold text-primary mb-2">{metric.label}</div>
                 <div className="text-xl font-bold text-foreground">
-                  {metric.value.toLocaleString()}{metric.suffix}
+                  <AnimatedCounter 
+                    target={metric.target} 
+                    suffix={metric.suffix}
+                    duration={2000}
+                  />
                 </div>
               </div>
             ))}
@@ -211,26 +197,7 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: BookOpen,
-                title: 'Open-Source Education',
-                description: 'Comprehensive programs and Projects for all levels, from non-coders to advanced practitioners.',
-                features: ['Non-Coders Course — AI for beginners and non-technical professionals', 'Agent Dev Class — Hands-on training for agent development', 'Interactive Workshops — Skill-building and collaboration with experts', 'Self-Managed Infrastructure — Securely own and operate our website, bots, and cloud environment with enterprise-grade reliability and built-in cybersecurity']
-              },
-              {
-                icon: Share,
-                title: 'Collaboration',
-                description: 'Cross-industry build space that turns high-value problems into open-source agents and measurable pilots.',
-                features: ['AI Forge Sprints — Foresight → design → prototype with expert/faculty reviews', 'Ethical AI Scorecard — Governance baked into every build (risk, privacy, bias)', 'Agent Ops — Deployment runbooks, evals, and metrics (time saved, quality lift)', 'Business Model Canvas — Adoption plan and ROI case for real-world rollout']
-              },
-              {
-                icon: Lightbulb,
-                title: 'Knowledge-Sharing Platform',
-                description: 'Accessible, peer-driven content and thought leadership for global impact.',
-                features: ['LinkedIn Submissions — Public contributions and project showcases', 'Discussion Channels — Community-driven Q&A and brainstorming', 'In-Person Events — Networking and strategic meetups', 'Research Hub & Open Resources — Curated knowledge for enterprise decision-making']
-              }
-            ].map((program) => (
+            {PROGRAMS.map((program) => (
               <div key={program.title} className="bg-card rounded-lg p-8 border hover:shadow-lg transition-shadow">
                 <program.icon className="h-12 w-12 text-primary mb-4" />
                 <h3 className="text-2xl font-semibold mb-4">{program.title}</h3>
