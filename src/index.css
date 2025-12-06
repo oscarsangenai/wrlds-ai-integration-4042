@@ -73,9 +73,9 @@ body {
     --background: 0 0% 100%;
     --foreground: 0 0% 7%; /* #121212 from style guide */
 
-    /* Layout spacing variables */
-    --header-h: 4rem;
-    --nav-h: 72px;
+    /* Layout spacing variables - fixed values matching Navbar h-16 */
+    --header-h: 4rem; /* 64px */
+    --nav-h: 4rem; /* 64px - matches Navbar h-16 */
     --tabs-bottom: 120px;
 
     --card: 0 0% 100%;

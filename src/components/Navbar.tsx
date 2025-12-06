@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Link, useLocation } from 'react-router-dom';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 
@@ -11,46 +11,13 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-    
-    const updateNavHeight = () => {
-      const nav = document.querySelector('nav');
-      if (nav) {
-        const height = nav.getBoundingClientRect().height;
-        document.documentElement.style.setProperty('--nav-h', `${height}px`);
-        document.documentElement.style.setProperty('--header-h', `${height}px`);
-      }
-    };
-
-    // Setup ResizeObserver for navbar height stability
-    const nav = document.querySelector('nav');
-    let resizeObserver: ResizeObserver | null = null;
-    
-    if (nav && 'ResizeObserver' in window) {
-      resizeObserver = new ResizeObserver(() => {
-        updateNavHeight();
-      });
-      resizeObserver.observe(nav);
-    }
-    
-    // Listen for orientation changes
-    const handleOrientationChange = () => {
-      setTimeout(updateNavHeight, 100);
+      setIsScrolled(window.scrollY > 10);
     };
     
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('orientationchange', handleOrientationChange);
-    updateNavHeight(); // Initial call
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('orientationchange', handleOrientationChange);
-      resizeObserver?.disconnect();
     };
   }, []);
 
