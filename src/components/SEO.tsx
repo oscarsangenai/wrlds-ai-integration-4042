@@ -1,25 +1,53 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useLocation } from 'react-router-dom';
 
-interface SEOProps {
-  title?: string;
-  description?: string;
-  type?: string;
-  name?: string;
-  imageUrl?: string;
-  publishDate?: string;
-  modifiedDate?: string;
-  author?: string;
-  category?: string;
-  keywords?: string[];
-  isBlogPost?: boolean;
-  noIndex?: boolean;
+/** FAQ item for structured data */
+export interface FAQItem {
+  question: string;
+  answer: string;
 }
 
+/** SEO component props - all route-specific data must be passed explicitly */
+export interface SEOProps {
+  /** Page title - will be used in <title> and OG/Twitter tags */
+  title?: string;
+  /** Meta description for search results */
+  description?: string;
+  /** Canonical URL for the page (full URL) */
+  canonicalUrl?: string;
+  /** OG type: 'website', 'article', etc. */
+  type?: string;
+  /** Site/organization name */
+  name?: string;
+  /** OG/Twitter image URL (can be relative or absolute) */
+  imageUrl?: string;
+  /** ISO date string for blog posts */
+  publishDate?: string;
+  /** ISO date string for last modification */
+  modifiedDate?: string;
+  /** Author name */
+  author?: string;
+  /** Content category */
+  category?: string;
+  /** SEO keywords array */
+  keywords?: string[];
+  /** Whether this is a blog post (affects OG type and structured data) */
+  isBlogPost?: boolean;
+  /** Whether to add noindex directive */
+  noIndex?: boolean;
+  /** FAQ items for FAQ structured data (optional) */
+  faqItems?: FAQItem[];
+}
+
+/**
+ * Purely presentational SEO component.
+ * All route-specific logic should live in page components.
+ * This component only renders meta tags based on explicit props.
+ */
 const SEO: React.FC<SEOProps> = ({
   title = 'Gen AI Global — Responsible AI Community',
   description = 'Gen AI Global: An open, responsible AI community. Content pending verification.',
+  canonicalUrl,
   type = 'website',
   name = 'Gen AI Global',
   imageUrl = '/lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png',
@@ -29,46 +57,12 @@ const SEO: React.FC<SEOProps> = ({
   category,
   keywords = ['Gen AI Global', 'responsible AI', 'AI community', 'education', 'research', 'volunteer'],
   isBlogPost = false,
-  noIndex = false
+  noIndex = false,
+  faqItems
 }) => {
-  const location = useLocation();
-  const SITE_URL = import.meta.env.VITE_SITE_URL ?? window.location.origin;
-  const currentUrl = `${SITE_URL}${location.pathname}`;
+  const SITE_URL = import.meta.env.VITE_SITE_URL ?? (typeof window !== 'undefined' ? window.location.origin : '');
+  const currentUrl = canonicalUrl || (typeof window !== 'undefined' ? window.location.href : SITE_URL);
   const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `${SITE_URL}${imageUrl}`;
-
-  // Enhanced keywords for specific posts
-  const enhancedKeywords = location.pathname.includes('smart-ppe-revolution') 
-    ? [
-        ...keywords,
-        'personal protective equipment',
-        'workplace safety solutions',
-        'smart safety gear',
-        'construction safety technology',
-        'industrial safety monitoring',
-        'occupational health technology',
-        'safety compliance',
-        'worker protection systems',
-        'smart hard hats',
-        'connected safety equipment'
-      ]
-    : location.pathname.includes('wearable-safety-tech-protecting-workers-roi')
-    ? [
-        ...keywords,
-        'workplace injury costs',
-        'safety ROI',
-        'workers compensation savings',
-        'ergonomic sensors',
-        'workplace safety investment',
-        'safety technology ROI',
-        'industrial wearables',
-        'safety cost reduction',
-        'occupational safety economics',
-        'safety technology partnerships',
-        'workplace injury statistics',
-        'safety equipment financing',
-        'injury prevention technology'
-      ]
-    : keywords;
 
   // Create base Organization JSON-LD structured data
   const organizationStructuredData = {
@@ -83,7 +77,7 @@ const SEO: React.FC<SEOProps> = ({
     ]
   };
 
-  // Enhanced BlogPosting JSON-LD structured data
+  // BlogPosting JSON-LD structured data
   const blogPostStructuredData = isBlogPost && publishDate ? {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -117,80 +111,30 @@ const SEO: React.FC<SEOProps> = ({
       url: SITE_URL
     },
     description: description,
-    keywords: enhancedKeywords.join(', '),
+    keywords: keywords.join(', '),
     articleSection: category,
     inLanguage: 'en-US',
     isAccessibleForFree: true
   } : null;
 
-  // Add FAQ structured data for Smart PPE post
-  const smartPPEFAQData = location.pathname.includes('smart-ppe-revolution') ? {
+  // FAQ structured data (passed from page components)
+  const faqStructuredData = faqItems && faqItems.length > 0 ? {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'What is Smart PPE?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Smart PPE (Personal Protective Equipment) refers to traditional safety gear enhanced with sensors, connectivity, and intelligence. Unlike ordinary PPE that acts as a passive barrier, smart PPE actively monitors conditions and provides real-time alerts to prevent accidents.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'How does smart PPE improve workplace safety?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Smart PPE improves safety by providing real-time monitoring of environmental conditions, worker health metrics, and potential hazards. It can detect falls, monitor vital signs, sense toxic gases, and automatically alert emergency responders when needed.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'What industries benefit from smart PPE?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Smart PPE benefits multiple industries including construction, manufacturing, oil & gas, fire & rescue, healthcare, mining, and any workplace where safety is paramount. Each industry can customize the technology to address specific safety challenges.'
-        }
+    mainEntity: faqItems.map(item => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer
       }
-    ]
+    }))
   } : null;
 
-  // Add FAQ structured data for Wearable Safety Tech ROI post
-  const wearableSafetyROIFAQData = location.pathname.includes('wearable-safety-tech-protecting-workers-roi') ? {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'How much do workplace injuries cost?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'According to the National Safety Council, the average cost for a medically consulted work injury is $43,000 in 2023. With 2.2 injuries per 100 full-time workers, a 200-person site can expect about $215,000 in injury costs annually before accounting for downtime or replacement training.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'What ROI can wearable safety technology deliver?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Real-world deployments show significant returns: one study found 54% lower OSHA recordables and 88% fewer lost workdays. Another warehouse study showed 62% of workers reduced risky movements by half, with total ergonomic hazards falling 39%.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'Do insurance companies support wearable safety technology?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes, many insurers now bundle wearable device costs into workers compensation premiums. Employers keep the hardware as long as usage stays high because fewer claims leave insurers ahead financially. Regional carriers are expanding similar rebate schemes.'
-        }
-      }
-    ]
-  } : null;
-
-  // Combine keywords with any additional category terms
+  // Combine keywords with category
   const keywordString = category 
-    ? [...enhancedKeywords, category.toLowerCase()].join(', ') 
-    : enhancedKeywords.join(', ');
+    ? [...keywords, category.toLowerCase()].join(', ') 
+    : keywords.join(', ');
 
   return (
     <Helmet>
@@ -247,15 +191,9 @@ const SEO: React.FC<SEOProps> = ({
         </script>
       )}
       
-      {smartPPEFAQData && (
+      {faqStructuredData && (
         <script type="application/ld+json">
-          {JSON.stringify(smartPPEFAQData)}
-        </script>
-      )}
-      
-      {wearableSafetyROIFAQData && (
-        <script type="application/ld+json">
-          {JSON.stringify(wearableSafetyROIFAQData)}
+          {JSON.stringify(faqStructuredData)}
         </script>
       )}
     </Helmet>
