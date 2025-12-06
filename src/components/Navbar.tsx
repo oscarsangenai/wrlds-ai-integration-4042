@@ -1,6 +1,7 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
+import { throttle } from '@/lib/throttle';
 import { Menu, X } from "lucide-react";
 import { Link, useLocation } from 'react-router-dom';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
@@ -9,17 +10,25 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
+  // Throttled scroll handler - runs at most once every 100ms
+  const handleScroll = useMemo(
+    () => throttle(() => {
       setIsScrolled(window.scrollY > 10);
-    };
+    }, 100),
+    []
+  );
+
+  useEffect(() => {
+    // Set initial state
+    handleScroll();
     
     window.addEventListener('scroll', handleScroll, { passive: true });
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      handleScroll.cancel();
     };
-  }, []);
+  }, [handleScroll]);
 
   const location = useLocation();
   const isActive = (to: string) => {
