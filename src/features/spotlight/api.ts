@@ -1,4 +1,4 @@
-import { MemberSpotlight, LinkedInScrapeResponse } from './types';
+import { MemberSpotlight, LinkedInScrapeResult, LinkedInScrapeData } from './types';
 import fallbackData from '@/data/memberSpotlights.json';
 
 // Data fetcher with fallback to embedded JSON
@@ -43,10 +43,17 @@ export const isLinkedInScraperEnabled = (): boolean => {
   return import.meta.env.VITE_ENABLE_LINKEDIN === '1';
 };
 
-// Optional LinkedIn scraper client (feature-flagged)
-export const scrapeLinkedInProfile = async (profileUrl: string): Promise<LinkedInScrapeResponse> => {
+/**
+ * Scrapes a LinkedIn profile for posts/data.
+ * Returns a structured result object - never throws.
+ */
+export const scrapeLinkedInProfile = async (profileUrl: string): Promise<LinkedInScrapeResult> => {
   if (!isLinkedInScraperEnabled()) {
-    throw new Error('LinkedIn scraper is disabled');
+    return { 
+      success: false, 
+      data: null, 
+      error: 'LinkedIn scraper is disabled' 
+    };
   }
 
   try {
@@ -66,19 +73,48 @@ export const scrapeLinkedInProfile = async (profileUrl: string): Promise<LinkedI
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        throw { message: `Scrape failed: ${response.statusText}`, status: response.status };
+        const errorText = await response.text().catch(() => response.statusText);
+        return { 
+          success: false, 
+          data: null, 
+          error: `Scrape failed (${response.status}): ${errorText}` 
+        };
       }
 
-      return await response.json();
+      const json = await response.json();
+      
+      // Validate response structure
+      if (!json || !Array.isArray(json.posts)) {
+        return { 
+          success: false, 
+          data: null, 
+          error: 'Invalid response format from LinkedIn scraper' 
+        };
+      }
+
+      const data: LinkedInScrapeData = { posts: json.posts };
+      return { success: true, data, error: null };
+      
     } catch (fetchError) {
       clearTimeout(timeoutId);
+      
       if (fetchError instanceof Error && fetchError.name === 'AbortError') {
-        throw { message: 'timeout', status: 408 };
+        return { 
+          success: false, 
+          data: null, 
+          error: 'Request timed out' 
+        };
       }
+      
       throw fetchError;
     }
   } catch (error) {
-    console.error('LinkedIn scraping failed:', error);
-    throw error;
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('scrapeLinkedInProfile failed:', error);
+    return { 
+      success: false, 
+      data: null, 
+      error: errorMessage 
+    };
   }
 };

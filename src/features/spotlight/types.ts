@@ -29,8 +29,7 @@ export interface PaginationState {
   totalPages: number;
 }
 
-export interface LinkedInScrapeResponse {
-  success: boolean;
+export interface LinkedInScrapeData {
   posts: Array<{
     id: string;
     content: string;
@@ -43,3 +42,14 @@ export interface LinkedInScrapeResponse {
     memberDescription?: string;
   }>;
 }
+
+/** @deprecated Use LinkedInScrapeResult instead */
+export interface LinkedInScrapeResponse {
+  success: boolean;
+  posts: LinkedInScrapeData['posts'];
+}
+
+/** Structured result type for scrapeLinkedInProfile - never throws */
+export type LinkedInScrapeResult = 
+  | { success: true; data: LinkedInScrapeData; error: null }
+  | { success: false; data: null; error: string };
