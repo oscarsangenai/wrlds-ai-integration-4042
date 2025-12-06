@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Helmet } from 'react-helmet-async';
 import { Check, ChevronDown } from 'lucide-react';
 import axios from 'axios';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -44,7 +45,8 @@ const MemberApply = () => {
 
   const onSubmit = async (data: MemberFormData) => {
     if (files.some(f => f.status === 'uploading')) {
-      return; // Wait for uploads to complete
+      toast.error('Please wait for files to finish uploading before submitting.');
+      return;
     }
 
     setIsSubmitting(true);
@@ -63,7 +65,7 @@ const MemberApply = () => {
       setShowSuccess(true);
     } catch (error) {
       console.error('Submission error:', error);
-      alert('Failed to submit application. Please try again.');
+      toast.error('Failed to submit application. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
