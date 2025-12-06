@@ -10,11 +10,9 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { Progress } from "@/components/ui/progress";
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from "@/components/ui/button";
-import { useScrollHijack } from '@/hooks/useScrollHijack';
 
 const Features = () => {
   const featuresRef = useRef<HTMLDivElement>(null);
-  const hijackSectionRef = useRef<HTMLDivElement>(null);
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
   const [progressValue, setProgressValue] = useState(0);
   const [currentSprint, setCurrentSprint] = useState(1);
@@ -47,8 +45,6 @@ const Features = () => {
       image: `${import.meta.env.BASE_URL || '/'}lovable-uploads/6739bd63-bf19-4abd-bb23-0b613bbf7ac8.png`
     }
   ];
-
-  const { isHijacked, currentIndex } = useScrollHijack(hijackSectionRef, features.length);
 
   const scrollToContact = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -160,121 +156,55 @@ const Features = () => {
             </p>
           </div>
           
-          {/* Scroll-hijacked features section */}
-          <div 
-            ref={hijackSectionRef}
-            className={cn(
-              "relative transition-all duration-500",
-              isHijacked ? "fixed inset-0 z-50 bg-black" : "grid grid-cols-1 md:grid-cols-2 gap-5"
-            )}
-            style={{ height: isHijacked ? '100vh' : 'auto' }}
-          >
-            {isHijacked && (
-              <div className="absolute top-4 right-4 z-10 text-white text-sm opacity-70">
-                {currentIndex + 1} / {features.length}
-              </div>
-            )}
-            
+          {/* Feature cards grid - accessible layout without scroll hijacking */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {features.map((feature, index) => (
               <div 
                 key={feature.title}
-                className={cn(
-                  "feature-item rounded-xl overflow-hidden transform transition-all duration-500 relative shadow-lg",
-                  isHijacked 
-                    ? cn(
-                        "absolute inset-0 w-full h-full",
-                        index === currentIndex 
-                          ? "opacity-100 translate-x-0" 
-                          : index < currentIndex 
-                            ? "opacity-0 -translate-x-full" 
-                            : "opacity-0 translate-x-full"
-                      )
-                    : "hover:-translate-y-1 h-[280px]"
-                )}
+                className="feature-item rounded-xl overflow-hidden transform transition-all duration-500 relative shadow-lg hover:-translate-y-1 h-[280px]"
                 style={{
-                  transitionDelay: isHijacked ? '0ms' : `${index * 100}ms`
+                  transitionDelay: `${index * 100}ms`
                 }}
-                onMouseEnter={() => !isHijacked && setHoveredFeature(index)} 
-                onMouseLeave={() => !isHijacked && setHoveredFeature(null)}
+                onMouseEnter={() => setHoveredFeature(index)} 
+                onMouseLeave={() => setHoveredFeature(null)}
               >
                 <div className="absolute inset-0 w-full h-full">
                   <img 
                     src={feature.image} 
                     alt={feature.title} 
-                    className={cn(
-                      "w-full h-full object-cover transition-all duration-300",
-                      isHijacked ? "grayscale-0" : "grayscale"
-                    )}
+                    className="w-full h-full object-cover transition-all duration-300 grayscale"
                     loading="lazy"
                     decoding="async"
                   />
                   <div className={cn(
                     "absolute inset-0 transition-opacity duration-300",
-                    isHijacked 
-                      ? "bg-black/40" 
-                      : hoveredFeature === index 
-                        ? "bg-black/50" 
-                        : "bg-black/70"
+                    hoveredFeature === index 
+                      ? "bg-black/50" 
+                      : "bg-black/70"
                   )}></div>
                 </div>
                 
-                <div className={cn(
-                  "relative z-10 flex flex-col justify-center",
-                  isHijacked 
-                    ? "p-16 h-full text-center items-center" 
-                    : "p-6 h-full justify-between"
-                )}>
-                  <div className={isHijacked ? "space-y-8" : ""}>
+                <div className="relative z-10 flex flex-col justify-between p-6 h-full">
+                  <div>
                     <div className={cn(
-                      "inline-block p-3 bg-gray-800/40 backdrop-blur-sm rounded-lg transition-all duration-300 transform",
-                      isHijacked 
-                        ? "mb-6 scale-150" 
-                        : hoveredFeature === index 
-                          ? "mb-4 hover:scale-110" 
-                          : "mb-4"
+                      "inline-block p-3 bg-gray-800/40 backdrop-blur-sm rounded-lg transition-all duration-300 transform mb-4",
+                      hoveredFeature === index ? "hover:scale-110" : ""
                     )}>
-                      <div className={`transform transition-transform duration-300 ${!isHijacked && hoveredFeature === index ? 'rotate-12' : ''}`}>
+                      <div className={`transform transition-transform duration-300 ${hoveredFeature === index ? 'rotate-12' : ''}`}>
                         {feature.icon}
                       </div>
                     </div>
-                    <h3 className={cn(
-                      "font-semibold text-white",
-                      isHijacked ? "text-4xl mb-6" : "text-xl mb-2"
-                    )}>
+                    <h3 className="font-semibold text-white text-xl mb-2">
                       {feature.title}
                     </h3>
-                    <p className={cn(
-                      "text-white/90",
-                      isHijacked ? "text-lg max-w-2xl" : "text-sm"
-                    )}>
+                    <p className="text-white/90 text-sm">
                       {feature.description}
                     </p>
                   </div>
-                  {!isHijacked && (
-                    <div className={`h-0.5 bg-white/70 mt-3 transition-all duration-500 ${hoveredFeature === index ? 'w-full' : 'w-0'}`}></div>
-                  )}
+                  <div className={`h-0.5 bg-white/70 mt-3 transition-all duration-500 ${hoveredFeature === index ? 'w-full' : 'w-0'}`}></div>
                 </div>
               </div>
             ))}
-            
-            {isHijacked && (
-              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white text-center">
-                <div className="flex space-x-2 mb-4">
-                  {features.map((_, index) => (
-                    <div 
-                      key={`sensor-${index}`}
-                      className={cn(
-                        "w-2 h-2 rounded-full transition-all duration-300",
-                        index === currentIndex ? "bg-white w-8" : "bg-white/50"
-                      )}
-                    />
-                  ))}
-                </div>
-                <p className="text-sm opacity-70">
-                  {isMobile ? "Swipe" : "Scroll"} to continue • Press ESC to exit
-                </p>
-              </div>
-            )}
           </div>
 
           <div className="mt-16 mb-8 feature-item">
@@ -369,121 +299,101 @@ const Features = () => {
                   </HoverCardContent>
                 </HoverCard>)}
             </div>
-
-            <div className="relative h-16 mb-10">
-              <div className="hidden md:block absolute left-1/2 -translate-x-1/2 w-1 h-full bg-gradient-to-b from-gray-300 to-gray-400"></div>
-              <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-full -mt-3">
-                <div className="bg-gray-400 rounded-full p-1">
-                  <ArrowRight className="w-5 h-5 text-white rotate-90" />
-                </div>
-              </div>
-              
-              <div className="md:hidden flex justify-center items-center h-full">
-                <div className="w-1/3 h-0.5 bg-gray-300"></div>
-                <div className="bg-gray-400 rounded-full p-1 mx-2">
-                  <ArrowRight className="w-5 h-5 text-white" />
-                </div>
-                <div className="w-1/3 h-0.5 bg-gray-300"></div>
-              </div>
-            </div>
             
-            <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-6 mb-10 shadow-md">
-              <div className="max-w-3xl mx-auto">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-2">
-                  <div className="flex items-center">
-                    <h3 className="text-xl font-bold">Adaptation Project</h3>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="text-sm text-gray-500 mr-2">Iterative Development</span>
-                    <RefreshCcw className="h-5 w-5 text-gray-600 animate-rotate-slow" />
-                  </div>
-                </div>
-                
-                <p className="text-gray-600 mb-4">Working iteratively with customers to tailor solutions to their needs</p>
-                
-                <div className="relative mb-2">
-                  <Progress value={progressValue} className="h-3 bg-gray-200" />
-                </div>
-                
-                <div className={cn("grid gap-1 mt-4", isMobile ? "grid-cols-2 gap-y-2" : "grid-cols-4")}>
-                  {sprintPhases.map((phase, index) => <div key={phase.name} className={cn("text-center p-2 rounded transition-all", progressValue >= index / sprintPhases.length * 100 && progressValue < (index + 1) / sprintPhases.length * 100 ? "bg-blue-50 border border-blue-100" : "bg-gray-50")}>
-                      <div className="flex flex-col items-center">
-                        <div className={cn("rounded-full p-1 mb-1", progressValue >= index / sprintPhases.length * 100 ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-500")}>
+            <div className="mt-12 pt-8 border-t border-gray-100">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div>
+                  <h3 className="text-xl font-bold mb-4">Our Agile Development Process</h3>
+                  <p className="text-gray-600 mb-6">
+                    We work in efficient 2-week sprints, ensuring rapid iteration and continuous improvement of your product.
+                  </p>
+                  
+                  <div className="bg-gray-50 rounded-xl p-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="font-medium text-gray-700">Sprint {currentSprint} of {totalSprints}</span>
+                      <span className="text-sm text-gray-500">{progressValue}% Complete</span>
+                    </div>
+                    <Progress value={progressValue} className="h-2 mb-6" />
+                    
+                    <div className="grid grid-cols-4 gap-2">
+                      {sprintPhases.map((phase, index) => (
+                        <div 
+                          key={phase.name}
+                          className={cn(
+                            "flex flex-col items-center p-2 rounded-lg transition-all duration-300",
+                            progressValue >= (index + 1) * 25 ? "bg-gray-700 text-white" : "bg-gray-100 text-gray-500"
+                          )}
+                        >
                           {phase.icon}
+                          <span className="text-xs mt-1">{phase.name}</span>
                         </div>
-                        <span className="text-xs font-medium">{phase.name}</span>
-                      </div>
-                    </div>)}
+                      ))}
+                    </div>
+                  </div>
                 </div>
                 
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6 gap-2">
-                  <div className="flex items-center">
-                    <div className="bg-green-100 rounded-full p-1 mr-2 shrink-0">
-                      <CheckCircle className="h-4 w-4 text-green-600" />
+                <div className="flex justify-center">
+                  <div className="relative w-64 h-64">
+                    <div className="absolute inset-0 rounded-full border-4 border-gray-200"></div>
+                    <div 
+                      className="absolute inset-0 rounded-full border-4 border-gray-700 transition-all duration-300"
+                      style={{
+                        clipPath: `polygon(50% 50%, 50% 0%, ${50 + 50 * Math.sin(progressValue / 100 * 2 * Math.PI)}% ${50 - 50 * Math.cos(progressValue / 100 * 2 * Math.PI)}%, 50% 50%)`
+                      }}
+                    ></div>
+                    <div className="absolute inset-4 rounded-full bg-white shadow-lg flex items-center justify-center">
+                      <div className="text-center">
+                        <Rocket className="h-12 w-12 mx-auto text-gray-700 mb-2" />
+                        <span className="text-2xl font-bold">{progressValue}%</span>
+                        <p className="text-xs text-gray-500">Sprint Progress</p>
+                      </div>
                     </div>
-                    <span className="text-sm text-gray-600">Customer feedback integrated at every stage</span>
-                  </div>
-                  <div className="text-sm text-gray-500 flex items-center mt-2 sm:mt-0">
-                    <span className="mr-2">Continuous improvement</span>
-                    <div className="flex space-x-1">
-                      <span className="inline-block w-2 h-2 bg-gray-300 rounded-full animate-pulse"></span>
-                      <span className="inline-block w-2 h-2 bg-gray-400 rounded-full animate-pulse animation-delay-200"></span>
-                      <span className="inline-block w-2 h-2 bg-gray-500 rounded-full animate-pulse animation-delay-400"></span>
-                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            
-            <div className="relative h-16 mb-10">
-              <div className="hidden md:block absolute left-1/2 -translate-x-1/2 w-1 h-full bg-gradient-to-b from-gray-300 to-gray-400"></div>
-              <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-full -mt-3">
-                <div className="bg-gray-400 rounded-full p-1">
-                  <ArrowRight className="w-5 h-5 text-white rotate-90" />
-                </div>
-              </div>
-              
-              <div className="md:hidden flex justify-center items-center h-full">
-                <div className="w-1/3 h-0.5 bg-gray-300"></div>
-                <div className="bg-gray-400 rounded-full p-1 mx-2">
-                  <ArrowRight className="w-5 h-5 text-white" />
-                </div>
-                <div className="w-1/3 h-0.5 bg-gray-300"></div>
-              </div>
-            </div>
-            
-            <div className="bg-gradient-to-r from-gray-100 via-white to-gray-100 rounded-lg p-8 max-w-xl mx-auto text-center shadow-md hover:shadow-lg transition-all duration-300">
-              <div className="relative inline-block mb-4">
-                <div className="absolute inset-0 bg-black/10 rounded-full animate-pulse-slow"></div>
-                <div className="relative bg-white rounded-full p-4 border border-gray-200 shadow-md">
-                  <Rocket className="h-10 w-10 text-gray-700" />
-                </div>
-              </div>
-              <h3 className="text-xl font-bold mb-2">Hitting the Market</h3>
-              <p className="text-gray-700">Ready to scale, produce, and launch</p>
-              <div className="flex justify-center mt-4 space-x-2">
-                <span className="inline-block w-3 h-3 rounded-full bg-gray-300 animate-pulse"></span>
-                <span className="inline-block w-3 h-3 rounded-full bg-gray-500 animate-pulse animation-delay-200"></span>
-                <span className="inline-block w-3 h-3 rounded-full bg-gray-700 animate-pulse animation-delay-400"></span>
               </div>
             </div>
           </div>
+        </div>
+      </section>
+      
+      <section id="product-flow" className="bg-white py-10 md:py-16">
+        <div className="w-full px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-block mb-2 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
+              Product Flow
+            </div>
+            <h2 className="text-3xl font-bold mb-4">From Concept to Customer</h2>
+            <p className="text-gray-600 max-w-3xl mx-auto">
+              Our end-to-end process takes your product idea from initial concept through manufacturing to the hands of your customers.
+            </p>
+          </div>
           
-          <div className="text-center">
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-              <Link to="/tech-details" onClick={() => window.scrollTo(0, 0)} className="inline-flex items-center px-4 sm:px-6 bg-white text-gray-700 rounded-lg border border-gray-200 hover:bg-gray-50 hover:shadow-md transition-all group py-3 w-full sm:w-auto justify-center">
-                Learn More About Our Technology
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              
-              <Button type="button" onClick={scrollToContact} className="inline-flex items-center px-4 sm:px-6 py-3 bg-gray-700 hover:bg-gray-800 text-white rounded-lg shadow-md hover:shadow-lg transition-all group w-full sm:w-auto justify-center">
-                Contact Our Experts
-                <MessageSquare className="ml-2 w-4 h-4 group-hover:scale-110 transition-transform" />
-              </Button>
+          <div className="relative">
+            <div className="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-gray-200 -translate-y-1/2 z-0"></div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+              {[
+                { icon: <Code className="h-8 w-8" />, title: "Design", description: "Concept & prototyping" },
+                { icon: <Microchip className="h-8 w-8" />, title: "Develop", description: "Hardware & software integration" },
+                { icon: <Factory className="h-8 w-8" />, title: "Manufacture", description: "Production & quality assurance" },
+                { icon: <Truck className="h-8 w-8" />, title: "Deliver", description: "Distribution & support" }
+              ].map((step, index) => (
+                <div key={step.title} className="flex flex-col items-center">
+                  <div className={cn(
+                    "w-16 h-16 rounded-full flex items-center justify-center mb-4 transition-all duration-300",
+                    "bg-white border-4 border-gray-700 text-gray-700 hover:bg-gray-700 hover:text-white"
+                  )}>
+                    {step.icon}
+                  </div>
+                  <h3 className="font-bold text-lg mb-1">{step.title}</h3>
+                  <p className="text-sm text-gray-600 text-center">{step.description}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
     </>;
 };
+
 export default Features;

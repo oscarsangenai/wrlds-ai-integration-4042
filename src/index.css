@@ -564,3 +564,22 @@ body {
   z-index: 50;
 }
 
+/* CSS Scroll Snap utilities for accessible section navigation */
+.scroll-snap-container {
+  scroll-snap-type: y mandatory;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Optional: proximity-based snap for less aggressive snapping */
+.scroll-snap-container-proximity {
+  scroll-snap-type: y proximity;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
