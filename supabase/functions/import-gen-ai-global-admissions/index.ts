@@ -46,10 +46,26 @@ const extractPrimaryField = (fieldObj: unknown): string | null => {
   return null;
 };
 
+const BLOCKED_HOSTNAME_PATTERNS = [
+  /^localhost$/i,
+  /^127\./,
+  /^10\./,
+  /^172\.(1[6-9]|2[0-9]|3[0-1])\./,
+  /^192\.168\./,
+  /^169\.254\./,
+  /^0\./,
+  /^::1$/,
+  /^fc00:/i,
+  /^fe80:/i,
+];
+
 const isValidFileUrl = (url: string): boolean => {
   try {
     const parsed = new URL(url);
-    return parsed.protocol === "https:";
+    if (parsed.protocol !== "https:") return false;
+    const hostname = parsed.hostname.toLowerCase();
+    if (BLOCKED_HOSTNAME_PATTERNS.some((p) => p.test(hostname))) return false;
+    return true;
   } catch {
     return false;
   }
@@ -96,11 +112,8 @@ const downloadAndUploadFile = async (
       return null;
     }
     
-    const { data: publicUrlData } = supabase.storage
-      .from("form_uploads")
-      .getPublicUrl(uniqueFileName);
-    
-    return publicUrlData.publicUrl;
+    // Store just the file path — buckets are private, admins use signed URLs
+    return uniqueFileName;
   } catch (error) {
     console.error("Error in downloadAndUploadFile:", error);
     return null;
@@ -116,9 +129,46 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // JWT Authentication — admin only
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(
+        JSON.stringify({ success: false, error: "Missing authorization" }),
+        { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const authSupabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } = await authSupabase.auth.getUser(token);
+    if (claimsError || !claimsData?.user) {
+      return new Response(
+        JSON.stringify({ success: false, error: "Invalid token" }),
+        { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    // Check admin role using service role client
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    const { data: roleRows } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", claimsData.user.id)
+      .eq("role", "admin");
+
+    if (!roleRows || roleRows.length === 0) {
+      return new Response(
+        JSON.stringify({ success: false, error: "Forbidden - admin role required" }),
+        { status: 403, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
 
     const formData = await req.formData();
     const file = formData.get("file") as File;
@@ -130,7 +180,6 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Limit file size to 10MB
     if (file.size > 10 * 1024 * 1024) {
       return new Response(
         JSON.stringify({ success: false, error: "File too large (max 10MB)" }),
@@ -177,6 +226,15 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    // Validate required columns
+    const firstRow = submissions[0];
+    if (!firstRow["Submission ID"]) {
+      return new Response(
+        JSON.stringify({ success: false, error: "Missing required column: Submission ID" }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
     console.log(`Processing ${submissions.length} submissions from JSON`);
 
     interface ImportError {
@@ -201,7 +259,6 @@ const handler = async (req: Request): Promise<Response> => {
           continue;
         }
 
-        // Check for duplicate
         const { data: existing } = await supabase
           .from("gen_ai_global_admissions")
           .select("id")
@@ -242,7 +299,6 @@ const handler = async (req: Request): Promise<Response> => {
           submitted_at: new Date().toISOString(),
         };
 
-        // Handle certificate URL
         const certificateUrl = sanitizeString(submission["If yes, please submit your certificate"]);
         if (certificateUrl && isValidFileUrl(certificateUrl)) {
           const fileName = certificateUrl.split("/").pop()?.substring(0, 200) || "certificate.pdf";
@@ -251,7 +307,6 @@ const handler = async (req: Request): Promise<Response> => {
           insertData.certificate_url = null;
         }
 
-        // Handle CV/Resume URL
         const cvUrl = sanitizeString(submission["To apply for a Gen AI Global volunteer role, or general member position, please upload your CV or resume (PDF preferred)"]);
         if (cvUrl && isValidFileUrl(cvUrl)) {
           const fileName = cvUrl.split("/").pop()?.substring(0, 200) || "resume.pdf";
