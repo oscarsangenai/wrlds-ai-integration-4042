@@ -67,10 +67,26 @@ const parseBoolean = (value: unknown): boolean => {
   return false;
 };
 
+const BLOCKED_HOSTNAME_PATTERNS = [
+  /^localhost$/i,
+  /^127\./,
+  /^10\./,
+  /^172\.(1[6-9]|2[0-9]|3[0-1])\./,
+  /^192\.168\./,
+  /^169\.254\./,
+  /^0\./,
+  /^::1$/,
+  /^fc00:/i,
+  /^fe80:/i,
+];
+
 const isValidFileUrl = (url: string): boolean => {
   try {
     const parsed = new URL(url);
-    return parsed.protocol === "https:";
+    if (parsed.protocol !== "https:") return false;
+    const hostname = parsed.hostname.toLowerCase();
+    if (BLOCKED_HOSTNAME_PATTERNS.some((p) => p.test(hostname))) return false;
+    return true;
   } catch {
     return false;
   }
@@ -96,7 +112,6 @@ const downloadAndUploadFile = async (
     }
 
     const blob = await response.blob();
-    // Limit file size to 50MB
     if (blob.size > 50 * 1024 * 1024) {
       console.error(`File too large: ${blob.size} bytes`);
       return null;
@@ -121,12 +136,8 @@ const downloadAndUploadFile = async (
       return null;
     }
 
-    const { data: publicUrlData } = supabase.storage
-      .from("form_uploads")
-      .getPublicUrl(uniqueFileName);
-
-    console.log(`File uploaded successfully: ${publicUrlData.publicUrl}`);
-    return publicUrlData.publicUrl;
+    // Store just the file path — buckets are private, admins use signed URLs
+    return uniqueFileName;
   } catch (error) {
     console.error("Error in downloadAndUploadFile:", error);
     return null;
@@ -190,11 +201,22 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // Validate webhook secret
+    const webhookSecret = req.headers.get("x-webhook-secret") || req.headers.get("x-fillout-webhook-secret");
+    const expectedSecret = Deno.env.get("FILLOUT_API_KEY");
+
+    if (!expectedSecret || !webhookSecret || webhookSecret !== expectedSecret) {
+      console.error("Webhook authentication failed");
+      return new Response(
+        JSON.stringify({ success: false, error: "Unauthorized" }),
+        { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Validate payload
     const rawBody = await req.json();
     const payload = validatePayload(rawBody);
 
@@ -222,19 +244,16 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Create a map of question ID to value
     const questionsMap = new Map(
       payload.submission.questions.map((q) => [q.id, q.value])
     );
 
-    // Initialize data object
     const formData: Record<string, unknown> = {
       submission_id: submissionId,
       raw_payload: payload,
       submitted_at: payload.submission.submissionTime || new Date().toISOString(),
     };
 
-    // Process each field
     for (const [fieldId, dbColumn] of Object.entries(FIELD_MAPPING)) {
       const value = questionsMap.get(fieldId);
 
@@ -243,23 +262,19 @@ const handler = async (req: Request): Promise<Response> => {
         continue;
       }
 
-      // Handle file uploads
       if (FILE_FIELD_IDS.has(fieldId)) {
         formData[dbColumn] = await processFileField(value, supabase);
         continue;
       }
 
-      // Handle boolean fields
       if (BOOLEAN_COLUMNS.has(dbColumn)) {
         formData[dbColumn] = parseBoolean(value);
         continue;
       }
 
-      // Default: sanitize and store
       formData[dbColumn] = sanitizeString(value);
     }
 
-    // Insert into database
     const { data, error } = await supabase
       .from("gen_ai_global_admissions")
       .insert(formData)
