@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { getCorsHeaders } from "../_shared/cors.ts";
 
 interface FilloutQuestion {
   id: string;
@@ -42,6 +38,25 @@ const FIELD_MAPPING: Record<string, string> = {
   "6vhu": "admission_understanding",
 };
 
+const BOOLEAN_COLUMNS = new Set([
+  "taken_mit_course",
+  "willing_to_volunteer",
+  "interested_in_volunteering",
+  "discord_sharing_consent",
+  "admission_understanding",
+]);
+
+const FILE_FIELD_IDS = new Set(["cRVh", "sZNa"]);
+
+const MAX_STRING_LENGTH = 5000;
+const MAX_QUESTIONS = 100;
+
+const sanitizeString = (value: unknown): string | null => {
+  if (value === null || value === undefined) return null;
+  const str = String(value).trim();
+  return str.substring(0, MAX_STRING_LENGTH) || null;
+};
+
 const parseBoolean = (value: unknown): boolean => {
   if (value === null || value === undefined) return false;
   if (typeof value === "boolean") return value;
@@ -52,48 +67,64 @@ const parseBoolean = (value: unknown): boolean => {
   return false;
 };
 
+const isValidFileUrl = (url: string): boolean => {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+};
+
 const downloadAndUploadFile = async (
   fileUrl: string,
   fileName: string,
   supabase: ReturnType<typeof createClient>
 ): Promise<string | null> => {
   try {
+    if (!isValidFileUrl(fileUrl)) {
+      console.error(`Invalid file URL rejected: ${fileUrl}`);
+      return null;
+    }
+
     console.log(`Downloading file from: ${fileUrl}`);
-    
-    // Download file from Fillout
+
     const response = await fetch(fileUrl);
     if (!response.ok) {
       console.error(`Failed to download file: ${response.statusText}`);
       return null;
     }
-    
+
     const blob = await response.blob();
+    // Limit file size to 50MB
+    if (blob.size > 50 * 1024 * 1024) {
+      console.error(`File too large: ${blob.size} bytes`);
+      return null;
+    }
+
     const arrayBuffer = await blob.arrayBuffer();
     const fileData = new Uint8Array(arrayBuffer);
-    
-    // Generate unique filename
+
     const timestamp = Date.now();
-    const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, "_");
+    const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, "_").substring(0, 200);
     const uniqueFileName = `${timestamp}_${sanitizedFileName}`;
-    
-    // Upload to Supabase storage
+
     const { error } = await supabase.storage
       .from("form_uploads")
       .upload(uniqueFileName, fileData, {
         contentType: blob.type,
         upsert: false,
       });
-    
+
     if (error) {
       console.error("Error uploading to Supabase storage:", error);
       return null;
     }
-    
-    // Get public URL
+
     const { data: publicUrlData } = supabase.storage
       .from("form_uploads")
       .getPublicUrl(uniqueFileName);
-    
+
     console.log(`File uploaded successfully: ${publicUrlData.publicUrl}`);
     return publicUrlData.publicUrl;
   } catch (error) {
@@ -109,18 +140,51 @@ const processFileField = async (
   if (!value || !Array.isArray(value) || value.length === 0) {
     return null;
   }
-  
-  // Handle multiple files - upload first file
+
   const file = value[0] as { url?: string; filename?: string };
-  if (file.url && file.filename) {
+  if (file.url && typeof file.url === "string" && file.filename && typeof file.filename === "string") {
     return await downloadAndUploadFile(file.url, file.filename, supabase);
   }
-  
+
   return null;
 };
 
+const validatePayload = (body: unknown): FilloutPayload => {
+  if (!body || typeof body !== "object") {
+    throw new Error("Invalid payload: expected JSON object");
+  }
+
+  const payload = body as Record<string, unknown>;
+
+  if (!payload.submission || typeof payload.submission !== "object") {
+    throw new Error("Invalid payload: missing submission object");
+  }
+
+  const submission = payload.submission as Record<string, unknown>;
+
+  if (!submission.submissionId || typeof submission.submissionId !== "string") {
+    throw new Error("Invalid payload: missing or invalid submissionId");
+  }
+
+  if (submission.submissionId.length > 255) {
+    throw new Error("Invalid payload: submissionId too long");
+  }
+
+  if (!Array.isArray(submission.questions)) {
+    throw new Error("Invalid payload: questions must be an array");
+  }
+
+  if (submission.questions.length > MAX_QUESTIONS) {
+    throw new Error(`Invalid payload: too many questions (max ${MAX_QUESTIONS})`);
+  }
+
+  return body as FilloutPayload;
+};
+
 const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight
+  const origin = req.headers.get("origin") ?? undefined;
+  const corsHeaders = getCorsHeaders(origin);
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -130,14 +194,11 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Parse webhook payload
-    const payload: FilloutPayload = await req.json();
-    console.log("Received webhook payload:", JSON.stringify(payload, null, 2));
+    // Validate payload
+    const rawBody = await req.json();
+    const payload = validatePayload(rawBody);
 
-    const submissionId = payload.submission?.submissionId;
-    if (!submissionId) {
-      throw new Error("Missing submission ID");
-    }
+    const submissionId = payload.submission.submissionId;
 
     // Check for duplicate submission
     const { data: existingSubmission } = await supabase
@@ -163,9 +224,9 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Create a map of question ID to value
     const questionsMap = new Map(
-      payload.submission.questions.map(q => [q.id, q.value])
+      payload.submission.questions.map((q) => [q.id, q.value])
     );
-    
+
     // Initialize data object
     const formData: Record<string, unknown> = {
       submission_id: submissionId,
@@ -176,35 +237,27 @@ const handler = async (req: Request): Promise<Response> => {
     // Process each field
     for (const [fieldId, dbColumn] of Object.entries(FIELD_MAPPING)) {
       const value = questionsMap.get(fieldId);
-      
+
       if (value === undefined || value === null) {
         formData[dbColumn] = null;
         continue;
       }
 
       // Handle file uploads
-      if (fieldId === "cRVh" || fieldId === "sZNa") {
+      if (FILE_FIELD_IDS.has(fieldId)) {
         formData[dbColumn] = await processFileField(value, supabase);
         continue;
       }
 
       // Handle boolean fields
-      if (
-        dbColumn === "taken_mit_course" ||
-        dbColumn === "willing_to_volunteer" ||
-        dbColumn === "interested_in_volunteering" ||
-        dbColumn === "discord_sharing_consent" ||
-        dbColumn === "admission_understanding"
-      ) {
+      if (BOOLEAN_COLUMNS.has(dbColumn)) {
         formData[dbColumn] = parseBoolean(value);
         continue;
       }
 
-      // Default: store the value as-is
-      formData[dbColumn] = value;
+      // Default: sanitize and store
+      formData[dbColumn] = sanitizeString(value);
     }
-
-    console.log("Processed form data:", JSON.stringify(formData, null, 2));
 
     // Insert into database
     const { data, error } = await supabase
@@ -233,11 +286,10 @@ const handler = async (req: Request): Promise<Response> => {
     );
   } catch (error) {
     console.error("Error processing webhook:", error);
-    const errorMessage = error instanceof Error ? error.message : "Internal server error";
     return new Response(
       JSON.stringify({
         success: false,
-        error: errorMessage,
+        error: "Failed to process submission",
       }),
       {
         status: 500,
