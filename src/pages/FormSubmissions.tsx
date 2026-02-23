@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,26 +23,61 @@ interface Submission {
 }
 
 const FormSubmissions = () => {
+  const navigate = useNavigate();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
   const [uploading, setUploading] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const webhookUrl = `https://neqkxwfvxwusrtzexmgk.supabase.co/functions/v1/gen-ai-global-admissions-webhook`;
-  const importUrl = `https://neqkxwfvxwusrtzexmgk.supabase.co/functions/v1/import-gen-ai-global-admissions`;
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const webhookUrl = `${supabaseUrl}/functions/v1/gen-ai-global-admissions-webhook`;
+  const importUrl = `${supabaseUrl}/functions/v1/import-gen-ai-global-admissions`;
+
+  // Auth + admin role check
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/');
+        return;
+      }
+
+      const { data: hasRole, error } = await supabase.rpc('has_role', {
+        _user_id: session.user.id,
+        _role: 'admin' as const,
+      });
+
+      if (error || !hasRole) {
+        toast.error("Access denied. Admin role required.");
+        navigate('/');
+        return;
+      }
+
+      setIsAuthorized(true);
+    };
+
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        navigate('/');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
   const fetchSubmissions = async () => {
     setLoading(true);
     try {
-      // Get total count
       const { count } = await supabase
         .from("gen_ai_global_admissions")
         .select("*", { count: "exact", head: true });
 
       setTotalCount(count || 0);
 
-      // Get recent submissions
       const { data, error } = await supabase
         .from("gen_ai_global_admissions")
         .select("*")
@@ -49,7 +85,6 @@ const FormSubmissions = () => {
         .limit(10);
 
       if (error) throw error;
-
       setSubmissions(data || []);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
@@ -61,8 +96,10 @@ const FormSubmissions = () => {
   };
 
   useEffect(() => {
-    fetchSubmissions();
-  }, []);
+    if (isAuthorized) {
+      fetchSubmissions();
+    }
+  }, [isAuthorized]);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -103,9 +140,7 @@ const FormSubmissions = () => {
 
       const response = await fetch(webhookUrl, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(testPayload),
       });
 
@@ -167,6 +202,16 @@ const FormSubmissions = () => {
     return new Date(dateString).toLocaleString();
   };
 
+  if (!isAuthorized) {
+    return (
+      <PageLayout>
+        <div className="container mx-auto py-8 px-4 text-center">
+          <p className="text-muted-foreground">Verifying access...</p>
+        </div>
+      </PageLayout>
+    );
+  }
+
   return (
     <PageLayout>
       <div className="container mx-auto py-8 px-4 max-w-7xl">
@@ -216,12 +261,15 @@ const FormSubmissions = () => {
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() =>
-                    window.open(
-                      "https://supabase.com/dashboard/project/neqkxwfvxwusrtzexmgk/editor",
-                      "_blank"
-                    )
-                  }
+                  onClick={() => {
+                    const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+                    if (projectId) {
+                      window.open(
+                        `https://supabase.com/dashboard/project/${projectId}/editor`,
+                        "_blank"
+                      );
+                    }
+                  }}
                 >
                   <ExternalLink className="h-4 w-4 mr-2" />
                   Open Supabase
