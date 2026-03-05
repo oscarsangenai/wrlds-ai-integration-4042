@@ -37,7 +37,6 @@ const Bylaws = () => {
 
               <h3 className="text-xl font-semibold mt-6 mb-3">1.1 Name</h3>
               <p className="text-muted-foreground mb-4">The organization shall be known as MIT Gen AI Global (the "Organization").</p>
-              <p className="text-muted-foreground mb-4"><strong>Independence Disclaimer:</strong> MIT Gen AI Global is an independent nonprofit organization and is not a department, program, or formally affiliated entity of the Massachusetts Institute of Technology (MIT). Any reference to MIT reflects the academic and professional backgrounds of the Organization's founders and collaborators, not an institutional endorsement or affiliation.</p>
 
               <h3 className="text-xl font-semibold mt-6 mb-3">1.2 Nonprofit Status</h3>
               <p className="text-muted-foreground mb-4">MIT Gen AI Global is a nonprofit network dedicated to advancing ethical, inclusive, and practical applications of artificial intelligence.</p>
