@@ -15,7 +15,7 @@ const BlogPostDetail = lazy(() => import('./pages/BlogPostDetail'));
 const DevelopmentProcess = lazy(() => import('./pages/DevelopmentProcess'));
 const TechDetails = lazy(() => import('./pages/TechDetails'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
-const Bylaws = lazy(() => import('./pages/Bylaws'));
+
 const Spotlight = lazy(() => import('./pages/Spotlight'));
 const Hackathon = lazy(() => import('./pages/Hackathon'));
 const GetInvolved = lazy(() => import('./pages/GetInvolved'));
