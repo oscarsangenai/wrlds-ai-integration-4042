@@ -61,7 +61,7 @@ const AnimatedRoutes = () => {
           <Route path="/development-process" element={<TransitionRoute><DevelopmentProcess /></TransitionRoute>} />
           <Route path="/tech-details" element={<TransitionRoute><TechDetails /></TransitionRoute>} />
           <Route path="/privacy-policy" element={<TransitionRoute><PrivacyPolicy /></TransitionRoute>} />
-          <Route path="/bylaws" element={<TransitionRoute><Bylaws /></TransitionRoute>} />
+          
           <Route path="/terms-of-service" element={<TransitionRoute><Placeholder /></TransitionRoute>} />
           <Route path="/careers" element={<TransitionRoute><Careers /></TransitionRoute>} />
           <Route path="/application-confirmation" element={<TransitionRoute><ApplicationConfirmation /></TransitionRoute>} />
