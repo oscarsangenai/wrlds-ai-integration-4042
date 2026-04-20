@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Allow webhook insert" ON public.gen_ai_global_admissions;
