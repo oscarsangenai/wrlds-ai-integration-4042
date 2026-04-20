@@ -15,6 +15,7 @@ const BlogPostDetail = lazy(() => import('./pages/BlogPostDetail'));
 const DevelopmentProcess = lazy(() => import('./pages/DevelopmentProcess'));
 const TechDetails = lazy(() => import('./pages/TechDetails'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const Bylaws = lazy(() => import('./pages/Bylaws'));
 
 const Spotlight = lazy(() => import('./pages/Spotlight'));
 const Hackathon = lazy(() => import('./pages/Hackathon'));
@@ -61,6 +62,7 @@ const AnimatedRoutes = () => {
           <Route path="/development-process" element={<TransitionRoute><DevelopmentProcess /></TransitionRoute>} />
           <Route path="/tech-details" element={<TransitionRoute><TechDetails /></TransitionRoute>} />
           <Route path="/privacy-policy" element={<TransitionRoute><PrivacyPolicy /></TransitionRoute>} />
+          <Route path="/bylaws" element={<TransitionRoute><Bylaws /></TransitionRoute>} />
           
           <Route path="/terms-of-service" element={<TransitionRoute><Placeholder /></TransitionRoute>} />
           <Route path="/careers" element={<TransitionRoute><Careers /></TransitionRoute>} />
